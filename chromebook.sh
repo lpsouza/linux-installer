@@ -1,5 +1,7 @@
 #!/bin/sh
 
+chmod +x ./src/*.sh
+
 ./src/apt-essentials.sh
 ./src/docker.sh
 ./src/dotnet.sh
