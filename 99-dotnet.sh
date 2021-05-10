@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # .NET Core
 wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -4 -O packages-microsoft-prod.deb

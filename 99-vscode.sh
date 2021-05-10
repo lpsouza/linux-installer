@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Visual Studio Code
 wget https://go.microsoft.com/fwlink/?LinkID=760868 -O vscode.deb

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Insync
 INSYNC_REPO=$(lsb_release -cs)

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Keychain
 sudo apt install -y keychain

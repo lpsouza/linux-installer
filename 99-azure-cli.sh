@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Azure CLI
 curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
