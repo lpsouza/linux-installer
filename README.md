@@ -13,17 +13,17 @@ bash apt-essentials.sh
 Basic tools
 
 ```sh
-for i in `ls -1 basic/`; do bash basic/$i; done
+for i in basic/*.sh; do bash $i; done
 ```
 
 Virtualization tools
 
 ```sh
-for i in `ls -1 virtual/`; do bash virtual/$i; done
+for i in virtual/*.sh; do bash $i; done
 ```
 
 Desktop tools
 
 ```sh
-for i in `ls -1 desktop/`; do bash desktop/$i; done
+for i in desktop/*.sh; do bash $i; done
 ```
