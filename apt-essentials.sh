@@ -13,6 +13,7 @@ software-properties-common \
 gnome-keyring \
 apt-utils \
 curl \
+wget \
 lsb-release \
 gnupg \
 htop \
@@ -20,4 +21,5 @@ acl \
 net-tools \
 jq \
 mc \
-pandoc
+pandoc \
+uidmap
