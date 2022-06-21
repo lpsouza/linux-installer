@@ -24,4 +24,5 @@ mc \
 pandoc \
 uidmap \
 zip \
-unzip
+unzip \
+coreutils
