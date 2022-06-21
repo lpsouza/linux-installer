@@ -16,10 +16,8 @@ curl \
 lsb-release \
 gnupg \
 htop \
-nano \
 acl \
 net-tools \
 jq \
 mc \
-tmux \
 pandoc
