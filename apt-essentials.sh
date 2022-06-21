@@ -22,4 +22,6 @@ net-tools \
 jq \
 mc \
 pandoc \
-uidmap
+uidmap \
+zip \
+unzip
