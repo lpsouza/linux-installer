@@ -26,4 +26,5 @@ pandoc \
 uidmap \
 zip \
 unzip \
-coreutils
+coreutils \
+ncdu
