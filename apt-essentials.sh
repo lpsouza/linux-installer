@@ -21,6 +21,7 @@ acl \
 net-tools \
 jq \
 mc \
+asciinema \
 pandoc \
 uidmap \
 zip \
