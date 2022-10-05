@@ -14,7 +14,7 @@ if [ "$INSTALL_ALREADY" == true ]; then
 else
     echo "Installing $INSTALL_NAME."
 
-    wget https://github.com/cli/cli/releases/download/v2.12.1/gh_2.12.1_linux_amd64.deb
+    wget https://github.com/cli/cli/releases/download/v2.17.0/gh_2.17.0_linux_amd64.deb
     sudo dpkg -i gh_2.12.1_linux_amd64.deb
     rm gh_2.12.1_linux_amd64.deb
 
