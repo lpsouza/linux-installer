@@ -15,6 +15,7 @@ else
     echo "Installing $INSTALL_NAME."
 
     curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+    sudo mv -v kustomize /usr/local/bin/
 
     [[ ! -d "$HOME/.config" ]] && mkdir $HOME/.config
     echo $INSTALL_NAME >> $INSTALL_FILE
