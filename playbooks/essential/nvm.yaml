@@ -34,7 +34,6 @@
         backrefs: yes
       when: nvm_plugin_check.rc != 0
 
-
     - name: Configure zstyle sources on oh-my-zsh
       blockinfile:
         dest: ~/.zshrc
@@ -53,7 +52,7 @@
 
     - name: Install node
       shell: |
-        export NVM_DIR="$HOME/.nvm"
+        [ -z "$NVM_DIR" ] && export NVM_DIR="$HOME/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
         nvm install --lts
         nvm use --lts
