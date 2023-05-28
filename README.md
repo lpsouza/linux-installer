@@ -6,8 +6,8 @@ This repository contains a script that installs a bunch of software on a fresh L
 
 This ansible playbooks has been tested on the following Linux distributions:
 
-- Ubuntu 22.04.2 LTS
-- Debian GNU/Linux 11
+- Ubuntu 22.04.2 LTS (on WSL2)
+- Debian GNU/Linux 11 (on Chromebook)
 
 ## Usage
 
