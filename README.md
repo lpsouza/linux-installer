@@ -53,6 +53,7 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
   - helm.yaml: Install [Helm](https://helm.sh/)
   - initial.yaml: Install basic* software
   - keychain.yaml: Install [Keychain](https://www.funtoo.org/Keychain)
+  - kubecm.yaml: Install [KubeCM](https://kubecm.cloud/)
   - kubectl.yaml: Install [kubectl](https://kubernetes.io/docs/tasks/tools/)
   - nvm.yaml: Install [NVM](https://github.com/nvm-sh/nvm)
   - passwordless.yaml: Configure passwordless sudo

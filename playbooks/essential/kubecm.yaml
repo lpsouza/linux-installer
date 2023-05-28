@@ -1,0 +1,34 @@
+- name: Install kubecm
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Check if kubecm is installed
+      stat:
+        path: /usr/local/bin/kubecm
+      register: kubecm_installed
+      changed_when: false
+
+    - name: Download kubecm
+      get_url:
+        url: https://github.com/sunny0826/kubecm/releases/download/v0.23.0/kubecm_v0.23.0_Linux_x86_64.tar.gz
+        dest: /tmp/kubecm.tar.gz
+      when: not kubecm_installed.stat.exists
+
+    - name: Extract kubecm
+      unarchive:
+        src: /tmp/kubecm.tar.gz
+        dest: /tmp
+        remote_src: yes
+      when: not kubecm_installed.stat.exists
+
+    - name: Install kubecm
+      copy:
+        src: /tmp/kubecm
+        dest: /usr/local/bin/kubecm
+        mode: 0755
+      when: not kubecm_installed.stat.exists

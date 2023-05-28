@@ -13,3 +13,4 @@
 - import_playbook: essential/gh.yaml
 - import_playbook: essential/kubectl.yaml
 - import_playbook: essential/helm.yaml
+- import_playbook: essential/kubecm.yaml
