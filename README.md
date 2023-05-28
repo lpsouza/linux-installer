@@ -47,6 +47,7 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
 - essential/
   - azure-cli.yaml: Install [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/what-is-azure-cli)
   - dotnet.yaml: Install [.NET SDK](https://dotnet.microsoft.com/en-us/)
+  - exa.yaml: Install [Exa](https://the.exa.website/)
   - gh.yaml: Install [GitHub CLI](https://cli.github.com/)
   - git.yaml: Configure Git global settings
   - helm.yaml: Install [Helm](https://helm.sh/)

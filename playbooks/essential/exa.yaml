@@ -1,0 +1,21 @@
+- name: Install exa
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Install exa
+      apt:
+        name: exa
+        state: latest
+
+    - name: Configure alias for exa to .zshrc
+      blockinfile:
+        path: ~/.zshrc
+        block: |
+          alias ls='exa --icons -F -H --group-directories-first -1'
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - exa"
+      become: false

@@ -4,6 +4,7 @@
 - import_playbook: essential/starship.yaml
 - import_playbook: essential/passwordless.yaml
 - import_playbook: essential/keychain.yaml
+- import_playbook: essential/exa.yaml
 - import_playbook: essential/git.yaml
 - import_playbook: essential/nvm.yaml
 - import_playbook: essential/dotnet.yaml
