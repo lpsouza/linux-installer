@@ -1,0 +1,38 @@
+---
+- name: Install jekyll
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Install ruby and zlib1g-dev
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - ruby
+        - ruby-dev
+        - zlib1g-dev
+
+    - name: Configure GEM_HOME and PATH (zsh)
+      blockinfile:
+        dest: ~/.zshrc
+        insertbefore: EOF
+        block: |
+          export GEM_HOME=$HOME/.gem/ruby/3.0.0
+          export PATH=$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - jekyll"
+      become: false
+
+    - name: Install jekyll and bundler
+      gem:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - jekyll
+        - bundler
+      become_user: lpsouza

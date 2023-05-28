@@ -1,0 +1,39 @@
+---
+- name: Initial setup
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Upgrade all packages to the latest version
+      apt:
+        upgrade: dist
+        update_cache: yes
+
+    - name: Install essential packages
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+          - build-essential
+          - apt-transport-https
+          - ca-certificates
+          - software-properties-common
+          - apt-utils
+          - curl
+          - wget
+          - lsb-release
+          - htop
+          - net-tools
+          - jq
+          - mc
+          - asciinema
+          - pandoc
+          - zip
+          - unzip
+          - coreutils
+          - ncdu

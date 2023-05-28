@@ -1,0 +1,41 @@
+---
+- name: Install keychain
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Install keychain
+      apt:
+        name: keychain
+        state: present
+
+    - name: Check if keychain plugin is already added
+      shell: grep -E "^plugins=\(.*keychain.*\)" ~/.zshrc
+      register: keychain_plugin_check
+      changed_when: false
+      failed_when: false
+      become: false
+
+    - name: Add keychain to oh-my-zsh plugins
+      lineinfile:
+        path: ~/.zshrc
+        regexp: '^plugins=\((.*)\)'
+        line: 'plugins=(\1 keychain)'
+        backrefs: yes
+      become: false
+      when: keychain_plugin_check.rc != 0
+
+    - name: Configure zstyle sources on oh-my-zsh
+      blockinfile:
+        dest: ~/.zshrc
+        insertbefore: plugins=\(
+        block: |
+          zstyle :omz:plugins:keychain agents ssh
+          zstyle :omz:plugins:keychain identities id_rsa
+          zstyle :omz:plugins:keychain options --nogui --quiet
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - keychain"
+      become: false

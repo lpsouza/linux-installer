@@ -1,0 +1,15 @@
+---
+- name: Install dotnet
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Install dotnet-sdk-7.0
+      apt:
+        name: dotnet-sdk-7.0
+        state: present
+        update_cache: yes

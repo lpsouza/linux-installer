@@ -1,0 +1,21 @@
+---
+- name: Install bashtop
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Install bashtop PPA repository
+      apt_repository:
+        repo: ppa:bashtop-monitor/bashtop
+        state: present
+        filename: bashtop
+
+    - name: Install bashtop
+      apt:
+        name: bashtop
+        state: present
+        update_cache: yes

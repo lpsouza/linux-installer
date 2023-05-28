@@ -1,0 +1,37 @@
+---
+- name: Install azure-cli
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: true
+
+  tasks:
+    - name: Check if GPG file is installed
+      stat:
+        path: /etc/apt/trusted.gpg.d/microsoft.gpg
+      register: gpg_file_stat
+      failed_when: false
+
+    - name: Download apt key
+      get_url:
+        url: https://packages.microsoft.com/keys/microsoft.asc
+        dest: /tmp/microsoft.asc
+      when: not gpg_file_stat.stat.exists
+
+    - name: Install apt key
+      shell: cat /tmp/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg
+      when: not gpg_file_stat.stat.exists
+
+    - name: Add apt repository
+      apt_repository:
+        repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ ansible_lsb.codename }} main
+        state: present
+        filename: azure-cli
+
+    - name: Install azure-cli
+      apt:
+        name: azure-cli
+        state: present
+        update_cache: yes

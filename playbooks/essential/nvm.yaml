@@ -1,0 +1,63 @@
+- name: Install nvm
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Check if nvm is installed
+      stat:
+        path: ~/.nvm
+      register: nvm_directory_stat
+      failed_when: false
+
+    - name: Download nvm
+      get_url:
+        url: https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh
+        dest: /tmp/nvm.sh
+      when: not nvm_directory_stat.stat.exists
+
+    - name: Install nvm
+      shell: bash /tmp/nvm.sh
+      when: not nvm_directory_stat.stat.exists
+
+    - name: Check if nvm plugin is already added
+      shell: grep -E "^plugins=\(.*nvm.*\)" ~/.zshrc
+      register: nvm_plugin_check
+      changed_when: false
+      failed_when: false
+      become: false
+
+    - name: Add nvm to oh-my-zsh plugins
+      lineinfile:
+        path: ~/.zshrc
+        regexp: '^plugins=\((.*)\)'
+        line: 'plugins=(\1 nvm)'
+        backrefs: yes
+      when: nvm_plugin_check.rc != 0
+
+
+    - name: Configure zstyle sources on oh-my-zsh
+      blockinfile:
+        dest: ~/.zshrc
+        insertbefore: plugins=\(
+        block: |
+          zstyle ':omz:plugins:nvm' lazy yes
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - nvm"
+
+    - name: Check if Node is installed
+      command: node -v
+      register: node_installed
+      changed_when: false
+      failed_when: false
+      check_mode: false
+      become: false
+
+    - name: Install node
+      shell: |
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+        nvm install --lts
+        nvm use --lts
+        npm install -g npm
+        npm install -g jshint
+      when: node_installed.rc != 0
+      become: false

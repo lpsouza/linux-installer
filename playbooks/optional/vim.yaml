@@ -1,0 +1,63 @@
+- name: Install vim
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Install vim
+      apt:
+        name: vim
+        state: present
+        update_cache: yes
+
+    - name: Check if .vim directory exists
+      stat:
+        path: ~/.vim
+      register: vim_directory_stat
+      become: false
+
+    - name: Create .vim directory
+      file:
+        path: ~/.vim
+        state: directory
+        mode: "0755"
+      become: false
+      when: not vim_directory_stat.stat.exists
+
+    - name: Check if .vim/autoload directory exists
+      stat:
+        path: ~/.vim/autoload
+      register: autoload_directory_stat
+      become: false
+
+    - name: Create .vim/autoload directory
+      file:
+        path: ~/.vim/autoload
+        state: directory
+        mode: "0755"
+      become: false
+      when: not autoload_directory_stat.stat.exists
+
+    - name: Check if plug.vim file exists
+      stat:
+        path: ~/.vim/autoload/plug.vim
+      register: plug_vim_file_stat
+      become: false
+
+    - name: Install plug.vim
+      get_url:
+        url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        dest: ~/.vim/autoload/plug.vim
+        mode: "0644"
+      become: false
+      when: not plug_vim_file_stat.stat.exists
+
+    - name: Copy vimrc from gist
+      get_url:
+        url: https://gist.githubusercontent.com/lpsouza/5dded5c48d62fb9eac6cc0d10609d96f/raw/642c001b3447c8974161bc5142bcd9ac8ce623e1/.vimrc
+        dest: ~/.vimrc
+        mode: "0644"
+      become: false

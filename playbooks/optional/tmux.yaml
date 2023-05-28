@@ -1,0 +1,21 @@
+- name: Install tmux
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Install tmux
+      apt:
+        name: tmux
+        state: present
+        update_cache: yes
+
+    - name: Copy tmux.conf from gist
+      get_url:
+        url: https://gist.githubusercontent.com/lpsouza/6534fd264197963e86dce01ece9f63d1/raw/c36e4fc56f89c1bc4cffd002b3078b1bc2e932da/.tmux.conf
+        dest: ~/.tmux.conf
+        mode: "0644"
+      become: false

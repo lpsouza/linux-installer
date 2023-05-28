@@ -1,0 +1,99 @@
+---
+- name: Install zsh, oh-my-zsh, autosuggestions and syntax highlighting
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Install zsh package
+      apt:
+        name: zsh
+        state: latest
+        update_cache: yes
+
+    - name: Check if Oh-My-Zsh is installed
+      become: false
+      stat:
+        path: ~/.oh-my-zsh
+      register: ohmyzsh_installed
+
+    - name: Install oh-my-zsh
+      become: false
+      shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+      when: not ohmyzsh_installed.stat.exists
+
+    - name: Check if zsh-autosuggestions plugin is installed
+      become: false
+      stat:
+        path: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+      register: zsh_autosuggestions_installed
+
+    - name: Install zsh-autosuggestions plugin
+      become: false
+      shell: git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+      when: not zsh_autosuggestions_installed.stat.exists
+
+    - name: Check if zsh-syntax-highlighting plugin is installed
+      become: false
+      stat:
+        path: ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+      register: zsh_syntax_highlighting_installed
+
+    - name: Install zsh-syntax-highlighting plugin
+      become: false
+      shell: git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+      when: not zsh_syntax_highlighting_installed.stat.exists
+
+    - name: Check if zsh-autosuggestions plugin is already added
+      shell: grep -E "^plugins=\(.*zsh\-autosuggestions.*\)" ~/.zshrc
+      register: autosuggestions_plugin_check
+      changed_when: false
+      failed_when: false
+      become: false
+
+    - name: Configure zsh-autosuggestions plugin
+      lineinfile:
+        path: ~/.zshrc
+        regexp: '^plugins=\((.*)\)'
+        line: 'plugins=(\1 zsh-autosuggestions)'
+        backrefs: yes
+      become: false
+      when: autosuggestions_plugin_check.rc != 0
+
+    - name: Check if zsh-syntax-highlighting plugin is already added
+      shell: grep -E "^plugins=\(.*zsh\-syntax\-highlighting.*\)" ~/.zshrc
+      register: syntax_highlighting_plugin_check
+      changed_when: false
+      failed_when: false
+      become: false
+
+    - name: Configure zsh-syntax-highlighting plugin
+      lineinfile:
+        path: ~/.zshrc
+        regexp: '^plugins=\((.*)\)'
+        line: 'plugins=(\1 zsh-syntax-highlighting)'
+        backrefs: yes
+      become: false
+      when: syntax_highlighting_plugin_check.rc != 0
+
+    - name: Configure zsh theme
+      become: false
+      lineinfile:
+        path: ~/.zshrc
+        regexp: "^ZSH_THEME="
+        line: 'ZSH_THEME="kafeitu"'
+
+    - name: Disable auto title
+      become: false
+      lineinfile:
+        path: ~/.zshrc
+        regexp: "^# DISABLE_AUTO_TITLE="
+        line: 'DISABLE_AUTO_TITLE="true"'
+
+    - name: Change default shell to zsh
+      user:
+        name: lpsouza
+        shell: /usr/bin/zsh

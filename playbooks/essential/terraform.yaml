@@ -1,0 +1,37 @@
+---
+- name: Install Terraform
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: true
+
+  tasks:
+    - name: Check if GPG file is installed
+      stat:
+        path: /etc/apt/trusted.gpg.d/terraform.gpg
+      register: gpg_file_stat
+      failed_when: false
+
+    - name: Download apt key
+      get_url:
+        url: https://apt.releases.hashicorp.com/gpg
+        dest: /tmp/terraform.gpg
+      when: not gpg_file_stat.stat.exists
+
+    - name: Install apt key
+      shell: cat /tmp/terraform.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/terraform.gpg
+      when: not gpg_file_stat.stat.exists
+
+    - name: Add apt repository
+      apt_repository:
+        repo: deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_lsb.codename }} main
+        state: present
+        filename: terraform
+
+    - name: Install Terraform
+      apt:
+        name: terraform
+        state: present
+        update_cache: yes

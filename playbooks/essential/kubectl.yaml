@@ -1,0 +1,37 @@
+---
+- name: Install kubectl
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Check if GPG file is installed
+      stat:
+        path: /etc/apt/trusted.gpg.d/google-apt-key.gpg
+      register: gpg_file_stat
+      failed_when: false
+
+    - name: Download apt key
+      get_url:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        dest: /tmp/apt-key.gpg
+      when: not gpg_file_stat.stat.exists
+
+    - name: Install apt key
+      shell: cat /tmp/apt-key.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/google-apt-key.gpg
+      when: not gpg_file_stat.stat.exists
+
+    - name: Add apt repository
+      apt_repository:
+        repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+        state: present
+        filename: kubernetes
+
+    - name: Install kubectl
+      apt:
+        name: kubectl
+        state: present
+        update_cache: yes
