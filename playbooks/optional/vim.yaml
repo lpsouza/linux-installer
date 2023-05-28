@@ -57,7 +57,7 @@
 
     - name: Copy vimrc from gist
       get_url:
-        url: https://gist.githubusercontent.com/lpsouza/5dded5c48d62fb9eac6cc0d10609d96f/raw/642c001b3447c8974161bc5142bcd9ac8ce623e1/.vimrc
+        url: https://gist.github.com/lpsouza/5dded5c48d62fb9eac6cc0d10609d96f/raw
         dest: ~/.vimrc
         mode: "0644"
       become: false

@@ -52,7 +52,7 @@
 
     - name: Download Starship configuration file
       get_url:
-        url: https://gist.githubusercontent.com/lpsouza/ef3e4df6dc945ba3cf8648d3ad765bcf/raw/6b16559e3420e5cdf8d7e13d069c01ad9a1e560a/starship.toml
+        url: https://gist.github.com/lpsouza/ef3e4df6dc945ba3cf8648d3ad765bcf/raw
         dest: ~/.config/starship.toml
         mode: "0644"
       become: false

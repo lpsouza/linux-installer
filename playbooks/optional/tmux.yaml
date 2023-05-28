@@ -15,7 +15,7 @@
 
     - name: Copy tmux.conf from gist
       get_url:
-        url: https://gist.githubusercontent.com/lpsouza/6534fd264197963e86dce01ece9f63d1/raw/c36e4fc56f89c1bc4cffd002b3078b1bc2e932da/.tmux.conf
+        url: https://gist.github.com/lpsouza/6534fd264197963e86dce01ece9f63d1/raw
         dest: ~/.tmux.conf
         mode: "0644"
       become: false
