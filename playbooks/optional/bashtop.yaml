@@ -5,7 +5,7 @@
   become: true
   become_user: root
   become_method: sudo
-  gather_facts: false
+  gather_facts: true
 
   tasks:
     - name: Install bashtop PPA repository
@@ -13,6 +13,7 @@
         repo: ppa:bashtop-monitor/bashtop
         state: present
         filename: bashtop
+      when: ansible_distribution == 'Ubuntu'
 
     - name: Install bashtop
       apt:
