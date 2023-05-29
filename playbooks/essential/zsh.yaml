@@ -30,6 +30,7 @@
       stat:
         path: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
       register: zsh_autosuggestions_installed
+      tags: config
 
     - name: Install zsh-autosuggestions plugin
       become: false
@@ -42,6 +43,7 @@
       stat:
         path: ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
       register: zsh_syntax_highlighting_installed
+      tags: config
 
     - name: Install zsh-syntax-highlighting plugin
       become: false
@@ -55,6 +57,7 @@
       changed_when: false
       failed_when: false
       become: false
+      tags: config
 
     - name: Configure zsh-autosuggestions plugin
       lineinfile:
@@ -72,6 +75,7 @@
       changed_when: false
       failed_when: false
       become: false
+      tags: config
 
     - name: Configure zsh-syntax-highlighting plugin
       lineinfile:

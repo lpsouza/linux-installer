@@ -24,6 +24,7 @@
       register: nvm_plugin_check
       changed_when: false
       failed_when: false
+      tags: config
 
     - name: Add nvm to oh-my-zsh plugins
       lineinfile:

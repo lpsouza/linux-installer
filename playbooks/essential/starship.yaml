@@ -42,6 +42,7 @@
       register: starship_config_directory_stat
       failed_when: false
       become: false
+      tags: config
 
     - name: Create Starship configuration directory
       file:
