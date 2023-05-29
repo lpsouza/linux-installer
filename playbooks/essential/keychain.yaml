@@ -28,6 +28,7 @@
         backrefs: yes
       become: false
       when: keychain_plugin_check.rc != 0
+      tags: config
 
     - name: Configure zstyle sources on oh-my-zsh
       blockinfile:
@@ -39,3 +40,4 @@
           zstyle :omz:plugins:keychain options --nogui --quiet
         marker: "# {mark} ANSIBLE MANAGED BLOCK - keychain"
       become: false
+      tags: config

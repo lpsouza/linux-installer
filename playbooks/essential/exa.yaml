@@ -19,3 +19,4 @@
           alias ls='exa --icons -F -H --group-directories-first -1'
         marker: "# {mark} ANSIBLE MANAGED BLOCK - exa"
       become: false
+      tags: config

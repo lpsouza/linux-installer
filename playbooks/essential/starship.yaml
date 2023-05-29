@@ -34,6 +34,7 @@
           fi
         marker: "# {mark} ANSIBLE MANAGED BLOCK - starship"
       become: false
+      tags: config
 
     - name: Check if exists Starship configuration directory
       stat:
@@ -49,6 +50,7 @@
         mode: "0755"
       become: false
       when: not starship_config_directory_stat.stat.exists
+      tags: config
 
     - name: Download Starship configuration file
       get_url:
@@ -56,3 +58,4 @@
         dest: ~/.config/starship.toml
         mode: "0644"
       become: false
+      tags: config

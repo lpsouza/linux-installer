@@ -27,6 +27,7 @@
           export PATH=$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH
         marker: "# {mark} ANSIBLE MANAGED BLOCK - jekyll"
       become: false
+      tags: config
 
     - name: Install jekyll and bundler
       gem:

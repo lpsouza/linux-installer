@@ -55,9 +55,10 @@
       become: false
       when: not plug_vim_file_stat.stat.exists
 
-    - name: Copy vimrc from gist
+    - name: Copy .vimrc from gist
       get_url:
         url: https://gist.github.com/lpsouza/5dded5c48d62fb9eac6cc0d10609d96f/raw
         dest: ~/.vimrc
         mode: "0644"
       become: false
+      tags: config

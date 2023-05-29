@@ -12,6 +12,7 @@
       apt:
         upgrade: dist
         update_cache: yes
+      tags: upgrade
 
     - name: Install essential packages
       apt:

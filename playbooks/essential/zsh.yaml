@@ -35,6 +35,7 @@
       become: false
       shell: git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
       when: not zsh_autosuggestions_installed.stat.exists
+      tags: config
 
     - name: Check if zsh-syntax-highlighting plugin is installed
       become: false
@@ -46,6 +47,7 @@
       become: false
       shell: git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
       when: not zsh_syntax_highlighting_installed.stat.exists
+      tags: config
 
     - name: Check if zsh-autosuggestions plugin is already added
       shell: grep -E "^plugins=\(.*zsh\-autosuggestions.*\)" ~/.zshrc
@@ -62,6 +64,7 @@
         backrefs: yes
       become: false
       when: autosuggestions_plugin_check.rc != 0
+      tags: config
 
     - name: Check if zsh-syntax-highlighting plugin is already added
       shell: grep -E "^plugins=\(.*zsh\-syntax\-highlighting.*\)" ~/.zshrc
@@ -78,6 +81,7 @@
         backrefs: yes
       become: false
       when: syntax_highlighting_plugin_check.rc != 0
+      tags: config
 
     - name: Configure zsh theme
       become: false
@@ -85,6 +89,7 @@
         path: ~/.zshrc
         regexp: "^ZSH_THEME="
         line: 'ZSH_THEME="kafeitu"'
+      tags: config
 
     - name: Disable auto title
       become: false
@@ -92,6 +97,7 @@
         path: ~/.zshrc
         regexp: "^# DISABLE_AUTO_TITLE="
         line: 'DISABLE_AUTO_TITLE="true"'
+      tags: config
 
     - name: Change default shell to zsh
       user:

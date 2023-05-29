@@ -33,6 +33,7 @@
         line: 'plugins=(\1 nvm)'
         backrefs: yes
       when: nvm_plugin_check.rc != 0
+      tags: config
 
     - name: Configure zstyle sources on oh-my-zsh
       blockinfile:
@@ -41,6 +42,7 @@
         block: |
           zstyle ':omz:plugins:nvm' lazy yes
         marker: "# {mark} ANSIBLE MANAGED BLOCK - nvm"
+      tags: config
 
     - name: Check if Node is installed
       command: node -v

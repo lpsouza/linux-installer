@@ -19,3 +19,4 @@
         dest: ~/.tmux.conf
         mode: "0644"
       become: false
+      tags: config
