@@ -5,7 +5,7 @@
   become: true
   become_user: root
   become_method: sudo
-  gather_facts: false
+  gather_facts: true
 
   tasks:
     - name: Add universe repository
