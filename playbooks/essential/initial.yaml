@@ -8,6 +8,13 @@
   gather_facts: false
 
   tasks:
+    - name: Add universe repository
+      apt_repository:
+        repo: deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} universe
+        state: present
+        update_cache: yes
+      tags: config
+
     - name: Upgrade all packages to the latest version
       apt:
         upgrade: dist
