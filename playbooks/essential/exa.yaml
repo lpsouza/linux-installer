@@ -12,7 +12,7 @@
         name: exa
         state: latest
       register: exa
-      when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu" and ansible_distribution_version | version_compare('20.10', '>=')
+      when: ansible_distribution == "Debian" or (ansible_distribution == "Ubuntu" and ansible_distribution_version >= "20.10")
 
     - name: Configure alias for exa to .zshrc if exa is installed
       blockinfile:
