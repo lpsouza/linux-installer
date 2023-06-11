@@ -4,19 +4,22 @@
   become: true
   become_user: root
   become_method: sudo
-  gather_facts: false
+  gather_facts: true
 
   tasks:
-    - name: Install exa
+    - name: Install exa if OS is Debian or Ubuntu 20.10+
       apt:
         name: exa
         state: latest
+      register: exa
+      when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu" and ansible_distribution_version | version_compare('20.10', '>=')
 
-    - name: Configure alias for exa to .zshrc
+    - name: Configure alias for exa to .zshrc if exa is installed
       blockinfile:
         path: ~/.zshrc
         block: |
           alias ls='exa --icons -F -H --group-directories-first -1'
         marker: "# {mark} ANSIBLE MANAGED BLOCK - exa"
+      when: exa is defined and exa.changed
       become: false
       tags: config
