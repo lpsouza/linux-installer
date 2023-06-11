@@ -27,21 +27,22 @@
         state: present
         update_cache: yes
       loop:
-        - build-essential
         - apt-transport-https
-        - ca-certificates
-        - software-properties-common
         - apt-utils
-        - curl
-        - wget
-        - lsb-release
-        - htop
-        - net-tools
-        - jq
-        - mc
         - asciinema
-        - pandoc
-        - zip
-        - unzip
+        - build-essential
+        - ca-certificates
         - coreutils
+        - curl
+        - htop
+        - jq
+        - lsb-release
+        - mc
+        - nano
         - ncdu
+        - net-tools
+        - pandoc
+        - software-properties-common
+        - unzip
+        - wget
+        - zip

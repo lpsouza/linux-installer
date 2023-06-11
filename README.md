@@ -70,21 +70,22 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
 
 ### *Basic software list
 
-- build-essential: Packages for building Debian packages
 - apt-transport-https: Allows the use of repositories accessed via the HTTP Secure protocol
-- ca-certificates: Common CA certificates
-- software-properties-common: Common software needed to manage software repositories
 - apt-utils: Package manager related utility programs
-- curl: Command line tool for transferring data with URL syntax
-- wget: Command line tool for retrieving files using HTTP, HTTPS, and FTP
-- lsb-release: Linux Standard Base version reporting utility
-- htop: Interactive process viewer
-- net-tools: Legacy network management utilities
-- jq: Command line JSON processor
-- mc: Midnight Commander file manager
 - asciinema: Terminal session recorder
-- pandoc: Universal document converter
-- zip: Archiver for .zip files
-- unzip: De-archiver for .zip files
+- build-essential: Packages for building Debian packages
+- ca-certificates: Common CA certificates
 - coreutils: GNU core utilities
+- curl: Command line tool for transferring data with URL syntax
+- htop: Interactive process viewer
+- jq: Command line JSON processor
+- lsb-release: Linux Standard Base version reporting utility
+- mc: Midnight Commander file manager
+- nano: Nano text editor (inspired by Pico)
 - ncdu: Disk usage analyzer with an ncurses interface
+- net-tools: Legacy network management utilities
+- pandoc: Universal document converter
+- software-properties-common: Common software needed to manage software repositories
+- unzip: De-archiver for .zip files
+- wget: Command line tool for retrieving files using HTTP, HTTPS, and FTP
+- zip: Archiver for .zip files
