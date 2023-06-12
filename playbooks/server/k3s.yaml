@@ -1,0 +1,25 @@
+- name: Install k3s
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Check if k3s is already installed
+      shell: which k3s
+      register: k3s_check
+      changed_when: false
+      failed_when: false
+
+    - name: Download k3s installer script
+      get_url:
+        url: https://get.k3s.io
+        dest: /tmp/install.sh
+        mode: "0755"
+      when: k3s_check.rc == 1
+
+    - name: Install k3s
+      shell: /tmp/install.sh
+      when: k3s_check.rc == 1
