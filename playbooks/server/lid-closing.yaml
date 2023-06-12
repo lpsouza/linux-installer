@@ -1,0 +1,38 @@
+- name: Disable lid closing
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Check if handleLidSwitch is already set to ignore
+      shell: grep -E "^HandleLidSwitch=ignore" /etc/systemd/logind.conf
+      register: lid_switch_check
+      changed_when: false
+      failed_when: false
+      tags: config
+
+    - name: Configure handleLidSwitch to ignore
+      lineinfile:
+        path: /etc/systemd/logind.conf
+        regexp: "^#HandleLidSwitch="
+        line: "HandleLidSwitch=ignore"
+      when: lid_switch_check.rc == 1
+      tags: config
+
+    - name: Check if LidSwitchIgnoreInhibited is already set to no
+      shell: grep -E "^LidSwitchIgnoreInhibited=no" /etc/systemd/logind.conf
+      register: lid_switch_ignore_check
+      changed_when: false
+      failed_when: false
+      tags: config
+
+    - name: Configure LidSwitchIgnoreInhibited to no
+      lineinfile:
+        path: /etc/systemd/logind.conf
+        regexp: "^#LidSwitchIgnoreInhibited="
+        line: "LidSwitchIgnoreInhibited=no"
+      when: lid_switch_ignore_check.rc == 1
+      tags: config
