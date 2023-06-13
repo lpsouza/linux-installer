@@ -65,6 +65,7 @@
         - mc
         - nano
         - ncdu
+        - neofetch
         - net-tools
         - pandoc
         - software-properties-common

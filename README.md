@@ -85,6 +85,7 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
 - mc: Midnight Commander file manager
 - nano: Nano text editor (inspired by Pico)
 - ncdu: Disk usage analyzer with an ncurses interface
+- neofetch: Fast, highly customizable system info script
 - net-tools: Legacy network management utilities
 - pandoc: Universal document converter
 - software-properties-common: Common software needed to manage software repositories
