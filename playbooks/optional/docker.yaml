@@ -1,0 +1,37 @@
+- name: Install docker
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Check if docker is already installed
+      shell: which docker
+      register: docker_check
+      changed_when: false
+      failed_when: false
+
+    - name: Download docker installer script
+      get_url:
+        url: https://get.docker.com
+        dest: /tmp/install.sh
+        mode: "0755"
+      when: docker_check.rc == 1
+
+    - name: Install docker
+      shell: /tmp/install.sh
+      when: docker_check.rc == 1
+
+    - name: Install uidmap
+      apt:
+        name: uidmap
+        state: present
+        update_cache: yes
+      when: docker_check.rc == 1
+
+    - name: Eun dockerd-rootless-setuptool.sh
+      shell: /usr/bin/dockerd-rootless-setuptool.sh install
+      when: docker_check.rc == 1
+      become: false
