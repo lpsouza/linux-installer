@@ -8,11 +8,36 @@
   gather_facts: true
 
   tasks:
+    - name: Check if universe repository is enabled
+      shell: apt-cache policy | grep universe
+      register: universe_repository
+      changed_when: false
+      failed_when: false
+      check_mode: false
+      tags: config
+
     - name: Add universe repository
       apt_repository:
         repo: deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} universe
         state: present
         update_cache: yes
+      when: universe_repository.rc != 0
+      tags: config
+
+    - name: Check if multiverse repository is enabled
+      shell: apt-cache policy | grep multiverse
+      register: multiverse_repository
+      changed_when: false
+      failed_when: false
+      check_mode: false
+      tags: config
+
+    - name: Add multiverse repository
+      apt_repository:
+        repo: deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} multiverse
+        state: present
+        update_cache: yes
+      when: multiverse_repository.rc != 0
       tags: config
 
     - name: Upgrade all packages to the latest version
