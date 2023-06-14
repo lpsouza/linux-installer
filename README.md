@@ -50,7 +50,7 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
   - dotnet.yaml: Install [.NET SDK](https://dotnet.microsoft.com/en-us/)
   - exa.yaml: Install [Exa](https://the.exa.website/)
   - gh.yaml: Install [GitHub CLI](https://cli.github.com/)
-  - git.yaml: Configure Git global settings
+  - git.yaml: Configure Git global settings using `GIT_USERNAME` and `GIT_EMAIL` environment variables
   - helm.yaml: Install [Helm](https://helm.sh/)
   - initial.yaml: Install basic* software
   - keychain.yaml: Install [Keychain](https://www.funtoo.org/Keychain)
