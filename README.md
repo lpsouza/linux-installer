@@ -68,6 +68,7 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
   - jekyll.yaml: Install [Jekyll](https://jekyllrb.com/)
   - k3s.yaml: Install [k3s](https://k3s.io/)
   - lid-closing.yaml: Configure lid closing action to ignore
+  - pubkey.yaml: Install public key using `PUBKEY` environment variable
   - tmux.yaml: Install [tmux](https://github.com/tmux/tmux)
   - vim.yaml: Install [Vim](https://www.vim.org/)
 

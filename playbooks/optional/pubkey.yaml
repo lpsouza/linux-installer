@@ -1,0 +1,22 @@
+- name: Install my public key
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    pubkey: "{{ lookup('env', 'PUBKEY') }}"
+
+  tasks:
+    - name: Check if public key is already added
+      shell: grep -E "^ssh-rsa.*{{ pubkey }}" ~/.ssh/authorized_keys
+      register: pubkey_check
+      changed_when: false
+      failed_when: false
+      tags: config
+
+    - name: Add public key to authorized_keys
+      lineinfile:
+        path: ~/.ssh/authorized_keys
+        line: "{{ pubkey }}"
+        create: yes
+      when: pubkey_check.rc != 0
+      tags: config
