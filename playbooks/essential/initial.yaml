@@ -71,4 +71,5 @@
         - software-properties-common
         - unzip
         - wget
+        - whois
         - zip

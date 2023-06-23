@@ -93,4 +93,5 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
 - software-properties-common: Common software needed to manage software repositories
 - unzip: De-archiver for .zip files
 - wget: Command line tool for retrieving files using HTTP, HTTPS, and FTP
+- whois: Intelligent WHOIS client
 - zip: Archiver for .zip files
