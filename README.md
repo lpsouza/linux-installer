@@ -82,9 +82,11 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
 - coreutils: GNU core utilities
 - curl: Command line tool for transferring data with URL syntax
 - htop: Interactive process viewer
+- iputils-ping: Tools to test the reachability of network hosts
 - jq: Command line JSON processor
 - lsb-release: Linux Standard Base version reporting utility
 - mc: Midnight Commander file manager
+- mtr: Network diagnostic tool
 - nano: Nano text editor (inspired by Pico)
 - ncdu: Disk usage analyzer with an ncurses interface
 - neofetch: Fast, highly customizable system info script

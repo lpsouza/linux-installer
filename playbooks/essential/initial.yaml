@@ -60,9 +60,11 @@
         - coreutils
         - curl
         - htop
+        - iputils-ping
         - jq
         - lsb-release
         - mc
+        - mtr
         - nano
         - ncdu
         - neofetch
