@@ -14,3 +14,4 @@
 - import_playbook: essential/kubectl.yaml
 - import_playbook: essential/helm.yaml
 - import_playbook: essential/kubecm.yaml
+- import_playbook: essential/k9s.yaml

@@ -53,6 +53,7 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
   - git.yaml: Configure Git global settings using `GIT_USERNAME` and `GIT_EMAIL` environment variables
   - helm.yaml: Install [Helm](https://helm.sh/)
   - initial.yaml: Install basic* software
+  - k9s.yaml: Install [K9s](https://k9scli.io/)
   - keychain.yaml: Install [Keychain](https://www.funtoo.org/Keychain)
   - kubecm.yaml: Install [KubeCM](https://kubecm.cloud/)
   - kubectl.yaml: Install [kubectl](https://kubernetes.io/docs/tasks/tools/)
