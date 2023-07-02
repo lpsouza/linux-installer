@@ -94,6 +94,7 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
 - net-tools: Legacy network management utilities
 - pandoc: Universal document converter
 - software-properties-common: Common software needed to manage software repositories
+- sqlite3: Command line interface for SQLite
 - unzip: De-archiver for .zip files
 - wget: Command line tool for retrieving files using HTTP, HTTPS, and FTP
 - whois: Intelligent WHOIS client

@@ -71,6 +71,7 @@
         - net-tools
         - pandoc
         - software-properties-common
+        - sqlite3
         - unzip
         - wget
         - whois
