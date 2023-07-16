@@ -58,6 +58,7 @@
         - build-essential
         - ca-certificates
         - coreutils
+        - csvkit
         - curl
         - htop
         - iputils-ping

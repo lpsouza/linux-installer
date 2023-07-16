@@ -81,6 +81,7 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
 - build-essential: Packages for building Debian packages
 - ca-certificates: Common CA certificates
 - coreutils: GNU core utilities
+- csvkit: Utilities for working with CSV files
 - curl: Command line tool for transferring data with URL syntax
 - htop: Interactive process viewer
 - iputils-ping: Tools to test the reachability of network hosts
