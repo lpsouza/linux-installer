@@ -52,6 +52,7 @@
         state: present
         update_cache: yes
       loop:
+        - ansible-lint
         - apt-transport-https
         - apt-utils
         - asciinema

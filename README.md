@@ -76,6 +76,7 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
 
 ### *Basic software list
 
+- ansible-lint: Checks playbooks for practices and behaviour that could potentially be improved
 - apt-transport-https: Allows the use of repositories accessed via the HTTP Secure protocol
 - apt-utils: Package manager related utility programs
 - asciinema: Terminal session recorder
