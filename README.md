@@ -52,7 +52,8 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
   - gh.yaml: Install [GitHub CLI](https://cli.github.com/)
   - git.yaml: Configure Git global settings using `GIT_USERNAME` and `GIT_EMAIL` environment variables
   - helm.yaml: Install [Helm](https://helm.sh/)
-  - initial.yaml: Install basic* software
+  - homeassistant-cli.yaml: Install [Home Assistant CLI](https://www.home-assistant.io/blog/2019/02/04/introducing-home-assistant-cli/)
+  - initial.yaml: Install basic* software and configure some initial settings
   - k9s.yaml: Install [K9s](https://k9scli.io/)
   - keychain.yaml: Install [Keychain](https://www.funtoo.org/Keychain)
   - kubecm.yaml: Install [KubeCM](https://kubecm.cloud/)
@@ -94,6 +95,8 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
 - neofetch: Fast, highly customizable system info script
 - net-tools: Legacy network management utilities
 - pandoc: Universal document converter
+- python-is-python3: Symlink /usr/bin/python to python3
+- python3-pip: Python package installer
 - software-properties-common: Common software needed to manage software repositories
 - sqlite3: Command line interface for SQLite
 - unzip: De-archiver for .zip files
