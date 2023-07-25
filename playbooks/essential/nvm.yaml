@@ -16,7 +16,9 @@
       when: not nvm_directory_stat.stat.exists
 
     - name: Install nvm
-      shell: bash /tmp/nvm.sh
+      script: /tmp/nvm.sh
+      args:
+        executable: /bin/bash
       when: not nvm_directory_stat.stat.exists
 
     - name: Check if nvm plugin is already added
@@ -31,7 +33,7 @@
         path: ~/.zshrc
         regexp: '^plugins=\((.*)\)'
         line: 'plugins=(\1 nvm)'
-        backrefs: yes
+        backrefs: true
       when: nvm_plugin_check.rc != 0
       tags: config
 
