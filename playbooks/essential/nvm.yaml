@@ -44,8 +44,11 @@
         marker: "# {mark} ANSIBLE MANAGED BLOCK - nvm"
       tags: config
 
-    - name: Check if Node is installed
-      command: node -v
+    - name: Check if Node is installed by nvm
+      shell: |
+        [ -z "$NVM_DIR" ] && export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+        nvm ls --no-colors --no-alias
       register: node_installed
       changed_when: false
       failed_when: false
