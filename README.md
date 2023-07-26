@@ -1,6 +1,6 @@
 # linux-installer
 
-This repository contains a script that installs a bunch of software on a fresh Linux installation using ansible playbooks.
+This repository contains ansible playbooks to install and configure software on Linux.
 
 ## Compatibility
 
