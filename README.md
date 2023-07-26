@@ -52,7 +52,7 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
   - gh.yaml: Install [GitHub CLI](https://cli.github.com/)
   - git.yaml: Configure Git global settings using `GIT_USERNAME` and `GIT_EMAIL` environment variables
   - helm.yaml: Install [Helm](https://helm.sh/)
-  - homeassistant-cli.yaml: Install [Home Assistant CLI](https://www.home-assistant.io/blog/2019/02/04/introducing-home-assistant-cli/)
+  - homeassistant-cli.yaml: Install [Home Assistant CLI](https://www.home-assistant.io/blog/2019/02/04/introducing-home-assistant-cli/) and configure `HASS_SERVER` and `HASS_TOKEN` environment variables.
   - initial.yaml: Install basic* software and configure some initial settings
   - k9s.yaml: Install [K9s](https://k9scli.io/)
   - keychain.yaml: Install [Keychain](https://www.funtoo.org/Keychain)
