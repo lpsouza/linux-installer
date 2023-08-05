@@ -72,6 +72,8 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
   - jekyll.yaml: Install [Jekyll](https://jekyllrb.com/)
   - k3s.yaml: Install [k3s](https://k3s.io/)
   - lid-closing.yaml: Configure lid closing action to ignore
+  - neovim.yaml: Install [Neovim](https://neovim.io/)
+  - nerdfont.yaml: Install [Nerd Fonts](https://www.nerdfonts.com/)
   - pubkey.yaml: Install public key using `PUBKEY` environment variable
   - tmux.yaml: Install [tmux](https://github.com/tmux/tmux)
 
