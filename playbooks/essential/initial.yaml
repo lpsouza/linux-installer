@@ -16,12 +16,12 @@
       check_mode: false
       tags: config
 
-    - name: Add universe repository
+    - name: Add universe repository on Ubuntu
       apt_repository:
-        repo: deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} universe
+        repo: "deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} universe"
         state: present
         update_cache: yes
-      when: universe_repository.rc != 0
+      when: universe_repository.rc != 0 and ansible_distribution == 'Ubuntu'
       tags: config
 
     - name: Check if multiverse repository is enabled
@@ -32,12 +32,12 @@
       check_mode: false
       tags: config
 
-    - name: Add multiverse repository
+    - name: Add multiverse repository on Ubuntu
       apt_repository:
-        repo: deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} multiverse
+        repo: "deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} multiverse"
         state: present
         update_cache: yes
-      when: multiverse_repository.rc != 0
+      when: multiverse_repository.rc != 0 and ansible_distribution == 'Ubuntu'
       tags: config
 
     - name: Upgrade all packages to the latest version
