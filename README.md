@@ -55,7 +55,7 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
   - git.yaml: Configure Git global settings using `GIT_USERNAME` and `GIT_EMAIL` environment variables
   - helm.yaml: Install [Helm](https://helm.sh/)
   - homeassistant-cli.yaml: Install [Home Assistant CLI](https://www.home-assistant.io/blog/2019/02/04/introducing-home-assistant-cli/) and configure `HASS_SERVER` and `HASS_TOKEN` environment variables.
-  - initial.yaml: Install basic* software and configure some initial settings
+  - initial.yaml: Install basic\* software and configure some initial settings
   - k9s.yaml: Install [K9s](https://k9scli.io/)
   - keychain.yaml: Install [Keychain](https://www.funtoo.org/Keychain)
   - kubecm.yaml: Install [KubeCM](https://kubecm.cloud/)
@@ -74,9 +74,8 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
   - lid-closing.yaml: Configure lid closing action to ignore
   - pubkey.yaml: Install public key using `PUBKEY` environment variable
   - tmux.yaml: Install [tmux](https://github.com/tmux/tmux)
-  - vim.yaml: Install [Vim](https://www.vim.org/)
 
-### *Basic software list
+### \*Basic software list
 
 - ansible-lint: Checks playbooks for practices and behaviour that could potentially be improved
 - apt-transport-https: Allows the use of repositories accessed via the HTTP Secure protocol
