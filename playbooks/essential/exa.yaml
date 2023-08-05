@@ -18,7 +18,7 @@
       blockinfile:
         path: ~/.zshrc
         block: |
-          alias ls='exa --icons -F -H --group-directories-first -1'
+          alias ls='exa --icons -F -H --group-directories-first'
         marker: "# {mark} ANSIBLE MANAGED BLOCK - exa"
       when: exa is defined and exa.changed
       become: false
