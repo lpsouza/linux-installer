@@ -1,0 +1,23 @@
+---
+- name: Install CaskaydiaCove NerdFont
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Download font
+      get_url:
+        url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/CascadiaCode.zip"
+        dest: "/tmp/CascadiaCode.zip"
+        mode: 0644
+
+    - name: Ensure .fonts/CascadiaCode directory exists
+      file:
+        path: "~/.fonts/CascadiaCode"
+        state: directory
+        mode: 0755
+
+    - name: Unzip font into local .fonts directory
+      unarchive:
+        src: "/tmp/CascadiaCode.zip"
+        dest: "~/.fonts/CascadiaCode"
+        mode: 0644
