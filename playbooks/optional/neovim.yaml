@@ -1,0 +1,17 @@
+---
+- name: Install Neovim
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Ensure ~/.local/bin directory exists
+      file:
+        path: ~/.local/bin
+        state: directory
+        mode: 0755
+
+    - name: Download nvim.appimage
+      get_url:
+        url: "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage"
+        dest: ~/.local/bin/nvim
+        mode: 0755
