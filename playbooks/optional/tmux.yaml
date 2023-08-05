@@ -13,6 +13,13 @@
         state: present
         update_cache: yes
 
+    - name: Clone tpm (tmux plugin manager) repository
+      git:
+        repo: "https://github.com/tmux-plugins/tpm"
+        dest: "~/.tmux/plugins/tpm"
+      become: false
+      tags: config
+
     - name: Copy tmux.conf from gist
       get_url:
         url: https://gist.github.com/lpsouza/6534fd264197963e86dce01ece9f63d1/raw
