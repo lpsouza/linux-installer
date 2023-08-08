@@ -1,0 +1,12 @@
+---
+- import_playbook: install-basics.yaml
+- import_playbook: ../essential/exa.yaml
+- import_playbook: ../essential/nvm.yaml
+- import_playbook: ../essential/dotnet.yaml
+- import_playbook: ../essential/terraform.yaml
+- import_playbook: ../essential/azure-cli.yaml
+- import_playbook: ../essential/kubectl.yaml
+- import_playbook: ../essential/helm.yaml
+- import_playbook: ../essential/kubecm.yaml
+- import_playbook: ../essential/k9s.yaml
+- import_playbook: ../essential/homeassistant-cli.yaml

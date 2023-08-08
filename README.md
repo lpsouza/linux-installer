@@ -35,49 +35,45 @@ export HASS_SERVER="https://your.homeassistant.server"
 export HASS_TOKEN="your-home-assistant-long-lived-access-token"
 
 # Run the install-essential playbook to instal essential software
-ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-pass
+ansible-playbook linux-installer/playbooks/bundles/install-basics.yaml --ask-become-pass
 
 # Let the ansible do the magic! :)
 ```
 
-## Playbook groups
-
-- **essential**: Playbooks that install essential software
-- **optional**: Playbooks that install optional software
-
 ## Playbook list
 
-- essential/
-  - azure-cli.yaml: Install [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/what-is-azure-cli)
-  - dotnet.yaml: Install [.NET SDK](https://dotnet.microsoft.com/en-us/)
-  - exa.yaml: Install [Exa](https://the.exa.website/)
-  - gh.yaml: Install [GitHub CLI](https://cli.github.com/)
-  - git.yaml: Configure Git global settings using `GIT_USERNAME` and `GIT_EMAIL` environment variables
-  - helm.yaml: Install [Helm](https://helm.sh/)
-  - homeassistant-cli.yaml: Install [Home Assistant CLI](https://www.home-assistant.io/blog/2019/02/04/introducing-home-assistant-cli/) and configure `HASS_SERVER` and `HASS_TOKEN` environment variables.
-  - initial.yaml: Install basic\* software and configure some initial settings
-  - k9s.yaml: Install [K9s](https://k9scli.io/)
-  - keychain.yaml: Install [Keychain](https://www.funtoo.org/Keychain)
-  - kubecm.yaml: Install [KubeCM](https://kubecm.cloud/)
-  - kubectl.yaml: Install [kubectl](https://kubernetes.io/docs/tasks/tools/)
-  - nvm.yaml: Install [NVM](https://github.com/nvm-sh/nvm)
-  - passwordless.yaml: Configure passwordless sudo
-  - starship.yaml: Install [Starship](https://starship.rs/)
-  - terraform.yaml: Install [Terraform](https://www.terraform.io/)
-  - zsh.yaml: Install [ZSH](https://www.zsh.org/) and [Oh My ZSH](https://ohmyz.sh/)
-- optional/
-  - bashtop.yaml: Install [Bashtop](https://github.com/aristocratos/bashtop)
-  - docker.yaml: Install [Docker](https://www.docker.com/)
-  - duf.yaml: Install [duf](https://github.com/muesli/duf)
-  - i3wm.yaml: Install [i3wm](https://i3wm.org/)
-  - jekyll.yaml: Install [Jekyll](https://jekyllrb.com/)
-  - k3s.yaml: Install [k3s](https://k3s.io/)
-  - lid-closing.yaml: Configure lid closing action to ignore
-  - neovim.yaml: Install [Neovim](https://neovim.io/)
-  - nerdfont.yaml: Install [Nerd Fonts](https://www.nerdfonts.com/)
-  - pubkey.yaml: Install public key using `PUBKEY` environment variable
-  - tmux.yaml: Install [tmux](https://github.com/tmux/tmux)
-  - tz.yaml: Configure timezone data
+- bundles/
+  - install-basics.yaml: Install essential playbooks
+  - install-ubuntu-wsl2.yaml: Install playbooks for Ubuntu on WSL2
+- azure-cli.yaml: Install [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/what-is-azure-cli)
+- bashtop.yaml: Install [Bashtop](https://github.com/aristocratos/bashtop)
+- docker.yaml: Install [Docker](https://www.docker.com/)
+- dotnet.yaml: Install [.NET SDK](https://dotnet.microsoft.com/en-us/)
+- duf.yaml: Install [duf](https://github.com/muesli/duf)
+- exa.yaml: Install [Exa](https://the.exa.website/)
+- gh.yaml: Install [GitHub CLI](https://cli.github.com/)
+- git.yaml: Configure Git global settings using `GIT_USERNAME` and `GIT_EMAIL` environment variables
+- helm.yaml: Install [Helm](https://helm.sh/)
+- homeassistant-cli.yaml: Install [Home Assistant CLI](https://www.home-assistant.io/blog/2019/02/04/introducing-home-assistant-cli/) and configure `HASS_SERVER` and `HASS_TOKEN` environment variables.
+- i3wm.yaml: Install [i3wm](https://i3wm.org/)
+- initial.yaml: Install basic\* software and configure some initial settings
+- jekyll.yaml: Install [Jekyll](https://jekyllrb.com/)
+- k3s.yaml: Install [k3s](https://k3s.io/)
+- k9s.yaml: Install [K9s](https://k9scli.io/)
+- keychain.yaml: Install [Keychain](https://www.funtoo.org/Keychain)
+- kubecm.yaml: Install [KubeCM](https://kubecm.cloud/)
+- kubectl.yaml: Install [kubectl](https://kubernetes.io/docs/tasks/tools/)
+- lid-closing.yaml: Configure lid closing action to ignore
+- neovim.yaml: Install [Neovim](https://neovim.io/)
+- nerdfont.yaml: Install [Nerd Fonts](https://www.nerdfonts.com/)
+- nvm.yaml: Install [NVM](https://github.com/nvm-sh/nvm)
+- passwordless.yaml: Configure passwordless sudo
+- pubkey.yaml: Install public key using `PUBKEY` environment variable
+- starship.yaml: Install [Starship](https://starship.rs/)
+- terraform.yaml: Install [Terraform](https://www.terraform.io/)
+- tmux.yaml: Install [tmux](https://github.com/tmux/tmux)
+- tz.yaml: Configure timezone data
+- zsh.yaml: Install [ZSH](https://www.zsh.org/) and [Oh My ZSH](https://ohmyz.sh/)
 
 ### \*Basic software list
 
