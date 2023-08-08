@@ -1,28 +1,28 @@
 # linux-installer
 
-This repository contains ansible playbooks to install and configure software on Linux.
+Welcome to the Linux Installer repository! This collection of Ansible playbooks empowers you to effortlessly install and configure software on your Linux system.
 
 ## Compatibility
 
-This ansible playbooks has been tested on the following Linux distributions:
+Our Ansible playbooks have been rigorously tested on the following Linux distributions:
 
-- Ubuntu 22.04.2 LTS (on WSL2)
-- Debian GNU/Linux 11 (on Chromebook)
+- Ubuntu 22.04.2 LTS (WSL2)
+- Debian GNU/Linux 11 (Chromebook)
 
 ## Usage
 
-Before running the ansible playbooks, some considerations must be taken:
+Before diving into the Ansible magic, let's cover some essentials:
 
-- The ansible playbooks are designed to be run on a fresh Linux installation
-- The ansible playbooks are designed to be run on local user called `lpsouza` (change the `remote_user` variable on each playbook if you want to use another user)
-- The ansible playbooks are designed to be run on a local machine (change the `hosts` variable on each playbook if you want to use another host and adjust the inventory file accordingly)
-- The ansible playbooks are designed to be run on a local machine with sudo access (change the `become_user` variable on each playbook if you want to use another user)
+- These playbooks are tailored for fresh Linux installations.
+- They are optimized for the local user 'lpsouza'. Modify the `remote_user` variable in each playbook if you prefer a different user.
+- They are crafted for local execution. Alter the `hosts` variable in each playbook to target a distinct host and adjust the inventory file accordingly.
+- The playbooks are designed for local machines with sudo access. Modify the `become_user` variable in each playbook to switch to another user if needed.
 
 ```bash
 # Update the apt repository
 sudo apt update
 
-# Install git and ansible
+# Install Git and Ansible
 sudo apt install git ansible
 
 # Clone this repository
@@ -34,10 +34,10 @@ export GIT_EMAIL="your@email"
 export HASS_SERVER="https://your.homeassistant.server"
 export HASS_TOKEN="your-home-assistant-long-lived-access-token"
 
-# Run the install-essential playbook to instal essential software
+# Run the 'install-basics' playbook to install essential software
 ansible-playbook linux-installer/playbooks/bundles/install-basics.yaml --ask-become-pass
 
-# Let the ansible do the magic! :)
+# Let Ansible perform its magic! 🪄
 ```
 
 ## Playbook list
@@ -106,3 +106,7 @@ ansible-playbook linux-installer/playbooks/bundles/install-basics.yaml --ask-bec
 - wget: Command line tool for retrieving files using HTTP, HTTPS, and FTP
 - whois: Intelligent WHOIS client
 - zip: Archiver for .zip files
+
+## Join the Automation Journey
+
+Embrace effortless software installation and configuration! The power of Ansible is at your fingertips. Explore our playbooks, adapt them to your needs, and simplify your Linux experience. Let's automate together! 🚀
