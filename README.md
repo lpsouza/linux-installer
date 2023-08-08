@@ -76,6 +76,7 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
   - nerdfont.yaml: Install [Nerd Fonts](https://www.nerdfonts.com/)
   - pubkey.yaml: Install public key using `PUBKEY` environment variable
   - tmux.yaml: Install [tmux](https://github.com/tmux/tmux)
+  - tz.yaml: Configure timezone data
 
 ### \*Basic software list
 

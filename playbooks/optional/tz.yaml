@@ -1,0 +1,14 @@
+---
+- name: Setting timezone
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Set timezone to America/Sao_Paulo
+      timezone:
+        name: America/Sao_Paulo
+        state: present
