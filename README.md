@@ -69,6 +69,7 @@ ansible-playbook linux-installer/playbooks/install-essentials.yaml --ask-become-
   - bashtop.yaml: Install [Bashtop](https://github.com/aristocratos/bashtop)
   - docker.yaml: Install [Docker](https://www.docker.com/)
   - duf.yaml: Install [duf](https://github.com/muesli/duf)
+  - i3wm.yaml: Install [i3wm](https://i3wm.org/)
   - jekyll.yaml: Install [Jekyll](https://jekyllrb.com/)
   - k3s.yaml: Install [k3s](https://k3s.io/)
   - lid-closing.yaml: Configure lid closing action to ignore
