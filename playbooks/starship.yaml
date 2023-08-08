@@ -8,7 +8,7 @@
   gather_facts: false
 
   tasks:
-    - name: Check if nvm is installed
+    - name: Check if Starship is installed
       stat:
         path: /usr/local/bin/starship
       register: starship_file_stat
