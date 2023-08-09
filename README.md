@@ -35,7 +35,8 @@ export HASS_SERVER="https://your.homeassistant.server"
 export HASS_TOKEN="your-home-assistant-long-lived-access-token"
 
 # Run the 'install-basics' playbook to install essential software
-ansible-playbook linux-installer/playbooks/bundles/install-basics.yaml --ask-become-pass
+cd linux-installer
+ansible-playbook playbooks/bundles/install-basics.yaml --ask-become-pass
 
 # Let Ansible perform its magic! 🪄
 ```
