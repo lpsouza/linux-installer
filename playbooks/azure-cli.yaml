@@ -21,7 +21,9 @@
       when: not gpg_file_stat.stat.exists
 
     - name: Install apt key
-      shell: cat /tmp/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg
+      shell: |
+        set -o pipefail
+        cat /tmp/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg
       when: not gpg_file_stat.stat.exists
 
     - name: Add apt repository
@@ -34,4 +36,4 @@
       apt:
         name: azure-cli
         state: present
-        update_cache: yes
+        update_cache: true

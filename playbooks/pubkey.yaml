@@ -17,6 +17,7 @@
       lineinfile:
         path: ~/.ssh/authorized_keys
         line: "{{ pubkey }}"
-        create: yes
+        create: true
+        mode: 0600
       when: pubkey_check.rc != 0
       tags: config

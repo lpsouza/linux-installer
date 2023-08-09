@@ -21,7 +21,9 @@
       when: not gpg_file_stat.stat.exists
 
     - name: Install apt key
-      shell: cat /tmp/helm.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/helm.gpg
+      shell: |
+        set -o pipefail
+        cat /tmp/helm.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/helm.gpg
       when: not gpg_file_stat.stat.exists
 
     - name: Add apt repository
@@ -34,4 +36,4 @@
       apt:
         name: helm
         state: present
-        update_cache: yes
+        update_cache: true

@@ -23,7 +23,7 @@
       unarchive:
         src: /tmp/kubecm.tar.gz
         dest: /tmp
-        remote_src: yes
+        remote_src: true
       when: not kubecm_installed.stat.exists
 
     - name: Install kubecm

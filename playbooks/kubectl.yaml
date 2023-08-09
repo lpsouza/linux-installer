@@ -21,7 +21,7 @@
       when: not gpg_file_stat.stat.exists
 
     - name: Install apt key
-      shell: cat /tmp/apt-key.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/google-apt-key.gpg
+      command: cat /tmp/apt-key.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/google-apt-key.gpg
       when: not gpg_file_stat.stat.exists
 
     - name: Add apt repository
@@ -34,4 +34,4 @@
       apt:
         name: kubectl
         state: present
-        update_cache: yes
+        update_cache: true

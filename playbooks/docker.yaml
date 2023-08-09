@@ -8,7 +8,7 @@
 
   tasks:
     - name: Check if docker is already installed
-      shell: which docker
+      command: which docker
       register: docker_check
       changed_when: false
       failed_when: false
@@ -21,17 +21,17 @@
       when: docker_check.rc == 1
 
     - name: Install docker
-      shell: /tmp/install.sh
+      command: /tmp/install.sh
       when: docker_check.rc == 1
 
     - name: Install uidmap
       apt:
         name: uidmap
         state: present
-        update_cache: yes
+        update_cache: true
       when: docker_check.rc == 1
 
-    - name: Eun dockerd-rootless-setuptool.sh
-      shell: /usr/bin/dockerd-rootless-setuptool.sh install
+    - name: Run dockerd-rootless-setuptool.sh
+      command: /usr/bin/dockerd-rootless-setuptool.sh install
       when: docker_check.rc == 1
       become: false

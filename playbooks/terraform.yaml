@@ -21,7 +21,7 @@
       when: not gpg_file_stat.stat.exists
 
     - name: Install apt key
-      shell: cat /tmp/terraform.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/terraform.gpg
+      command: cat /tmp/terraform.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/terraform.gpg
       when: not gpg_file_stat.stat.exists
 
     - name: Add apt repository
@@ -34,4 +34,4 @@
       apt:
         name: terraform
         state: present
-        update_cache: yes
+        update_cache: true

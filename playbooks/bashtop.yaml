@@ -19,12 +19,12 @@
       apt:
         name: bashtop
         state: present
-        update_cache: yes
+        update_cache: true
       when: ansible_distribution == 'Ubuntu'
 
     - name: Install bashtop (btop)
       apt:
         name: btop
         state: present
-        update_cache: yes
+        update_cache: true
       when: ansible_distribution == 'Debian'

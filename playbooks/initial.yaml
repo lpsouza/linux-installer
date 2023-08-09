@@ -9,7 +9,9 @@
 
   tasks:
     - name: Check if universe repository is enabled
-      shell: apt-cache policy | grep universe
+      shell: |
+        set -o pipefail
+        apt-cache policy | grep universe
       register: universe_repository
       changed_when: false
       failed_when: false
@@ -20,12 +22,14 @@
       apt_repository:
         repo: "deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} universe"
         state: present
-        update_cache: yes
+        update_cache: true
       when: universe_repository.rc != 0 and ansible_distribution == 'Ubuntu'
       tags: config
 
     - name: Check if multiverse repository is enabled
-      shell: apt-cache policy | grep multiverse
+      shell: |
+        set -o pipefail
+        apt-cache policy | grep multiverse
       register: multiverse_repository
       changed_when: false
       failed_when: false
@@ -36,21 +40,21 @@
       apt_repository:
         repo: "deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} multiverse"
         state: present
-        update_cache: yes
+        update_cache: true
       when: multiverse_repository.rc != 0 and ansible_distribution == 'Ubuntu'
       tags: config
 
     - name: Upgrade all packages to the latest version
       apt:
         upgrade: dist
-        update_cache: yes
+        update_cache: true
       tags: upgrade
 
     - name: Install essential packages
       apt:
         name: "{{ item }}"
         state: present
-        update_cache: yes
+        update_cache: true
       loop:
         - ansible-lint
         - apt-transport-https

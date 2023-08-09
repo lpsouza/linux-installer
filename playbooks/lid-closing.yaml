@@ -8,7 +8,7 @@
 
   tasks:
     - name: Check if handleLidSwitch is already set to ignore
-      shell: grep -E "^HandleLidSwitch=ignore" /etc/systemd/logind.conf
+      command: grep -E "^HandleLidSwitch=ignore" /etc/systemd/logind.conf
       register: lid_switch_check
       changed_when: false
       failed_when: false
@@ -23,7 +23,7 @@
       tags: config
 
     - name: Check if LidSwitchIgnoreInhibited is already set to no
-      shell: grep -E "^LidSwitchIgnoreInhibited=no" /etc/systemd/logind.conf
+      command: grep -E "^LidSwitchIgnoreInhibited=no" /etc/systemd/logind.conf
       register: lid_switch_ignore_check
       changed_when: false
       failed_when: false
