@@ -46,6 +46,7 @@ ansible-playbook linux-installer/playbooks/bundles/install-basics.yaml --ask-bec
   - install-basics.yaml: Install essential playbooks
   - install-ubuntu-wsl2.yaml: Install playbooks for Ubuntu on WSL2
 - azure-cli.yaml: Install [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/what-is-azure-cli)
+- bash.yaml: Configure Bash
 - bashtop.yaml: Install [Bashtop](https://github.com/aristocratos/bashtop)
 - docker.yaml: Install [Docker](https://www.docker.com/)
 - dotnet.yaml: Install [.NET SDK](https://dotnet.microsoft.com/en-us/)

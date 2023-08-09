@@ -1,0 +1,23 @@
+---
+- name: Configure bash
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Add on .bashrc user bin folder to PATH
+      blockinfile:
+        path: ~/.bashrc
+        block: |
+          if [ -d "$HOME/bin" ] ; then
+            PATH="$HOME/bin:$PATH"
+          fi
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - bin folder"
+
+    - name: Add on .bashrc user .local/bin folder to PATH
+      blockinfile:
+        path: ~/.bashrc
+        block: |
+          if [ -d "$HOME/.local/bin" ] ; then
+            PATH="$HOME/.local/bin:$PATH"
+          fi
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - .local/bin folder"

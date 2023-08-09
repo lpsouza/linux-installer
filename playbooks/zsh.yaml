@@ -15,21 +15,21 @@
         update_cache: true
 
     - name: Check if Oh-My-Zsh is installed
-      become: false
       stat:
         path: ~/.oh-my-zsh
       register: ohmyzsh_installed
+      become: false
 
     - name: Install oh-my-zsh
-      become: false
       shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
       when: not ohmyzsh_installed.stat.exists
+      become: false
 
     - name: Check if zsh-autosuggestions plugin is installed
-      become: false
       stat:
         path: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
       register: zsh_autosuggestions_installed
+      become: false
       tags: config
 
     - name: Install zsh-autosuggestions plugin
@@ -38,13 +38,14 @@
         dest: "{{ ZSH_CUSTOM | default('~/.oh-my-zsh/custom') }}/plugins/zsh-autosuggestions"
         version: master
       when: not zsh_autosuggestions_installed.stat.exists
+      become: false
       tags: config
 
     - name: Check if zsh-syntax-highlighting plugin is installed
-      become: false
       stat:
         path: ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
       register: zsh_syntax_highlighting_installed
+      become: false
       tags: config
 
     - name: Install zsh-syntax-highlighting plugin
@@ -53,6 +54,7 @@
         dest: "{{ ZSH_CUSTOM | default('~/.oh-my-zsh/custom') }}/plugins/zsh-syntax-highlighting"
         version: master
       when: not zsh_syntax_highlighting_installed.stat.exists
+      become: false
       tags: config
 
     - name: Check if zsh-autosuggestions plugin is already added
@@ -92,19 +94,41 @@
       tags: config
 
     - name: Configure zsh theme
-      become: false
       lineinfile:
         path: ~/.zshrc
         regexp: "^ZSH_THEME="
         line: 'ZSH_THEME="kafeitu"'
+      become: false
       tags: config
 
     - name: Disable auto title
-      become: false
       lineinfile:
         path: ~/.zshrc
         regexp: "^# DISABLE_AUTO_TITLE="
         line: 'DISABLE_AUTO_TITLE="true"'
+      become: false
+      tags: config
+
+    - name: Add on .zshrc user bin folder to PATH
+      blockinfile:
+        path: ~/.zshrc
+        block: |
+          if [ -d "$HOME/bin" ] ; then
+            PATH="$HOME/bin:$PATH"
+          fi
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - bin folder"
+      become: false
+      tags: config
+
+    - name: Add on .zshrc user .local/bin folder to PATH
+      blockinfile:
+        path: ~/.zshrc
+        block: |
+          if [ -d "$HOME/.local/bin" ] ; then
+            PATH="$HOME/.local/bin:$PATH"
+          fi
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - .local/bin folder"
+      become: false
       tags: config
 
     - name: Change default shell to zsh
