@@ -15,3 +15,9 @@
         url: "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage"
         dest: ~/.local/bin/nvim
         mode: 0755
+
+    - name: Clone configuration repository
+      git:
+        repo: "https://github.com/lpsouza/nvim-config.git"
+        dest: ~/.config/nvim
+        version: main
