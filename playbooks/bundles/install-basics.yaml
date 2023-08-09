@@ -1,8 +1,8 @@
 ---
-- import_playbook: ../essential/initial.yaml
-- import_playbook: ../essential/zsh.yaml
-- import_playbook: ../essential/starship.yaml
-- import_playbook: ../essential/passwordless.yaml
-- import_playbook: ../essential/keychain.yaml
-- import_playbook: ../essential/git.yaml
-- import_playbook: ../essential/gh.yaml
+- import_playbook: ../initial.yaml
+- import_playbook: ../zsh.yaml
+- import_playbook: ../starship.yaml
+- import_playbook: ../passwordless.yaml
+- import_playbook: ../keychain.yaml
+- import_playbook: ../git.yaml
+- import_playbook: ../gh.yaml
