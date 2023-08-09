@@ -47,5 +47,5 @@
       git_config:
         scope: global
         name: pull.rebase
-        value: false
+        value: "false"
       when: git_pull_rebase_output.value is not defined
