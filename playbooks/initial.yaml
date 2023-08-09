@@ -61,6 +61,7 @@
         - coreutils
         - csvkit
         - curl
+        - fuse
         - elinks
         - htop
         - iputils-ping

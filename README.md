@@ -86,6 +86,7 @@ ansible-playbook linux-installer/playbooks/bundles/install-basics.yaml --ask-bec
 - coreutils: GNU core utilities
 - csvkit: Utilities for working with CSV files
 - curl: Command line tool for transferring data with URL syntax
+- fuse: Filesystem in Userspace
 - elinks: Advanced and well-established feature-rich text mode web browser
 - htop: Interactive process viewer
 - iputils-ping: Tools to test the reachability of network hosts
