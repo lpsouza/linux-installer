@@ -17,13 +17,7 @@
     - name: Download apt key
       get_url:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-        dest: /tmp/apt-key.gpg
-      when: not gpg_file_stat.stat.exists
-
-    - name: Install apt key
-      shell: |
-        set -o pipefail
-        cat /tmp/apt-key.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/google-apt-key.gpg
+        dest: /etc/apt/trusted.gpg.d/google-apt-key.gpg
       when: not gpg_file_stat.stat.exists
 
     - name: Add apt repository
