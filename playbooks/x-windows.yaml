@@ -8,17 +8,11 @@
   gather_facts: false
 
   tasks:
-    - name: Install xorg, xinit, i3 and xrdp
+    - name: Install i3, xorg, xinit, xrdp, xephyr and kitty
       apt:
-        name: "{{ item }}"
+        name: ['i3', 'xorg', 'xinit', 'xrdp', 'xserver-xephyr', 'kitty']
         state: present
         update_cache: true
-      with_items:
-        - xorg
-        - xinit
-        - i3
-        - xrdp
-        - kitty
 
     - name: Change default terminal to kitty
       command: update-alternatives --set x-terminal-emulator /usr/bin/kitty
