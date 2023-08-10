@@ -1,0 +1,15 @@
+---
+- name: Install kitty
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Install kitty
+      apt:
+        name: kitty
+        state: present
+        update_cache: true

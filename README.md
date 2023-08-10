@@ -63,6 +63,7 @@ ansible-playbook playbooks/bundles/install-basics.yaml --ask-become-pass
 - k3s.yaml: Install [k3s](https://k3s.io/)
 - k9s.yaml: Install [K9s](https://k9scli.io/)
 - keychain.yaml: Install [Keychain](https://www.funtoo.org/Keychain)
+- kitty.yaml: Install [Kitty](https://sw.kovidgoyal.net/kitty/)
 - kubecm.yaml: Install [KubeCM](https://kubecm.cloud/)
 - kubectl.yaml: Install [kubectl](https://kubernetes.io/docs/tasks/tools/)
 - lid-closing.yaml: Configure lid closing action to ignore
