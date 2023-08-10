@@ -11,4 +11,3 @@
     - name: Set timezone to America/Sao_Paulo
       timezone:
         name: America/Sao_Paulo
-        state: present
