@@ -21,7 +21,9 @@
       when: not gpg_file_stat.stat.exists
 
     - name: Install apt key
-      command: cat /tmp/apt-key.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/google-apt-key.gpg
+      shell: |
+        set -o pipefail
+        cat /tmp/apt-key.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/google-apt-key.gpg
       when: not gpg_file_stat.stat.exists
 
     - name: Add apt repository
