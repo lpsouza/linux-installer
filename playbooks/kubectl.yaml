@@ -7,27 +7,12 @@
   become_method: sudo
   gather_facts: false
 
+  vars:
+    kubectl_version: v1.27.4
+
   tasks:
-    - name: Check if GPG file is installed
-      stat:
-        path: /etc/apt/trusted.gpg.d/google-apt-key.gpg
-      register: gpg_file_stat
-      failed_when: false
-
-    - name: Download apt key
+    - name: Download kubectl binary
       get_url:
-        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-        dest: /etc/apt/trusted.gpg.d/google-apt-key.gpg
-      when: not gpg_file_stat.stat.exists
-
-    - name: Add apt repository
-      apt_repository:
-        repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
-        state: present
-        filename: kubernetes
-
-    - name: Install kubectl
-      apt:
-        name: kubectl
-        state: present
-        update_cache: true
+        url: https://storage.googleapis.com/kubernetes-release/release/{{ kubectl_version }}/bin/linux/amd64/kubectl
+        dest: /usr/local/bin/kubectl
+        mode: 0755
