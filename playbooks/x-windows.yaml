@@ -25,5 +25,5 @@
           #!/bin/bash
           Xephyr -br -fullscreen -resizeable :20 &
           sleep 5
-          DISPLAY=:20 startx -- :20 -dpi 96 vt8
+          DISPLAY=:20 i3 &
         mode: 0755
