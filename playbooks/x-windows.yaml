@@ -1,5 +1,5 @@
 ---
-- name: Install kitty
+- name: Install X Window System
   hosts: localhost
   remote_user: lpsouza
   become: true
@@ -8,11 +8,17 @@
   gather_facts: false
 
   tasks:
-    - name: Install kitty
+    - name: Install xorg, xinit, i3 and xrdp
       apt:
-        name: kitty
+        name: "{{ item }}"
         state: present
         update_cache: true
+      with_items:
+        - xorg
+        - xinit
+        - i3
+        - xrdp
+        - kitty
 
     - name: Change default terminal to kitty
       command: update-alternatives --set x-terminal-emulator /usr/bin/kitty
