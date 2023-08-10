@@ -10,9 +10,5 @@
   tasks:
     - name: Install xorg, xinit and i3
       apt:
-        name: "{{ item }}"
+        name: ['xorg', 'xinit', 'i3']
         state: present
-      with_items:
-        - xorg
-        - xinit
-        - i3
