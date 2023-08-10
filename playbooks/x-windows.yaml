@@ -23,7 +23,7 @@
         dest: /usr/local/bin/startx-xephyr
         content: |
           #!/bin/bash
-          Xephyr -br -fullscreen -resizable :20 &
+          Xephyr -br -fullscreen -resizeable :20 &
           sleep 5
-          DISPLAY=:20 startx &
+          DISPLAY=:20 startx -- :20 -dpi 96 vt8
         mode: 0755
