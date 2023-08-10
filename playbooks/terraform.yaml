@@ -7,31 +7,20 @@
   become_method: sudo
   gather_facts: true
 
+  vars:
+    - terraform_version: 1.5.5
+
   tasks:
-    - name: Check if GPG file is installed
-      stat:
-        path: /etc/apt/trusted.gpg.d/terraform.gpg
-      register: gpg_file_stat
-      failed_when: false
-
-    - name: Download apt key
+    - name: Download Terraform
       get_url:
-        url: https://apt.releases.hashicorp.com/gpg
-        dest: /tmp/terraform.gpg
-      when: not gpg_file_stat.stat.exists
+        url: https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip
+        dest: /tmp/terraform_{{ terraform_version }}_linux_amd64.zip
+        mode: 0644
 
-    - name: Install apt key
-      command: cat /tmp/terraform.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/terraform.gpg
-      when: not gpg_file_stat.stat.exists
-
-    - name: Add apt repository
-      apt_repository:
-        repo: deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_lsb.codename }} main
-        state: present
-        filename: terraform
-
-    - name: Install Terraform
-      apt:
-        name: terraform
-        state: present
-        update_cache: true
+    - name: Unzip Terraform
+      unarchive:
+        src: /tmp/terraform_{{ terraform_version }}_linux_amd64.zip
+        dest: /usr/local/bin
+        remote_src: true
+        mode: 0755
+        creates: /usr/local/bin/terraform
