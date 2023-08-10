@@ -17,3 +17,13 @@
     - name: Change default terminal to kitty
       command: update-alternatives --set x-terminal-emulator /usr/bin/kitty
       changed_when: true
+
+    - name: Create startx-xephyr script
+      copy:
+        dest: /usr/local/bin/startx-xephyr
+        content: |
+          #!/bin/bash
+          Xephyr -br -fullscreen -resizable :20 &
+          sleep 5
+          DISPLAY=:20 startx &
+        mode: 0755
