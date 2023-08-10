@@ -13,3 +13,7 @@
         name: kitty
         state: present
         update_cache: true
+
+    - name: Change default terminal to kitty
+      command: update-alternatives --set x-terminal-emulator /usr/bin/kitty
+      changed_when: result.rc != 0
