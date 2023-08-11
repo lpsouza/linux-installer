@@ -47,6 +47,7 @@
 
     - name: Check if Node is installed by nvm
       shell: |
+        source ~/.bashrc
         [ -z "$NVM_DIR" ] && export NVM_DIR="$HOME/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
         nvm ls --no-colors --no-alias
@@ -57,6 +58,7 @@
 
     - name: Install node
       shell: |
+        source ~/.bashrc
         [ -z "$NVM_DIR" ] && export NVM_DIR="$HOME/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
         nvm install --lts
