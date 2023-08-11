@@ -10,3 +10,6 @@
 - import_playbook: ../kubecm.yaml
 - import_playbook: ../k9s.yaml
 - import_playbook: ../homeassistant-cli.yaml
+- import_playbook: ../nerdfont.yaml
+- import_playbook: ../neovim.yaml
+- import_playbook: ../x-windows.yaml

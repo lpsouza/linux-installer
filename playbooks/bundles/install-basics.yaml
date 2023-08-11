@@ -1,6 +1,8 @@
 ---
 - import_playbook: ../initial.yaml
 - import_playbook: ../zsh.yaml
-- import_playbook: ../passwordless.yaml
+- import_playbook: ../starship.yaml
+- import_playbook: ../exa.yaml
 - import_playbook: ../git.yaml
 - import_playbook: ../gh.yaml
+- import_playbook: ../passwordless.yaml
