@@ -1,5 +1,5 @@
 ---
-- name: Install X Window System
+- name: Install X Window System and friends
   hosts: localhost
   remote_user: lpsouza
   become: true
@@ -8,9 +8,16 @@
   gather_facts: false
 
   tasks:
-    - name: Install i3, xorg, xinit, xrdp, xephyr and kitty
+    - name: Install X Window System and friends
       apt:
-        name: ['i3', 'xorg', 'xinit', 'xrdp', 'xserver-xephyr', 'kitty']
+        name:
+          - i3
+          - i3blocks
+          - xorg
+          - xinit
+          - xrdp
+          - xserver-xephyr
+          - kitty
         state: present
         update_cache: true
 
@@ -18,12 +25,20 @@
       command: update-alternatives --set x-terminal-emulator /usr/bin/kitty
       changed_when: true
 
-    - name: Create startx-xephyr script
+    - name: Ensure ~/.local/bin directory exists
+      file:
+        path: ~/.local/bin
+        state: directory
+        mode: 0755
+      become: false
+
+    - name: Create i3wm script
       copy:
-        dest: /usr/local/bin/startx-xephyr
+        dest: ~/.local/bin/i3wm
         content: |
           #!/bin/bash
-          Xephyr -br -fullscreen -resizeable :20 &
+          Xephyr -br -fullscreen -resizeable -dpi 200 :20 &
           sleep 5
           DISPLAY=:20 i3 &
         mode: 0755
+      become: false
