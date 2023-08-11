@@ -52,37 +52,36 @@
 
     - name: Install essential packages
       apt:
-        name: "{{ item }}"
+        name:
+          - ansible-lint
+          - apt-transport-https
+          - apt-utils
+          - asciinema
+          - build-essential
+          - ca-certificates
+          - coreutils
+          - csvkit
+          - curl
+          - fuse
+          - elinks
+          - htop
+          - iputils-ping
+          - jq
+          - lsb-release
+          - mc
+          - mtr
+          - nano
+          - ncdu
+          - neofetch
+          - net-tools
+          - pandoc
+          - python-is-python3
+          - python3-pip
+          - software-properties-common
+          - sqlite3
+          - unzip
+          - wget
+          - whois
+          - zip
         state: present
         update_cache: true
-      loop:
-        - ansible-lint
-        - apt-transport-https
-        - apt-utils
-        - asciinema
-        - build-essential
-        - ca-certificates
-        - coreutils
-        - csvkit
-        - curl
-        - fuse
-        - elinks
-        - htop
-        - iputils-ping
-        - jq
-        - lsb-release
-        - mc
-        - mtr
-        - nano
-        - ncdu
-        - neofetch
-        - net-tools
-        - pandoc
-        - python-is-python3
-        - python3-pip
-        - software-properties-common
-        - sqlite3
-        - unzip
-        - wget
-        - whois
-        - zip
