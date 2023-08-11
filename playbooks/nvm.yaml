@@ -13,12 +13,11 @@
       get_url:
         url: https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh
         dest: /tmp/nvm.sh
+        mode: '0755'
       when: not nvm_directory_stat.stat.exists
 
     - name: Install nvm
       script: /tmp/nvm.sh
-      args:
-        executable: /bin/bash
       when: not nvm_directory_stat.stat.exists
 
     - name: Check if nvm plugin is already added
