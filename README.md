@@ -31,8 +31,6 @@ git clone https://github.com/lpsouza/linux-installer.git
 # Set git global settings
 export GIT_USERNAME="Your Name"
 export GIT_EMAIL="your@email"
-export HASS_SERVER="https://your.homeassistant.server"
-export HASS_TOKEN="your-home-assistant-long-lived-access-token"
 
 # Run the 'install-basics' playbook to install essential software
 cd linux-installer
