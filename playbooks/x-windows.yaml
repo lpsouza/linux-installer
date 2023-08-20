@@ -37,8 +37,13 @@
         dest: ~/.local/bin/i3wm
         content: |
           #!/bin/bash
-          Xephyr -br -fullscreen -resizeable -dpi 200 :20 &
+          unset DBUS_SESSION_BUS_ADDRESS
+          unset XDG_RUNTIME_DIR
+          Xephyr -br -ac -noreset -fullscreen -resizeable :20 1>/dev/null 2>&1 &
           sleep 5
-          DISPLAY=:20 i3 &
+          export DISPLAY=:20
+          xrdb -merge ~/.Xresources
+          i3 1>/dev/null 2>&1
+          kill -9 $(ps aux | grep Xephyr | grep -v grep | cut -d" " -f4)
         mode: 0755
       become: false
