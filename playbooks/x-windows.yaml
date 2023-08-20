@@ -44,6 +44,13 @@
           export DISPLAY=:20
           xrdb -merge ~/.Xresources
           i3 1>/dev/null 2>&1
-          kill -9 $(ps aux | grep Xephyr | grep -v grep | cut -d" " -f4)
+          pkill Xephyr
         mode: 0755
+      become: false
+
+    - name: "Add dpi to 180 on .Xresources"
+      lineinfile:
+        path: ~/.Xresources
+        line: "Xft.dpi: 180"
+        insertafter: EOF
       become: false
