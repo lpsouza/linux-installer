@@ -21,9 +21,12 @@
         state: present
         update_cache: true
 
-    - name: Change default terminal to kitty
-      command: update-alternatives --set x-terminal-emulator /usr/bin/kitty
-      changed_when: true
+    - name: Ensure default terminal is set to kitty
+      shell: |
+        if [ "$(update-alternatives --display x-terminal-emulator | grep 'link currently points to')" != "/usr/bin/kitty" ]; then
+          update-alternatives --set x-terminal-emulator /usr/bin/kitty
+        fi
+      changed_when: false
 
     - name: Ensure ~/.local/bin directory exists
       file:
@@ -54,3 +57,18 @@
         line: "Xft.dpi: 180"
         insertafter: EOF
       become: false
+
+    - name: Create desktop shortcut to i3wm script
+      copy:
+        dest: /usr/share/applications/i3wm.desktop
+        content: |
+          [Desktop Entry]
+          Type=Application
+          Name=i3wm
+          Terminal=false
+          NoDisplay=false
+          GenericName=i3wm
+          Comment=i3wm
+          Exec=/home/lpsouza/.local/bin/i3wm
+        mode: 0644
+
