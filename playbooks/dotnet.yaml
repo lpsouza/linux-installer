@@ -29,3 +29,13 @@
         name: dotnet-sdk-7.0
         state: present
         update_cache: true
+
+    - name: Update PATH for .dotnet/tools in .zshrc
+      blockinfile:
+        path: ~/.zshrc
+        block: |
+          if [ -d "$HOME/.dotnet/tools" ] ; then
+            PATH="$HOME/.dotnet/tools:$PATH"
+          fi
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - DOTNET"
+      become: false
