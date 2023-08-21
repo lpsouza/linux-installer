@@ -72,3 +72,10 @@
           Exec=/home/lpsouza/.local/bin/i3wm
         mode: 0644
 
+    - name: Copy i3status config from gist
+      get_url:
+        url: https://gist.github.com/lpsouza/408b2d8142caeb27f8dc6645b84fe04d/raw
+        dest: ~/.config/i3status/config
+        mode: "0644"
+      become: false
+      tags: config
