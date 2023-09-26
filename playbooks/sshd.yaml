@@ -1,0 +1,37 @@
+---
+- name: Install OpenSSH Server
+  hosts: local
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Install OpenSSH Server
+      apt:
+        name: openssh-server
+        state: present
+        update_cache: true
+
+    - name: Check if linux is a WSL distribution
+      command: "grep -qEi '(Microsoft|WSL)' /proc/version"
+      register: is_wsl
+      failed_when: false
+      changed_when: false
+
+    - name: Enable SystemD on wsl.conf
+      ini_file:
+        path: /etc/wsl.conf
+        section: "boot"
+        option: "systemd"
+        value: "true"
+        state: present
+        mode: 0644
+      when: is_wsl.rc == 0
+
+    - name: Enable OpenSSH Server
+      service:
+        name: ssh
+        enabled: true
+        state: started

@@ -69,6 +69,7 @@ ansible-playbook playbooks/bundles/install-basics.yaml --ask-become-pass
 - nvm.yaml: Install [NVM](https://github.com/nvm-sh/nvm)
 - passwordless.yaml: Configure passwordless sudo
 - pubkey.yaml: Install public key using `PUBKEY` environment variable
+- sshd.yaml: Configure SSH daemon
 - starship.yaml: Install [Starship](https://starship.rs/)
 - terraform.yaml: Install [Terraform](https://www.terraform.io/)
 - tmux.yaml: Install [tmux](https://github.com/tmux/tmux)
