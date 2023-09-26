@@ -67,6 +67,9 @@
           - htop
           - iputils-ping
           - jq
+          - libasound2
+          - libgtk-3-0
+          - libnss3
           - lsb-release
           - mc
           - mtr

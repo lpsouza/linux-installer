@@ -63,6 +63,7 @@ ansible-playbook playbooks/bundles/install-basics.yaml --ask-become-pass
 - kubecm.yaml: Install [KubeCM](https://kubecm.cloud/)
 - kubectl.yaml: Install [kubectl](https://kubernetes.io/docs/tasks/tools/)
 - lid-closing.yaml: Configure lid closing action to ignore
+- mqtt-explorer.yaml: Install [MQTT Explorer](https://mqtt-explorer.com/)
 - neovim.yaml: Install [Neovim](https://neovim.io/)
 - nerdfont.yaml: Install [Nerd Fonts](https://www.nerdfonts.com/)
 - nvm.yaml: Install [NVM](https://github.com/nvm-sh/nvm)
@@ -91,6 +92,9 @@ ansible-playbook playbooks/bundles/install-basics.yaml --ask-become-pass
 - htop: Interactive process viewer
 - iputils-ping: Tools to test the reachability of network hosts
 - jq: Command line JSON processor
+- libasound2: Shared library for ALSA applications
+- libgtk-3-0: GTK graphical user interface library
+- libnss3: Network Security Service libraries
 - lsb-release: Linux Standard Base version reporting utility
 - mc: Midnight Commander file manager
 - mtr: Network diagnostic tool

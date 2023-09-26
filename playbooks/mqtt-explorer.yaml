@@ -1,0 +1,17 @@
+---
+- name: Install MQTT Explorer
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Ensure ~/.local/bin directory exists
+      file:
+        path: ~/.local/bin
+        state: directory
+        mode: 0755
+
+    - name: Download mqtt-explorer.appimage
+      get_url:
+        url: "https://github.com/thomasnordquist/MQTT-Explorer/releases/download/0.0.0-0.4.0-beta1/MQTT-Explorer-0.4.0-beta1.AppImage"
+        dest: ~/.local/bin/mqtt-explorer
+        mode: 0755
