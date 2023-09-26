@@ -68,6 +68,7 @@ ansible-playbook playbooks/bundles/install-basics.yaml --ask-become-pass
 - nerdfont.yaml: Install [Nerd Fonts](https://www.nerdfonts.com/)
 - nvm.yaml: Install [NVM](https://github.com/nvm-sh/nvm)
 - passwordless.yaml: Configure passwordless sudo
+- powershell.yaml: Install [PowerShell](https://docs.microsoft.com/en-us/powershell/)
 - pubkey.yaml: Install public key using `PUBKEY` environment variable
 - sshd.yaml: Configure SSH daemon
 - starship.yaml: Install [Starship](https://starship.rs/)
