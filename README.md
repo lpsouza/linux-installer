@@ -53,6 +53,7 @@ ansible-playbook playbooks/bundles/install-basics.yaml --ask-become-pass
 - exa.yaml: Install [Exa](https://the.exa.website/)
 - gh.yaml: Install [GitHub CLI](https://cli.github.com/)
 - git.yaml: Configure Git global settings using `GIT_USERNAME` and `GIT_EMAIL` environment variables
+- gns3.yaml: Install [GNS3](https://www.gns3.com/)
 - helm.yaml: Install [Helm](https://helm.sh/)
 - homeassistant-cli.yaml: Install [Home Assistant CLI](https://www.home-assistant.io/blog/2019/02/04/introducing-home-assistant-cli/) and configure `HASS_SERVER` and `HASS_TOKEN` environment variables.
 - initial.yaml: Install basic\* software and configure some initial settings

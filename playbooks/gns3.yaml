@@ -1,0 +1,33 @@
+---
+- name: Install GNS3
+  hosts: localhost
+  remote_user: lpsouza
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: false
+
+  tasks:
+    - name: Install PPA repository
+      apt_repository:
+        repo: ppa:gns3/ppa
+        state: present
+        update_cache: true
+
+    - name: Install GNS3 Server
+      apt:
+        name: gns3-server
+        state: present
+        update_cache: true
+
+    - name: Install GNS3
+      apt:
+        name: gns3-gui
+        state: present
+        update_cache: true
+
+    - name: Install VNC Viewer (for console)
+      apt:
+        name: tigervnc-viewer
+        state: present
+        update_cache: true
