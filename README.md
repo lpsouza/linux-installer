@@ -57,7 +57,6 @@ ansible-playbook playbooks/bundles/install-basics.yaml --ask-become-pass
 - helm.yaml: Install [Helm](https://helm.sh/)
 - homeassistant-cli.yaml: Install [Home Assistant CLI](https://www.home-assistant.io/blog/2019/02/04/introducing-home-assistant-cli/) and configure `HASS_SERVER` and `HASS_TOKEN` environment variables.
 - initial.yaml: Install basic\* software and configure some initial settings
-- jekyll.yaml: Install [Jekyll](https://jekyllrb.com/)
 - k3s.yaml: Install [k3s](https://k3s.io/)
 - k9s.yaml: Install [K9s](https://k9scli.io/)
 - keychain.yaml: Install [Keychain](https://www.funtoo.org/Keychain)
