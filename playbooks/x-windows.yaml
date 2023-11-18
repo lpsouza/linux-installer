@@ -86,6 +86,19 @@
           Exec=/home/lpsouza/.local/bin/i3wm
         mode: 0644
 
+    - name: Check if ~/.config/i3status exists
+      stat:
+        path: ~/.config/i3status
+      register: i3status
+
+    - name: Create ~/.config/i3status if it doesn't exist
+      file:
+        path: ~/.config/i3status
+        state: directory
+        mode: 0755
+      when: not i3status.stat.exists
+      become: false
+
     - name: Copy i3status config from gist
       get_url:
         url: https://gist.github.com/lpsouza/408b2d8142caeb27f8dc6645b84fe04d/raw
