@@ -8,6 +8,13 @@
   gather_facts: true
 
   tasks:
+    - name: Touching .hushlogin file
+      file:
+        path: .hushlogin
+        state: touch
+        mode: '0644'
+      become: false
+
     - name: Check if universe repository is enabled
       shell: |
         set -o pipefail
