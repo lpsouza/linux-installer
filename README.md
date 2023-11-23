@@ -6,8 +6,7 @@ Welcome to the Linux Installer repository! This collection of Ansible playbooks 
 
 Our Ansible playbooks have been rigorously tested on the following Linux distributions:
 
-- Ubuntu 22.04.2 LTS (WSL2)
-- Debian GNU/Linux 11 (Chromebook)
+- Ubuntu 22.04.2 LTS
 
 ## Usage
 
