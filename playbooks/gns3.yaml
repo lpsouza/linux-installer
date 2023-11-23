@@ -26,9 +26,11 @@
         state: present
         update_cache: true
 
-    - name: Install VNC Viewer (for console)
+    - name: Install VNC Viewer and Gnome Terminal (for console)
       apt:
-        name: tigervnc-viewer
+        name:
+          - tigervnc-viewer
+          - gnome-terminal
         state: present
         update_cache: true
 
