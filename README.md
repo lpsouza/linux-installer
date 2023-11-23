@@ -27,22 +27,15 @@ sudo apt install git ansible
 # Clone this repository
 git clone https://github.com/lpsouza/linux-installer.git
 
-# Set git global settings
-export GIT_USERNAME="Your Name"
-export GIT_EMAIL="your@email"
-
-# Run the 'install-basics' playbook to install essential software
+# Install basic software and configure some initial settings
 cd linux-installer
-ansible-playbook playbooks/bundles/install-basics.yaml --ask-become-pass
+ansible-playbook playbooks/initial.yaml --ask-become-pass
 
 # Let Ansible perform its magic! 🪄
 ```
 
 ## Playbook list
 
-- bundles/
-  - install-basics.yaml: Install essential playbooks
-  - install-ubuntu-wsl2.yaml: Install playbooks for Ubuntu on WSL2
 - azure-cli.yaml: Install [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/what-is-azure-cli)
 - bash.yaml: Configure Bash
 - bashtop.yaml: Install [Bashtop](https://github.com/aristocratos/bashtop)
