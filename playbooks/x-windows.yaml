@@ -63,30 +63,9 @@
           Xephyr -br -ac -noreset -fullscreen -resizeable :20 1>/dev/null 2>&1 &
           sleep 5
           export DISPLAY=:20
-          xrdb -merge ~/.Xresources
           i3 1>/dev/null 2>&1
           pkill Xephyr
         mode: 0755
-      become: false
-
-    - name: Check if ~/.Xresources exists
-      stat:
-        path: ~/.Xresources
-      register: xresources
-
-    - name: Create ~/.Xresources if it doesn't exist
-      file:
-        path: ~/.Xresources
-        state: touch
-        mode: 0644
-      when: not xresources.stat.exists
-      become: false
-
-    - name: "Add dpi to 180 on .Xresources"
-      lineinfile:
-        path: ~/.Xresources
-        line: "Xft.dpi: 180"
-        insertafter: EOF
       become: false
 
     - name: Create desktop shortcut to i3wm script
