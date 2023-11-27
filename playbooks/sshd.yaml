@@ -1,10 +1,7 @@
 ---
 - name: Install OpenSSH Server
   hosts: local
-  remote_user: lpsouza
   become: true
-  become_user: root
-  become_method: sudo
   gather_facts: false
 
   tasks:

@@ -1,10 +1,7 @@
 ---
 - name: Install GNS3
-  hosts: localhost
-  remote_user: lpsouza
+  hosts: linux
   become: true
-  become_user: root
-  become_method: sudo
   gather_facts: false
 
   tasks:
@@ -37,7 +34,7 @@
     # sudo usermod -aG kvm $(whoami)
     - name: Add user to kvm group
       user:
-        name: lpsouza
+        name: "{{ ansible_user }}"
         groups: kvm
         append: true
         state: present

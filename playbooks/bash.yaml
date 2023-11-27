@@ -1,6 +1,6 @@
 ---
 - name: Configure bash
-  hosts: localhost
+  hosts: linux
   gather_facts: false
 
   tasks:

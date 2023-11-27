@@ -1,10 +1,7 @@
 ---
 - name: Initial setup
-  hosts: localhost
-  remote_user: lpsouza
+  hosts: linux
   become: true
-  become_user: root
-  become_method: sudo
   gather_facts: true
 
   tasks:
@@ -23,7 +20,7 @@
       changed_when: false
       failed_when: false
       check_mode: false
-      tags: config
+
 
     - name: Add universe repository on Ubuntu
       apt_repository:
@@ -31,7 +28,7 @@
         state: present
         update_cache: true
       when: universe_repository.rc != 0 and ansible_distribution == 'Ubuntu'
-      tags: config
+
 
     - name: Check if multiverse repository is enabled
       shell: |
@@ -41,7 +38,7 @@
       changed_when: false
       failed_when: false
       check_mode: false
-      tags: config
+
 
     - name: Add multiverse repository on Ubuntu
       apt_repository:
@@ -49,7 +46,7 @@
         state: present
         update_cache: true
       when: multiverse_repository.rc != 0 and ansible_distribution == 'Ubuntu'
-      tags: config
+
 
     - name: Upgrade all packages to the latest version
       apt:

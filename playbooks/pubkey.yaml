@@ -1,5 +1,5 @@
 - name: Install my public key
-  hosts: localhost
+  hosts: linux
   gather_facts: false
 
   vars:
@@ -11,7 +11,7 @@
       register: pubkey_check
       changed_when: false
       failed_when: false
-      tags: config
+
 
     - name: Add public key to authorized_keys
       lineinfile:
@@ -20,4 +20,4 @@
         create: true
         mode: 0600
       when: pubkey_check.rc != 0
-      tags: config
+

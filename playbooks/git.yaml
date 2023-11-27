@@ -1,6 +1,6 @@
 ---
 - name: Configure Git username and email
-  hosts: localhost
+  hosts: linux
   gather_facts: false
 
   vars:

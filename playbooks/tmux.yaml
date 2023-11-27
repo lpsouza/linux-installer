@@ -1,9 +1,6 @@
 - name: Install tmux
-  hosts: localhost
-  remote_user: lpsouza
+  hosts: linux
   become: true
-  become_user: root
-  become_method: sudo
   gather_facts: false
 
   tasks:
@@ -19,7 +16,7 @@
         dest: "~/.tmux/plugins/tpm"
         version: master
       become: false
-      tags: config
+
 
     - name: Copy tmux.conf from gist
       get_url:
@@ -27,4 +24,4 @@
         dest: ~/.tmux.conf
         mode: "0644"
       become: false
-      tags: config
+

@@ -1,5 +1,5 @@
 - name: Install homeassistant-cli
-  hosts: localhost
+  hosts: linux
   gather_facts: false
 
   vars:
@@ -28,4 +28,4 @@
           export HASS_SERVER={{ hass_server }}
           export HASS_TOKEN={{ hass_token }}
         marker: "# {mark} ANSIBLE MANAGED BLOCK - HASS_CLI_ENV"
-      tags: config
+

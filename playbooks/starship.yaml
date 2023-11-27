@@ -1,10 +1,7 @@
 ---
 - name: Install Starship prompt
-  hosts: localhost
-  remote_user: lpsouza
+  hosts: linux
   become: true
-  become_user: root
-  become_method: sudo
   gather_facts: false
 
   tasks:
@@ -34,7 +31,7 @@
           fi
         marker: "# {mark} ANSIBLE MANAGED BLOCK - starship"
       become: false
-      tags: config
+
 
     - name: Check if exists Starship configuration directory
       stat:
@@ -42,7 +39,7 @@
       register: starship_config_directory_stat
       failed_when: false
       become: false
-      tags: config
+
 
     - name: Create Starship configuration directory
       file:
@@ -51,7 +48,7 @@
         mode: "0755"
       become: false
       when: not starship_config_directory_stat.stat.exists
-      tags: config
+
 
     - name: Download Starship configuration file
       get_url:
@@ -59,4 +56,4 @@
         dest: ~/.config/starship.toml
         mode: "0644"
       become: false
-      tags: config
+

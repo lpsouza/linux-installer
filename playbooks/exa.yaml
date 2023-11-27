@@ -1,9 +1,6 @@
 - name: Install exa
-  hosts: localhost
-  remote_user: lpsouza
+  hosts: linux
   become: true
-  become_user: root
-  become_method: sudo
   gather_facts: true
 
   tasks:
@@ -22,4 +19,4 @@
         marker: "# {mark} ANSIBLE MANAGED BLOCK - exa"
       when: exa is defined and exa.changed
       become: false
-      tags: config
+

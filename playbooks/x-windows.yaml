@@ -1,10 +1,7 @@
 ---
 - name: Install X Window System and friends
-  hosts: localhost
-  remote_user: lpsouza
+  hosts: linux
   become: true
-  become_user: root
-  become_method: sudo
   gather_facts: false
 
   tasks:
@@ -79,7 +76,7 @@
           NoDisplay=false
           GenericName=i3wm
           Comment=i3wm
-          Exec=/home/lpsouza/.local/bin/i3wm
+          Exec=/home/{{ ansible_user }}/.local/bin/i3wm
         mode: 0644
 
     - name: Check if ~/.config/i3status exists
@@ -101,4 +98,4 @@
         dest: ~/.config/i3status/config
         mode: "0644"
       become: false
-      tags: config
+

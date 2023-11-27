@@ -1,6 +1,6 @@
 ---
 - name: Install CaskaydiaCove NerdFont
-  hosts: localhost
+  hosts: linux
   gather_facts: false
 
   tasks:
