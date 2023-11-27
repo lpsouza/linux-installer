@@ -5,12 +5,14 @@
   gather_facts: true
 
   tasks:
-    - name: Touching .hushlogin file
+    - name: Create .hushlogin file
       file:
-        path: .hushlogin
+        path: /home/{{ ansible_user }}/.hushlogin
         state: touch
         mode: '0644'
-      become: false
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+      tags: hushlogin
 
     - name: Check if universe repository is enabled
       shell: |
