@@ -174,6 +174,14 @@ export HASS_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ansible-playbook playbooks/homeassistant-cli.yaml
 ```
 
+### Insync
+
+Install [Insync](https://www.insynchq.com/)
+
+```bash
+ansible-playbook playbooks/insync.yaml
+```
+
 ### k3s
 
 Install [k3s](https://k3s.io/)

@@ -1,0 +1,37 @@
+---
+- name: Install Insync
+  hosts: linux
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Add Insync key
+      apt_key:
+        url: https://d2t3ff60b2tol4.cloudfront.net/repomd.xml.key
+        state: present
+
+    - name: Add Insync repository
+      apt_repository:
+        repo: deb http://apt.insync.io/ubuntu xenial non-free contrib
+        state: present
+        filename: insync
+        update_cache: true
+
+    - name: Install Insync
+      apt:
+        name: insync
+        state: present
+        update_cache: true
+
+    - name: Add Insync startup on .zshrc
+      blockinfile:
+        dest: ~/.zshrc
+        block: |
+          if ! pgrep -x "insync" > /dev/null
+          then
+            if [[ -f /usr/bin/insync ]]; then
+              insync start
+            fi
+          fi
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - Insync"
+      become: false
