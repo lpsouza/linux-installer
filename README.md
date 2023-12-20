@@ -74,6 +74,14 @@ The `initial.yaml` playbook installs the following software:
 
 ## Playbooks installation
 
+### AWS CLI
+
+Install [AWS CLI](https://aws.amazon.com/cli/)
+
+```bash
+ansible-playbook playbooks/aws-cli.yaml
+```
+
 ### Azure CLI
 
 Install [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/what-is-azure-cli)
