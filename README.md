@@ -56,6 +56,7 @@ The `initial.yaml` playbook installs the following software:
 - libgtk-3-0: GTK graphical user interface library
 - libnss3: Network Security Service libraries
 - lsb-release: Linux Standard Base version reporting utility
+- lm-sensors: Hardware monitoring sensors
 - mc: Midnight Commander file manager
 - mtr: Network diagnostic tool
 - nano: Nano text editor (inspired by Pico)
