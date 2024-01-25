@@ -10,25 +10,17 @@
         url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
         dest: /tmp/awscliv2.zip
         mode: 0755
-      register: awscli
+      notify:
+        - Unzip AWS CLI
+        - Install AWS CLI
 
+  handlers:
     - name: Unzip AWS CLI
       unarchive:
         src: /tmp/awscliv2.zip
         dest: /tmp
-        remote_src: yes
+        remote_src: true
         creates: /tmp/aws
-      when: awscli.changed
 
     - name: Install AWS CLI
       command: /tmp/aws/install
-      when: awscli.changed
-
-    - name: Configure alias for aws to .zshrc if aws is installed
-      blockinfile:
-        path: ~/.zshrc
-        block: |
-          alias aws='~/.local/bin/aws'
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - aws"
-      when: awscli.changed
-      become: false
