@@ -42,6 +42,7 @@ The `initial.yaml` playbook installs the following software:
 - apt-transport-https: Allows the use of repositories accessed via the HTTP Secure protocol
 - apt-utils: Package manager related utility programs
 - asciinema: Terminal session recorder
+- bat: Cat clone with syntax highlighting and Git integration
 - build-essential: Packages for building Debian packages
 - ca-certificates: Common CA certificates
 - coreutils: GNU core utilities

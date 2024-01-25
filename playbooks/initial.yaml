@@ -63,6 +63,7 @@
           - apt-transport-https
           - apt-utils
           - asciinema
+          - bat
           - build-essential
           - ca-certificates
           - coreutils
