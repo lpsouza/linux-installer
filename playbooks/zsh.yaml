@@ -127,6 +127,14 @@
         marker: "# {mark} ANSIBLE MANAGED BLOCK - .local/bin folder"
       become: false
 
+    - name: Configure aliases on .zshrc
+      blockinfile:
+        path: ~/.zshrc
+        block: |
+          alias copilot='gh copilot suggest'
+          alias cat='batcat'
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - aliases"
+      become: false
 
     - name: Change default shell to zsh
       user:
