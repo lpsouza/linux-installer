@@ -15,7 +15,7 @@ The Ansible playbooks have been tested on the following Linux distributions:
 sudo apt update
 
 # Install Git and Ansible
-sudo apt install git ansible
+sudo apt install -y git ansible
 
 # Clone this repository
 git clone https://github.com/lpsouza/linux-installer.git
