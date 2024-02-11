@@ -56,6 +56,12 @@
         fi
       changed_when: false
 
+    - name: X Windows | Restart xrdp service
+      service:
+        name: xrdp
+        state: restarted
+      changed_when: false
+
     # - name: X Windows | Install X Window System (i3, xfce4, xorg, xinit, xrdp, xserver-xephyr and kitty)
     #   apt:
     #     name:
