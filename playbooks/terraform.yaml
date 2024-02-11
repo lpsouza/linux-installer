@@ -1,20 +1,20 @@
 ---
-- name: Install Terraform
+- name: Terraform | Installation
   hosts: linux
-  become: true
   gather_facts: true
+  become: true
 
   vars:
-    - terraform_version: 1.5.5
+    terraform_version: 1.7.3
 
   tasks:
-    - name: Download Terraform
+    - name: Terraform | Download
       get_url:
         url: https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip
         dest: /tmp/terraform_{{ terraform_version }}_linux_amd64.zip
         mode: 0644
 
-    - name: Unzip Terraform
+    - name: Terraform | Unzip
       unarchive:
         src: /tmp/terraform_{{ terraform_version }}_linux_amd64.zip
         dest: /usr/local/bin

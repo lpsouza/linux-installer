@@ -1,29 +1,29 @@
 ---
-- name: Install GNS3
+- name: GNS3 | Installation
   hosts: linux
-  become: true
   gather_facts: false
+  become: true
 
   tasks:
-    - name: Install PPA repository
+    - name: GNS3 | Install PPA repository
       apt_repository:
         repo: ppa:gns3/ppa
         state: present
         update_cache: true
 
-    - name: Install GNS3 Server
+    - name: GNS3 | Install Server
       apt:
         name: gns3-server
         state: present
         update_cache: true
 
-    - name: Install GNS3
+    - name: GNS3 | Install GUI
       apt:
         name: gns3-gui
         state: present
         update_cache: true
 
-    - name: Install VNC Viewer and Gnome Terminal (for console)
+    - name: GNS3 | Install VNC Viewer and Gnome Terminal (for console)
       apt:
         name:
           - tigervnc-viewer
@@ -31,8 +31,7 @@
         state: present
         update_cache: true
 
-    # sudo usermod -aG kvm $(whoami)
-    - name: Add user to kvm group
+    - name: GNS3 | Add user to kvm group
       user:
         name: "{{ ansible_user }}"
         groups: kvm

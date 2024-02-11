@@ -1,23 +1,35 @@
 ---
-- name: Install Neovim
+- name: Neovim | Installation
   hosts: linux
   gather_facts: false
+  become: true
 
   tasks:
-    - name: Ensure ~/.local/bin directory exists
-      file:
-        path: ~/.local/bin
-        state: directory
-        mode: 0755
-
-    - name: Download nvim.appimage
+    - name: Neovim | Download appimage
       get_url:
         url: "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage"
-        dest: ~/.local/bin/nvim
+        dest: /usr/local/bin/nvim
         mode: 0755
 
-    - name: Clone configuration repository
+    - name: Neovim | Check if configuration directory exists
+      stat:
+        path: ~/.config
+      register: config_directory_stat
+      failed_when: false
+      become: false
+
+
+    - name: Neovim | If not exists, create configuration directory
+      file:
+        path: ~/.config
+        state: directory
+        mode: "0755"
+      become: false
+      when: not config_directory_stat.stat.exists
+
+    - name: Neovim | Clone configuration repository
       git:
         repo: "https://github.com/lpsouza/nvim-config.git"
         dest: ~/.config/nvim
         version: main
+      become: false

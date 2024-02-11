@@ -1,33 +1,38 @@
 ---
-- name: Install dotnet
+- name: .NET | Installation
   hosts: linux
-  become: true
   gather_facts: false
+  become: true
+
+  vars:
+    dotnet_version: 8.0
 
   tasks:
-    - name: Search for dotnet-sdk-7.0 on apt-cache
-      command: apt-cache search dotnet-sdk-7.0
-      register: dotnet_sdk_7_0
-      failed_when: false
+    - name: .NET | Checking if is already installed
+      command: apt-cache search dotnet-sdk-{{ dotnet_version }}
+      register: dotnet_sdk
       changed_when: false
+      failed_when: dotnet_sdk.rc != 0
 
-    - name: Download packages-microsoft-prod.deb
+    - name: .NET | Download packages from Microsoft
       get_url:
         url: https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb
         dest: /tmp/packages-microsoft-prod.deb
-      when: dotnet_sdk_7_0.stdout.find('dotnet-sdk-7.0') == -1
+      when: "dotnet_sdk.stdout == ''"
 
-    - name: Install packages-microsoft-prod.deb
+    - name: .NET | Install packages from Microsoft
       command: dpkg -i /tmp/packages-microsoft-prod.deb
-      when: dotnet_sdk_7_0.stdout.find('dotnet-sdk-7.0') == -1
+      when: "dotnet_sdk.stdout == ''"
 
-    - name: Install dotnet-sdk-7.0
+    - name: .NET | Install
       apt:
-        name: dotnet-sdk-7.0
+        name: 'dotnet-sdk-{{ dotnet_version }}'
         state: present
         update_cache: true
+      register: dotnet_install
+      when: "dotnet_sdk.stdout == ''"
 
-    - name: Update PATH for .dotnet/tools in .zshrc
+    - name: .NET | Update PATH for .dotnet/tools in .zshrc
       blockinfile:
         path: ~/.zshrc
         block: |
@@ -35,4 +40,16 @@
             PATH="$HOME/.dotnet/tools:$PATH"
           fi
         marker: "# {mark} ANSIBLE MANAGED BLOCK - DOTNET"
+      when: dotnet_install is defined and dotnet_install.changed
+      become: false
+
+    - name: .NET | Update PATH for .dotnet/tools in .bashrc
+      blockinfile:
+        path: ~/.bashrc
+        block: |
+          if [ -d "$HOME/.dotnet/tools" ] ; then
+            PATH="$HOME/.dotnet/tools:$PATH"
+          fi
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - DOTNET"
+      when: dotnet_install is defined and dotnet_install.changed
       become: false

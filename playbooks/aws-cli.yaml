@@ -1,26 +1,33 @@
 ---
-- name: Install AWS CLI
+- name: AWS CLI | Installation
   hosts: linux
-  become: true
   gather_facts: true
+  become: true
 
   tasks:
-    - name: Download AWS CLI
+    - name: AWS CLI | Checking if is already installed
+      command: "which aws"
+      register: aws_cli_check
+      changed_when: false
+      failed_when: false
+
+    - name: AWS CLI | Download AWS CLI
       get_url:
         url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
         dest: /tmp/awscliv2.zip
         mode: 0755
+      when: aws_cli_check.rc != 0
       notify:
-        - Unzip AWS CLI
-        - Install AWS CLI
+        - AWS CLI | Unzip
+        - AWS CLI | Install
 
   handlers:
-    - name: Unzip AWS CLI
+    - name: AWS CLI | Unzip
       unarchive:
         src: /tmp/awscliv2.zip
         dest: /tmp
         remote_src: true
         creates: /tmp/aws
 
-    - name: Install AWS CLI
+    - name: AWS CLI | Install
       command: /tmp/aws/install

@@ -1,23 +1,27 @@
-- name: Install my public key
+---
+- name: Public key | Installation
   hosts: linux
   gather_facts: false
 
   vars:
-    pubkey: "{{ lookup('env', 'PUBKEY') }}"
+    pubkey: "{{ lookup('env', 'PUBKEY', default='not set') }}"
 
   tasks:
-    - name: Check if public key is already added
+    - name: Public key | Check if PUBKEY environment variable is set
+      fail:
+        msg: "PUBKEY environment variable is not set"
+      when: pubkey == "not set"
+
+    - name: Public key | Check if public key is already in authorized_keys
       shell: grep -E "^ssh-rsa.*{{ pubkey }}" ~/.ssh/authorized_keys
       register: pubkey_check
       changed_when: false
       failed_when: false
 
-
-    - name: Add public key to authorized_keys
+    - name: Public key | Add public key to authorized_keys
       lineinfile:
         path: ~/.ssh/authorized_keys
         line: "{{ pubkey }}"
         create: true
         mode: 0600
       when: pubkey_check.rc != 0
-

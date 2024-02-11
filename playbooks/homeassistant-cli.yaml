@@ -1,4 +1,5 @@
-- name: Install homeassistant-cli
+---
+- name: Home Assistant CLI | Installation
   hosts: linux
   gather_facts: false
 
@@ -7,21 +8,21 @@
     hass_token: "{{ lookup('env', 'HASS_TOKEN') }}"
 
   tasks:
-    - name: Check if homeassistant-cli is installed
+    - name: Home Assistant CLI | Check if homeassistant-cli is installed
       command: hass-cli --version
       register: homeassistant_cli_installed
       changed_when: false
       failed_when: false
       check_mode: false
 
-    - name: Install homeassistant-cli
+    - name: Home Assistant CLI | Install
       pip:
         name: homeassistant-cli
         state: present
       register: homeassistant_cli_installer
       when: homeassistant_cli_installed.rc != 0
 
-    - name: Configure homeassistant-cli environment on .zshrc file
+    - name: Home Assistant CLI | Configure (on zshrc)
       blockinfile:
         path: ~/.zshrc
         block: |
@@ -29,3 +30,10 @@
           export HASS_TOKEN={{ hass_token }}
         marker: "# {mark} ANSIBLE MANAGED BLOCK - HASS_CLI_ENV"
 
+    - name: Home Assistant CLI | Configure (on bashrc)
+      blockinfile:
+        path: ~/.bashrc
+        block: |
+          export HASS_SERVER={{ hass_server }}
+          export HASS_TOKEN={{ hass_token }}
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - HASS_CLI_ENV"

@@ -1,33 +1,36 @@
-- name: Install nvm
+---
+- name: NVM | Installation
   hosts: linux
   gather_facts: false
 
+  vars:
+    nvm_version: "0.38.0"
+
   tasks:
-    - name: Check if nvm is installed
+    - name: NVM | Check if is already installed
       stat:
         path: ~/.nvm
       register: nvm_directory_stat
       failed_when: false
 
-    - name: Download nvm
+    - name: NVM | Download
       get_url:
-        url: https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh
+        url: https://raw.githubusercontent.com/nvm-sh/nvm/v{{ nvm_version }}/install.sh
         dest: /tmp/nvm.sh
         mode: '0755'
       when: not nvm_directory_stat.stat.exists
 
-    - name: Install nvm
+    - name: NVM | Install nvm
       script: /tmp/nvm.sh
       when: not nvm_directory_stat.stat.exists
 
-    - name: Check if nvm plugin is already added
+    - name: NVM | Check if nvm plugin is already added to oh-my-zsh (ZSH)
       shell: grep -E "^plugins=\(.*nvm.*\)" ~/.zshrc
       register: nvm_plugin_check
       changed_when: false
       failed_when: false
 
-
-    - name: Add nvm to oh-my-zsh plugins
+    - name: NVM | Add nvm to oh-my-zsh plugins (ZSH)
       lineinfile:
         path: ~/.zshrc
         regexp: '^plugins=\((.*)\)'
@@ -36,10 +39,24 @@
       when: nvm_plugin_check.rc != 0
 
 
-    - name: Configure zstyle sources on oh-my-zsh
+    - name: NVM | Configure zstyle sources on oh-my-zsh (ZSH)
       blockinfile:
         dest: ~/.zshrc
         insertbefore: plugins=\(
         block: |
           zstyle ':omz:plugins:nvm' lazy yes
         marker: "# {mark} ANSIBLE MANAGED BLOCK - nvm"
+
+    - name: NVM | Check if nvm is configured on .bashrc (BASH)
+      shell: grep -E "^export NVM_DIR=" ~/.bashrc
+      register: nvm_bashrc_check
+      changed_when: false
+      failed_when: false
+
+    - name: NVM | Configure nvm on .bashrc (BASH)
+      lineinfile:
+        path: ~/.bashrc
+        regexp: '^export NVM_DIR='
+        line: 'export NVM_DIR="$HOME/.nvm"'
+        backrefs: true
+      when: nvm_bashrc_check.rc != 0

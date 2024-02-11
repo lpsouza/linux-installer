@@ -1,22 +1,23 @@
-- name: Install k3s
+---
+- name: K3S | Installation
   hosts: linux
-  become: true
   gather_facts: false
+  become: true
 
   tasks:
-    - name: Check if k3s is already installed
+    - name: K3S | Check if is already installed
       command: which k3s
       register: k3s_check
       changed_when: false
       failed_when: false
 
-    - name: Download k3s installer script
+    - name: K3S | Download installer script
       get_url:
         url: https://get.k3s.io
         dest: /tmp/install.sh
         mode: "0755"
       when: k3s_check.rc == 1
 
-    - name: Install k3s
+    - name: K3S | Install
       command: /tmp/install.sh
       when: k3s_check.rc == 1

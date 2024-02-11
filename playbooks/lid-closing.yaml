@@ -1,17 +1,18 @@
-- name: Disable lid closing
+---
+- name: Lid closing | Configurations
   hosts: linux
-  become: true
   gather_facts: false
+  become: true
 
   tasks:
-    - name: Check if handleLidSwitch is already set to ignore
+    - name: Lid closing | Check if handleLidSwitch is already set to ignore
       command: grep -E "^HandleLidSwitch=ignore" /etc/systemd/logind.conf
       register: lid_switch_check
       changed_when: false
       failed_when: false
 
 
-    - name: Configure handleLidSwitch to ignore
+    - name: Lid closing | Configure handleLidSwitch to ignore
       lineinfile:
         path: /etc/systemd/logind.conf
         regexp: "^#HandleLidSwitch="
@@ -19,17 +20,16 @@
       when: lid_switch_check.rc == 1
 
 
-    - name: Check if LidSwitchIgnoreInhibited is already set to no
+    - name: Lid closing | Check if LidSwitchIgnoreInhibited is already set to no
       command: grep -E "^LidSwitchIgnoreInhibited=no" /etc/systemd/logind.conf
       register: lid_switch_ignore_check
       changed_when: false
       failed_when: false
 
 
-    - name: Configure LidSwitchIgnoreInhibited to no
+    - name: Lid closing | Configure LidSwitchIgnoreInhibited to no
       lineinfile:
         path: /etc/systemd/logind.conf
         regexp: "^#LidSwitchIgnoreInhibited="
         line: "LidSwitchIgnoreInhibited=no"
       when: lid_switch_ignore_check.rc == 1
-

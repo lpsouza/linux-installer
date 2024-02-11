@@ -1,35 +1,34 @@
 ---
-- name: Install zsh, oh-my-zsh, autosuggestions and syntax highlighting
+- name: ZSH | Installation
   hosts: linux
-  become: true
   gather_facts: false
+  become: true
 
   tasks:
-    - name: Install zsh package
+    - name: ZSH | Install
       apt:
         name: zsh
         state: present
         update_cache: true
 
-    - name: Check if Oh-My-Zsh is installed
+    - name: ZSH | Check if Oh-My-Zsh is installed
       stat:
         path: ~/.oh-my-zsh
       register: ohmyzsh_installed
       become: false
 
-    - name: Install oh-my-zsh
+    - name: ZSH | If not installed, install Oh-My-Zsh
       shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
       when: not ohmyzsh_installed.stat.exists
       become: false
 
-    - name: Check if zsh-autosuggestions plugin is installed
+    - name: ZSH | Check if zsh-autosuggestions plugin is installed
       stat:
         path: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
       register: zsh_autosuggestions_installed
       become: false
 
-
-    - name: Install zsh-autosuggestions plugin
+    - name: ZSH | If not installed, install zsh-autosuggestions plugin
       git:
         repo: https://github.com/zsh-users/zsh-autosuggestions
         dest: "{{ ZSH_CUSTOM | default('~/.oh-my-zsh/custom') }}/plugins/zsh-autosuggestions"
@@ -38,14 +37,14 @@
       become: false
 
 
-    - name: Check if zsh-syntax-highlighting plugin is installed
+    - name: ZSH | Check if zsh-syntax-highlighting plugin is installed
       stat:
         path: ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
       register: zsh_syntax_highlighting_installed
       become: false
 
 
-    - name: Install zsh-syntax-highlighting plugin
+    - name: ZSH | If not installed, install zsh-syntax-highlighting plugin
       git:
         repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
         dest: "{{ ZSH_CUSTOM | default('~/.oh-my-zsh/custom') }}/plugins/zsh-syntax-highlighting"
@@ -54,7 +53,7 @@
       become: false
 
 
-    - name: Check if zsh-autosuggestions plugin is already added
+    - name: ZSH | Check if zsh-autosuggestions plugin is already added
       shell: grep -E "^plugins=\(.*zsh\-autosuggestions.*\)" ~/.zshrc
       register: autosuggestions_plugin_check
       changed_when: false
@@ -62,7 +61,7 @@
       become: false
 
 
-    - name: Configure zsh-autosuggestions plugin
+    - name: ZSH | If not added, configure zsh-autosuggestions plugin
       lineinfile:
         path: ~/.zshrc
         regexp: '^plugins=\((.*)\)'
@@ -72,7 +71,7 @@
       when: autosuggestions_plugin_check.rc != 0
 
 
-    - name: Check if zsh-syntax-highlighting plugin is already added
+    - name: ZSH | Check if zsh-syntax-highlighting plugin is already added
       shell: grep -E "^plugins=\(.*zsh\-syntax\-highlighting.*\)" ~/.zshrc
       register: syntax_highlighting_plugin_check
       changed_when: false
@@ -80,7 +79,7 @@
       become: false
 
 
-    - name: Configure zsh-syntax-highlighting plugin
+    - name: ZSH | If not added, configure zsh-syntax-highlighting plugin
       lineinfile:
         path: ~/.zshrc
         regexp: '^plugins=\((.*)\)'
@@ -90,7 +89,7 @@
       when: syntax_highlighting_plugin_check.rc != 0
 
 
-    - name: Configure zsh theme
+    - name: ZSH | Configure ZSH_THEME to kafeitu
       lineinfile:
         path: ~/.zshrc
         regexp: "^ZSH_THEME="
@@ -98,7 +97,7 @@
       become: false
 
 
-    - name: Disable auto title
+    - name: ZSH | Disable auto title
       lineinfile:
         path: ~/.zshrc
         regexp: "^# DISABLE_AUTO_TITLE="
@@ -106,7 +105,7 @@
       become: false
 
 
-    - name: Add on .zshrc user bin folder to PATH
+    - name: ZSH | Add bin folder to PATH
       blockinfile:
         path: ~/.zshrc
         block: |
@@ -117,7 +116,7 @@
       become: false
 
 
-    - name: Add on .zshrc user .local/bin folder to PATH
+    - name: ZSH | Add .local/bin folder to PATH
       blockinfile:
         path: ~/.zshrc
         block: |
@@ -127,16 +126,7 @@
         marker: "# {mark} ANSIBLE MANAGED BLOCK - .local/bin folder"
       become: false
 
-    - name: Configure aliases on .zshrc
-      blockinfile:
-        path: ~/.zshrc
-        block: |
-          alias copilot='gh copilot suggest'
-          alias cat='batcat'
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - aliases"
-      become: false
-
-    - name: Change default shell to zsh
+    - name: ZSH | Change default shell to zsh
       user:
         name: "{{ ansible_user }}"
         shell: /usr/bin/zsh

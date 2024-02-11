@@ -1,27 +1,18 @@
 ---
-- name: Install bashtop
+- name: Bashtop | Installation
   hosts: linux
-  become: true
   gather_facts: true
+  become: true
 
   tasks:
-    - name: Install bashtop PPA repository
+    - name: Bashtop | Install PPA repository
       apt_repository:
         repo: ppa:bashtop-monitor/bashtop
         state: present
         filename: bashtop
-      when: ansible_distribution == 'Ubuntu'
 
-    - name: Install bashtop
+    - name: Bashtop | Install
       apt:
         name: bashtop
         state: present
         update_cache: true
-      when: ansible_distribution == 'Ubuntu'
-
-    - name: Install bashtop (btop)
-      apt:
-        name: btop
-        state: present
-        update_cache: true
-      when: ansible_distribution == 'Debian'

@@ -1,25 +1,25 @@
 ---
-- name: Install Powershell
-  hosts: local
-  become: true
+- name: Powershell | Installation
+  hosts: linux
   gather_facts: false
+  become: true
 
   tasks:
-    - name: Get Ubuntu release version
+    - name: Powershell | Get Ubuntu release version
       command: lsb_release -rs
       register: ubuntu_release
       changed_when: false
 
-    - name: Download the Microsoft repository GPG keys
+    - name: Powershell | Download the Microsoft repository GPG keys
       get_url:
         url: https://packages.microsoft.com/config/ubuntu/{{ ubuntu_release.stdout }}/packages-microsoft-prod.deb
         dest: /tmp/packages-microsoft-prod.deb
 
-    - name: Install the Microsoft repository GPG keys
+    - name: Powershell | Install the Microsoft repository GPG keys
       apt:
         deb: /tmp/packages-microsoft-prod.deb
 
-    - name: Install Powershell
+    - name: Powershell | Install
       apt:
         name: powershell
         state: present

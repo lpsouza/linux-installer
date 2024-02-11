@@ -1,23 +1,31 @@
 ---
-- name: Install CaskaydiaCove NerdFont
+- name: CaskaydiaCove NerdFont | Installation
   hosts: linux
   gather_facts: false
 
   tasks:
-    - name: Download font
+    - name: CaskaydiaCove NerdFont | Check if is already installed
+      stat:
+        path: "~/.fonts/CascadiaCode"
+      register: caskaydia_cove_nerd_font
+
+    - name: CaskaydiaCove NerdFont | Download
       get_url:
         url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/CascadiaCode.zip"
         dest: "/tmp/CascadiaCode.zip"
         mode: 0644
+      when: caskaydia_cove_nerd_font.stat.exists == false
 
-    - name: Ensure .fonts/CascadiaCode directory exists
+    - name: CaskaydiaCove NerdFont | Create local .fonts directory
       file:
         path: "~/.fonts/CascadiaCode"
         state: directory
         mode: 0755
+      when: caskaydia_cove_nerd_font.stat.exists == false
 
-    - name: Unzip font into local .fonts directory
+    - name: CaskaydiaCove NerdFont | Unzip
       unarchive:
         src: "/tmp/CascadiaCode.zip"
         dest: "~/.fonts/CascadiaCode"
         mode: 0644
+      when: caskaydia_cove_nerd_font.stat.exists == false

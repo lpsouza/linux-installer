@@ -1,16 +1,17 @@
-- name: Install tmux
+---
+- name: Tmux | Installation
   hosts: linux
-  become: true
   gather_facts: false
+  become: true
 
   tasks:
-    - name: Install tmux
+    - name: Tmux | Install
       apt:
         name: tmux
         state: present
         update_cache: true
 
-    - name: Clone tpm (tmux plugin manager) repository
+    - name: Tmux | Install Tmux Plugin Manager
       git:
         repo: "https://github.com/tmux-plugins/tpm"
         dest: "~/.tmux/plugins/tpm"
@@ -18,10 +19,9 @@
       become: false
 
 
-    - name: Copy tmux.conf from gist
+    - name: Tmux | Download tmux custom configuration
       get_url:
         url: https://gist.github.com/lpsouza/6534fd264197963e86dce01ece9f63d1/raw
         dest: ~/.tmux.conf
         mode: "0644"
       become: false
-

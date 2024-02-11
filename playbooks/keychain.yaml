@@ -1,24 +1,23 @@
 ---
-- name: Install keychain
+- name: Keychain | Installation
   hosts: linux
-  become: true
   gather_facts: false
+  become: true
 
   tasks:
-    - name: Install keychain
+    - name: Keychain | Install
       apt:
         name: keychain
         state: present
 
-    - name: Check if keychain plugin is already added
+    - name: Keychain | Check if is already added on oh-my-zsh plugins (ZSH)
       shell: grep -E "^plugins=\(.*keychain.*\)" ~/.zshrc
       register: keychain_plugin_check
       changed_when: false
       failed_when: false
       become: false
 
-
-    - name: Add keychain to oh-my-zsh plugins
+    - name: Keychain | Add keychain to oh-my-zsh plugins (ZSH)
       lineinfile:
         path: ~/.zshrc
         regexp: '^plugins=\((.*)\)'
@@ -27,8 +26,7 @@
       become: false
       when: keychain_plugin_check.rc != 0
 
-
-    - name: Configure zstyle sources on oh-my-zsh
+    - name: Keychain | Configure zstyle sources on oh-my-zsh (ZSH)
       blockinfile:
         dest: ~/.zshrc
         insertbefore: plugins=\(
@@ -39,3 +37,16 @@
         marker: "# {mark} ANSIBLE MANAGED BLOCK - keychain"
       become: false
 
+    - name: Keychain | Check if is already added on .bashrc (BASH)
+      shell: grep -E "^eval \$(keychain --quiet --agents ssh id_rsa)" ~/.bashrc
+      register: keychain_bashrc_check
+      changed_when: false
+      failed_when: false
+      become: false
+
+    - name: Keychain | Add keychain to .bashrc (BASH)
+      lineinfile:
+        path: ~/.bashrc
+        line: 'eval $(keychain --quiet --agents ssh id_rsa)'
+      become: false
+      when: keychain_bashrc_check.rc != 0

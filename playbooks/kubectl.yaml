@@ -1,14 +1,14 @@
 ---
-- name: Install kubectl
+- name: Kubectl | Installation
   hosts: linux
-  become: true
   gather_facts: false
+  become: true
 
   vars:
     kubectl_version: v1.27.4
 
   tasks:
-    - name: Download kubectl binary
+    - name: Kubectl | Download binary to /usr/local/bin
       get_url:
         url: https://storage.googleapis.com/kubernetes-release/release/{{ kubectl_version }}/bin/linux/amd64/kubectl
         dest: /usr/local/bin/kubectl

@@ -1,23 +1,23 @@
 ---
-- name: Install OpenSSH Server
-  hosts: local
-  become: true
+- name: OpenSSH Server | Installation
+  hosts: linux
   gather_facts: false
+  become: true
 
   tasks:
-    - name: Install OpenSSH Server
+    - name: OpenSSH Server | Install
       apt:
         name: openssh-server
         state: present
         update_cache: true
 
-    - name: Check if linux is a WSL distribution
+    - name: OpenSSH Server | Check if is a WSL instance
       command: "grep -qEi '(Microsoft|WSL)' /proc/version"
       register: is_wsl
       failed_when: false
       changed_when: false
 
-    - name: Enable SystemD on wsl.conf
+    - name: OpenSSH Server | If is a WSL instance, enable systemd
       ini_file:
         path: /etc/wsl.conf
         section: "boot"
@@ -27,8 +27,15 @@
         mode: 0644
       when: is_wsl.rc == 0
 
-    - name: Enable OpenSSH Server
+    - name: OpenSSH Server | Check if systemd is running
+      command: "ps -p 1 -o comm="
+      register: init_process
+      failed_when: false
+      changed_when: false
+
+    - name: OpenSSH Server | Enable service (systemd)
       service:
         name: ssh
         enabled: true
         state: started
+      when: init_process.stdout == "systemd"

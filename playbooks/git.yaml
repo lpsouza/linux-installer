@@ -1,51 +1,74 @@
 ---
-- name: Configure Git username and email
+- name: Git | Installation
   hosts: linux
   gather_facts: false
+  become: true
 
   vars:
-    git_username: "{{ lookup('env', 'GIT_USERNAME') }}"
-    git_email: "{{ lookup('env', 'GIT_EMAIL') }}"
+    git_username: "{{ lookup('env', 'GIT_USERNAME', default='not set') }}"
+    git_email: "{{ lookup('env', 'GIT_EMAIL', default='not set') }}"
 
   tasks:
-    - name: Check Git username configuration
+    - name: Git | Check if GIT_USERNAME environment variable is set
+      fail:
+        msg: "GIT_USERNAME environment variable is not set"
+      when: git_username == "not set"
+
+    - name: Git | Check if GIT_EMAIL environment variable is set
+      fail:
+        msg: "GIT_EMAIL environment variable is not set"
+      when: git_email == "not set"
+
+    - name: Git | Install
+      package:
+        name: git
+        state: present
+        update_cache: yes
+
+    - name: Git | Check if user name is already defined
       git_config:
         scope: global
         name: user.name
       register: git_username_output
       changed_when: false
+      become: false
 
-    - name: Set Git username
+    - name: Git | Set user name
       git_config:
         scope: global
         name: user.name
         value: "{{ git_username }}"
       when: git_username_output.value is not defined
+      become: false
 
-    - name: Check Git email configuration
+    - name: Git | Check if user email is already defined
       git_config:
         scope: global
         name: user.email
       register: git_email_output
       changed_when: false
+      become: false
 
-    - name: Set Git email
+    - name: Git | Set user email
       git_config:
         scope: global
         name: user.email
         value: "{{ git_email }}"
       when: git_email_output.value is not defined
+      become: false
 
-    - name: Check Git pull.rebase configuration set to false (merge)
+    - name: Git | Check if pull.rebase is already defined
       git_config:
         scope: global
         name: pull.rebase
       register: git_pull_rebase_output
       changed_when: false
+      become: false
 
-    - name: Set Git pull.rebase to false (merge)
+    - name: Git | Set pull.rebase
       git_config:
         scope: global
         name: pull.rebase
         value: "false"
       when: git_pull_rebase_output.value is not defined
+      become: false

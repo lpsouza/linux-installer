@@ -1,34 +1,35 @@
-- name: Install docker
+---
+- name: Docker | Installation
   hosts: linux
-  become: true
   gather_facts: false
+  become: true
 
   tasks:
-    - name: Check if docker is already installed
+    - name: Docker | Checking if is already installed
       command: which docker
       register: docker_check
       changed_when: false
       failed_when: false
 
-    - name: Download docker installer script
+    - name: Docker | Download installer script
       get_url:
         url: https://get.docker.com
         dest: /tmp/install.sh
         mode: "0755"
       when: docker_check.rc == 1
 
-    - name: Install docker
+    - name: Docker | Install
       command: /tmp/install.sh
       when: docker_check.rc == 1
 
-    - name: Install uidmap
+    - name: Docker | Install extra packages
       apt:
         name: uidmap
         state: present
         update_cache: true
       when: docker_check.rc == 1
 
-    - name: Run dockerd-rootless-setuptool.sh
+    - name: Docker | Configure rootless mode
       command: /usr/bin/dockerd-rootless-setuptool.sh install
       when: docker_check.rc == 1
       become: false

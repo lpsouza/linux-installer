@@ -1,28 +1,28 @@
 ---
-- name: Install Starship prompt
+- name: Starship | Installation
   hosts: linux
-  become: true
   gather_facts: false
+  become: true
 
   tasks:
-    - name: Check if Starship is installed
+    - name: Starship | Check if is installed
       stat:
         path: /usr/local/bin/starship
       register: starship_file_stat
       failed_when: false
 
-    - name: Download Starship installation script
+    - name: Starship | Download
       get_url:
         url: https://starship.rs/install.sh
         dest: /tmp/starship_install.sh
         mode: "0755"
       when: not starship_file_stat.stat.exists
 
-    - name: Execute Starship installation script
+    - name: Starship | Install
       command: /tmp/starship_install.sh -y
       when: not starship_file_stat.stat.exists
 
-    - name: Set up Starship configuration for current user (zsh)
+    - name: Starship | Set up execution in Zsh
       blockinfile:
         dest: ~/.zshrc
         block: |
@@ -32,28 +32,35 @@
         marker: "# {mark} ANSIBLE MANAGED BLOCK - starship"
       become: false
 
+    - name: Starship | Set up execution in Bash
+      blockinfile:
+        dest: ~/.bashrc
+        block: |
+          if [ -x "$(command -v starship)" ]; then
+              eval "$(starship init bash)"
+          fi
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - starship"
+      become: false
 
-    - name: Check if exists Starship configuration directory
+    - name: Starship | Check if configuration directory exists
       stat:
         path: ~/.config
-      register: starship_config_directory_stat
+      register: config_directory_stat
       failed_when: false
       become: false
 
 
-    - name: Create Starship configuration directory
+    - name: Starship | If not exists, create configuration directory
       file:
         path: ~/.config
         state: directory
         mode: "0755"
       become: false
-      when: not starship_config_directory_stat.stat.exists
+      when: not config_directory_stat.stat.exists
 
-
-    - name: Download Starship configuration file
+    - name: Starship | Download personal configuration file
       get_url:
         url: https://gist.github.com/lpsouza/ef3e4df6dc945ba3cf8648d3ad765bcf/raw
         dest: ~/.config/starship.toml
         mode: "0644"
       become: false
-
