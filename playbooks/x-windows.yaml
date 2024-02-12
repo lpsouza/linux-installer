@@ -74,10 +74,10 @@
     - name: X Windows | Set default window manager to wmaker (if is set to default)
       shell: |
         set -o pipefail
-        if [ "$(update-alternatives --display x-session-manager | grep 'link currently points to')" != "/usr/bin/wmaker" ]; then
+        if [ "$(update-alternatives --display x-session-manager | grep 'link currently points to')" != "/usr/bin/x-session-manager" ]; then
           update-alternatives --set x-session-manager /usr/bin/x-session-manager
         fi
-        if [ "$(update-alternatives --display x-window-manager | grep 'link currently points to')" != "/usr/bin/wmaker" ]; then
+        if [ "$(update-alternatives --display x-window-manager | grep 'link currently points to')" != "/usr/bin//x-window-manager" ]; then
           update-alternatives --set x-window-manager /usr/bin/x-window-manager
         fi
       changed_when: false
