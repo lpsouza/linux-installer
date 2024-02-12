@@ -6,7 +6,7 @@
 
   vars:
     install_window_managers: ["i3", "xfce4"]
-    default_window_manager: "{{ lookup('env', 'DEFAULT_WINDOW_MANAGER') | default('i3') }}"
+    default_window_manager: "{{ lookup('env', 'DEFAULT_WINDOW_MANAGER') | default('i3', true) }}"
 
   tasks:
     - name: X Windows | Install X Window System (base)
