@@ -79,6 +79,7 @@
         fi
       changed_when: false
       when: default_window_manager == "wmaker"
+      become: false
 
     - name: X Windows | Restart xrdp service
       service:
