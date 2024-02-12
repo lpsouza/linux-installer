@@ -47,7 +47,7 @@
     - name: X Windows | Set default window manager to i3 (if is set to default)
       shell: |
         set -o pipefail
-        sed -i '/exec wmaker/d' /home/{{ ansible_user }}/.xsession
+        rm -f /home/{{ ansible_user }}/.xsession
         if [ "$(update-alternatives --display x-session-manager | grep 'link currently points to')" != "/usr/bin/i3" ]; then
           update-alternatives --set x-session-manager /usr/bin/i3
         fi
@@ -69,7 +69,7 @@
     - name: X Windows | Set default window manager to xfce4 (if is set to default)
       shell: |
         set -o pipefail
-        sed -i '/exec wmaker/d' /home/{{ ansible_user }}/.xsession
+        rm -f /home/{{ ansible_user }}/.xsession
         if [ "$(update-alternatives --display x-session-manager | grep 'link currently points to')" != "/usr/bin/startxfce4" ]; then
           update-alternatives --set x-session-manager /usr/bin/startxfce4
         fi
