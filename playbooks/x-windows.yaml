@@ -74,8 +74,8 @@
     - name: X Windows | Set default window manager to wmaker (if is set to default)
       shell: |
         set -o pipefail
-        if [ "$(update-alternatives --display x-window-manager | grep 'link currently points to')" != "/usr/bin/wmaker" ]; then
-          update-alternatives --set x-window-manager /usr/bin/wmaker
+        if ! grep -q "exec wmaker" ~/.xinitrc; then
+          echo "exec wmaker" >> ~/.xinitrc
         fi
       changed_when: false
       when: default_window_manager == "wmaker"
