@@ -30,6 +30,7 @@
     - name: X Windows | Set default window manager to i3 (if is set to default)
       shell: |
         set -o pipefail
+        sed -i '/exec wmaker/d' ~/.xsession
         if [ "$(update-alternatives --display x-session-manager | grep 'link currently points to')" != "/usr/bin/i3" ]; then
           update-alternatives --set x-session-manager /usr/bin/i3
         fi
@@ -51,6 +52,7 @@
     - name: X Windows | Set default window manager to xfce4 (if is set to default)
       shell: |
         set -o pipefail
+        sed -i '/exec wmaker/d' ~/.xsession
         if [ "$(update-alternatives --display x-session-manager | grep 'link currently points to')" != "/usr/bin/startxfce4" ]; then
           update-alternatives --set x-session-manager /usr/bin/startxfce4
         fi
@@ -74,8 +76,8 @@
     - name: X Windows | Set default window manager to wmaker (if is set to default)
       shell: |
         set -o pipefail
-        if ! grep -q "exec wmaker" ~/.xinitrc; then
-          echo "exec wmaker" >> ~/.xinitrc
+        if ! grep -q "exec wmaker" ~/.xsession; then
+          echo "exec wmaker" >> ~/.xsession
         fi
       changed_when: false
       when: default_window_manager == "wmaker"
