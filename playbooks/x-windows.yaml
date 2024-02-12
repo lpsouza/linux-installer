@@ -34,6 +34,7 @@
         recurse: true
         mode: 0755
       when: install_window_managers is defined and "i3" in install_window_managers
+      changed_when: false
       become: false
 
     - name: X Windows | i3status | Copy i3status config
@@ -42,6 +43,7 @@
         dest: ~/.config/i3status/config
         mode: "0644"
       when: install_window_managers is defined and "i3" in install_window_managers
+      changed_when: false
       become: false
 
     - name: X Windows | Set default window manager to i3 (if is set to default)
@@ -103,6 +105,12 @@
     - name: X Windows | Restart xrdp service
       service:
         name: xrdp
+        state: restarted
+      changed_when: false
+
+    - name: X Windows | Restart xrdp-sesman service
+      service:
+        name: xrdp-sesman
         state: restarted
       changed_when: false
 
