@@ -75,10 +75,10 @@
       shell: |
         set -o pipefail
         if [ "$(update-alternatives --display x-session-manager | grep 'link currently points to')" != "/usr/bin/wmaker" ]; then
-          update-alternatives --set x-session-manager /usr/bin/wmaker
+          update-alternatives --set x-session-manager /usr/bin/x-session-manager
         fi
         if [ "$(update-alternatives --display x-window-manager | grep 'link currently points to')" != "/usr/bin/wmaker" ]; then
-          update-alternatives --set x-window-manager /usr/bin/wmaker
+          update-alternatives --set x-window-manager /usr/bin/x-window-manager
         fi
       changed_when: false
       when: default_window_manager == "wmaker"
