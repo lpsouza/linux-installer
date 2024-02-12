@@ -27,6 +27,23 @@
         update_cache: true
       when: install_window_managers is defined and "i3" in install_window_managers
 
+    - name: X Windows | i3status | Check if ~/.config/i3status exists
+      file:
+        path: ~/.config/i3status
+        state: directory
+        recurse: true
+        mode: 0755
+      when: install_window_managers is defined and "i3" in install_window_managers
+      become: false
+
+    - name: X Windows | i3status | Copy i3status config
+      get_url:
+        url: https://gist.github.com/lpsouza/408b2d8142caeb27f8dc6645b84fe04d/raw
+        dest: ~/.config/i3status/config
+        mode: "0644"
+      when: install_window_managers is defined and "i3" in install_window_managers
+      become: false
+
     - name: X Windows | Set default window manager to i3 (if is set to default)
       shell: |
         set -o pipefail
