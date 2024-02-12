@@ -115,7 +115,7 @@
       changed_when: false
 
     - name: X Windows | Restart xorg
-      command: "pkill -HUP -f /usr/lib/xorg/Xorg"
+      command: "pkill X"
       changed_when: false
 
     # - name: X Windows | Install X Window System (i3, xfce4, xorg, xinit, xrdp, xserver-xephyr and kitty)
