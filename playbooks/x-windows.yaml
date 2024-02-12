@@ -117,6 +117,7 @@
     - name: X Windows | Restart xorg
       command: "pkill X"
       changed_when: false
+      failed_when: false
 
     # - name: X Windows | Install X Window System (i3, xfce4, xorg, xinit, xrdp, xserver-xephyr and kitty)
     #   apt:
