@@ -27,6 +27,18 @@
         update_cache: true
       when: install_window_managers is defined and "i3" in install_window_managers
 
+    - name: X Windows | Set default window manager to i3 (if is set to default)
+      shell: |
+        set -o pipefail
+        if [ "$(update-alternatives --display x-session-manager | grep 'link currently points to')" != "/usr/bin/i3" ]; then
+          update-alternatives --set x-session-manager /usr/bin/i3
+        fi
+        if [ "$(update-alternatives --display x-window-manager | grep 'link currently points to')" != "/usr/bin/i3" ]; then
+          update-alternatives --set x-window-manager /usr/bin/i3
+        fi
+      changed_when: false
+      when: default_window_manager == "i3"
+
     - name: X Windows | Install xfce4 window manager
       apt:
         name:
@@ -36,25 +48,17 @@
         update_cache: true
       when: install_window_managers is defined and "xfce4" in install_window_managers
 
-    - name: X Windows | Set default window manager
+    - name: X Windows | Set default window manager to xfce4 (if is set to default)
       shell: |
         set -o pipefail
-        if [ "{{ default_window_manager }}" == "i3" ]; then
-          if [ "$(update-alternatives --display x-session-manager | grep 'link currently points to')" != "/usr/bin/i3" ]; then
-            update-alternatives --set x-session-manager /usr/bin/i3
-          fi
-          if [ "$(update-alternatives --display x-window-manager | grep 'link currently points to')" != "/usr/bin/i3" ]; then
-            update-alternatives --set x-window-manager /usr/bin/i3
-          fi
-        elif [ "{{ default_window_manager }}" == "xfce4" ]; then
-          if [ "$(update-alternatives --display x-session-manager | grep 'link currently points to')" != "/usr/bin/startxfce4" ]; then
-            update-alternatives --set x-session-manager /usr/bin/startxfce4
-          fi
-          if [ "$(update-alternatives --display x-window-manager | grep 'link currently points to')" != "/usr/bin/xfwm4" ]; then
-            update-alternatives --set x-window-manager /usr/bin/xfwm4
-          fi
+        if [ "$(update-alternatives --display x-session-manager | grep 'link currently points to')" != "/usr/bin/startxfce4" ]; then
+          update-alternatives --set x-session-manager /usr/bin/startxfce4
+        fi
+        if [ "$(update-alternatives --display x-window-manager | grep 'link currently points to')" != "/usr/bin/xfwm4" ]; then
+          update-alternatives --set x-window-manager /usr/bin/xfwm4
         fi
       changed_when: false
+      when: default_window_manager == "xfce4"
 
     - name: X Windows | Restart xrdp service
       service:
