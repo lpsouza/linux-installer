@@ -69,12 +69,15 @@
       shell: |
         set -o pipefail
         rm -f /home/{{ ansible_user }}/.xsession
-        if [ "$(update-alternatives --display x-session-manager | grep 'link currently points to')" != "/usr/bin/i3" ]; then
-          update-alternatives --set x-session-manager /usr/bin/i3
+        if ! grep -q "exec i3" ~/.xsession; then
+          echo "exec i3" >> ~/.xsession
         fi
-        if [ "$(update-alternatives --display x-window-manager | grep 'link currently points to')" != "/usr/bin/i3" ]; then
-          update-alternatives --set x-window-manager /usr/bin/i3
-        fi
+        # if [ "$(update-alternatives --display x-session-manager | grep 'link currently points to')" != "/usr/bin/i3" ]; then
+        #   update-alternatives --set x-session-manager /usr/bin/i3
+        # fi
+        # if [ "$(update-alternatives --display x-window-manager | grep 'link currently points to')" != "/usr/bin/i3" ]; then
+        #   update-alternatives --set x-window-manager /usr/bin/i3
+        # fi
       changed_when: false
       when: default_window_manager == "i3"
 
@@ -91,12 +94,15 @@
       shell: |
         set -o pipefail
         rm -f /home/{{ ansible_user }}/.xsession
-        if [ "$(update-alternatives --display x-session-manager | grep 'link currently points to')" != "/usr/bin/startxfce4" ]; then
-          update-alternatives --set x-session-manager /usr/bin/startxfce4
+        if ! grep -q "exec startxfce4" ~/.xsession; then
+          echo "exec startxfce4" >> ~/.xsession
         fi
-        if [ "$(update-alternatives --display x-window-manager | grep 'link currently points to')" != "/usr/bin/xfwm4" ]; then
-          update-alternatives --set x-window-manager /usr/bin/xfwm4
-        fi
+        # if [ "$(update-alternatives --display x-session-manager | grep 'link currently points to')" != "/usr/bin/startxfce4" ]; then
+        #   update-alternatives --set x-session-manager /usr/bin/startxfce4
+        # fi
+        # if [ "$(update-alternatives --display x-window-manager | grep 'link currently points to')" != "/usr/bin/xfwm4" ]; then
+        #   update-alternatives --set x-window-manager /usr/bin/xfwm4
+        # fi
       changed_when: false
       when: default_window_manager == "xfce4"
 
