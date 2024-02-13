@@ -111,6 +111,7 @@
     - name: X Windows | Set default window manager to wmaker (if is set to default)
       shell: |
         set -o pipefail
+        rm -f ~/.xsession
         if ! grep -q "exec wmaker" ~/.xsession; then
           echo "exec wmaker" >> ~/.xsession
         fi
