@@ -27,6 +27,25 @@
         update_cache: true
       when: install_window_managers is defined and "i3" in install_window_managers
 
+    - name: X Windows | Check if ~/.config/i3 exists
+      file:
+        path: ~/.config/i3
+        state: directory
+        recurse: true
+        mode: 0755
+      when: install_window_managers is defined and "i3" in install_window_managers
+      changed_when: false
+      become: false
+
+    - name: X Windows | Copy i3 config
+      get_url:
+        url: https://gist.github.com/lpsouza/9ac2100ce15e43dc57847858903b1849/raw
+        dest: ~/.config/i3/config
+        mode: "0644"
+      when: install_window_managers is defined and "i3" in install_window_managers
+      changed_when: false
+      become: false
+    
     - name: X Windows | i3status | Check if ~/.config/i3status exists
       file:
         path: ~/.config/i3status
@@ -118,61 +137,3 @@
       command: "pkill X"
       changed_when: false
       failed_when: false
-
-    # - name: X Windows | Install X Window System (i3, xfce4, xorg, xinit, xrdp, xserver-xephyr and kitty)
-    #   apt:
-    #     name:
-    #       - i3
-    #       - i3blocks
-    #       - xfce4
-    #       - xorg
-    #       - xinit
-    #       - xrdp
-    #       - xserver-xephyr
-    #       - kitty
-    #     state: present
-    #     update_cache: true
-
-    # - name: X Windows | Ensure default terminal is set to kitty
-    #   shell: |
-    #     set -o pipefail
-    #     if [ "$(update-alternatives --display x-terminal-emulator | grep 'link currently points to')" != "/usr/bin/kitty" ]; then
-    #       update-alternatives --set x-terminal-emulator /usr/bin/kitty
-    #     fi
-    #   changed_when: false
-
-    # - name: X Windows | Ensure default x-session-manager is set to xfce4
-    #   shell: |
-    #     set -o pipefail
-    #     if [ "$(update-alternatives --display x-session-manager | grep 'link currently points to')" != "/usr/bin/startxfce4" ]; then
-    #       update-alternatives --set x-session-manager /usr/bin/startxfce4
-    #     fi
-    #   changed_when: false
-
-    # - name: X Windows | Ensure default x-window-manager is set to xfwm4
-    #   shell: |
-    #     set -o pipefail
-    #     if [ "$(update-alternatives --display x-window-manager | grep 'link currently points to')" != "/usr/bin/xfwm4" ]; then
-    #       update-alternatives --set x-window-manager /usr/bin/xfwm4
-    #     fi
-    #   changed_when: false
-
-    # - name: X Windows | Check if ~/.config/i3status exists
-    #   stat:
-    #     path: ~/.config/i3status
-    #   register: i3status
-
-    # - name: X Windows | Create ~/.config/i3status if it doesn't exist
-    #   file:
-    #     path: ~/.config/i3status
-    #     state: directory
-    #     mode: 0755
-    #   when: not i3status.stat.exists
-    #   become: false
-
-    # - name: X Windows | Copy i3status config from gist
-    #   get_url:
-    #     url: https://gist.github.com/lpsouza/408b2d8142caeb27f8dc6645b84fe04d/raw
-    #     dest: ~/.config/i3status/config
-    #     mode: "0644"
-    #   become: false
