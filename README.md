@@ -232,12 +232,28 @@ Install [kubectl](https://kubernetes.io/docs/tasks/tools/)
 ansible-playbook playbooks/kubectl.yaml
 ```
 
+### Kustomize
+
+Install [Kustomize](https://kustomize.io/)
+
+```bash
+ansible-playbook playbooks/kustomize.yaml
+```
+
 ### Lid closing
 
 Configure lid closing action to ignore
 
 ```bash
 ansible-playbook playbooks/lid-closing.yaml
+```
+
+## MongoSH
+
+Install [MongoSH](https://docs.mongodb.com/mongosh/)
+
+```bash
+ansible-playbook playbooks/mongosh.yaml
 ```
 
 ### MQTT Explorer

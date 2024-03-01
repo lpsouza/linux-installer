@@ -1,0 +1,26 @@
+- name: Install kustomize
+  hosts: linux
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Check if kustomize is already installed
+      command: which kustomize
+      register: kustomize_check
+      changed_when: false
+      failed_when: false
+
+    - name: Download kustomize installer script
+      get_url:
+        url: https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh
+        dest: /tmp/install_kustomize.sh
+        mode: "0755"
+      when: kustomize_check.rc == 1
+
+    - name: Install kustomize
+      command: /tmp/install_kustomize.sh
+      when: kustomize_check.rc == 1
+
+    - name: Move kustomize binary to /usr/local/bin
+      command: mv ./kustomize /usr/local/bin/kustomize
+      when: kustomize_check.rc == 1  # yaml: disable=trailing-spaces

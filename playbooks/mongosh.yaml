@@ -1,0 +1,27 @@
+---
+- name: Install mongosh
+  hosts: linux
+  become: true
+  gather_facts: false
+
+  vars:
+    mongosh_version: "2.1.5"
+
+  tasks:
+    - name: Check if mongosh is already installed
+      shell: dpkg-query -W -f='${Status}' mongosh || echo "not installed"
+      register: mongosh_package_status
+      changed_when: false
+      failed_when: mongosh_package_status.rc != 0
+
+    - name: Download mongosh
+      get_url:
+        url: https://downloads.mongodb.com/compass/mongodb-mongosh_{{ mongosh_version }}_amd64.deb
+        dest: /tmp/mongodb-mongosh_{{ mongosh_version }}_amd64.deb
+      when: "'not installed' in mongosh_package_status.stdout"
+
+    - name: Install mongosh
+      apt:
+        deb: /tmp/mongodb-mongosh_{{ mongosh_version }}_amd64.deb
+        state: present
+      when: "'not installed' in mongosh_package_status.stdout"
