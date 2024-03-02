@@ -12,7 +12,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get upgrade -y
 
 # Install ansible
-RUN apt-get install -y ansible git sudo
+RUN apt-get install -y ansible ansible-lint git sudo
 
 # Create a non-root user to use - see https://aka.ms/vscode-remote/containers/non-root-user.
 RUN groupadd --gid $USER_GID $USERNAME \
