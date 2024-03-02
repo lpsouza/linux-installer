@@ -46,7 +46,7 @@
       when: install_window_managers is defined and "i3" in install_window_managers
       changed_when: false
       become: false
-    
+
     - name: X Windows | i3status | Check if ~/.config/i3status exists
       file:
         path: ~/.config/i3status
