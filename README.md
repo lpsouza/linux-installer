@@ -108,6 +108,14 @@ Install [Bashtop](https://github.com/aristocratos/bashtop)
 ansible-playbook playbooks/bashtop.yaml
 ```
 
+### DBeaver
+
+Install [DBeaver](https://dbeaver.io/)
+
+```bash
+ansible-playbook playbooks/dbeaver.yaml
+```
+
 ### Docker
 
 Install [Docker](https://www.docker.com/)
