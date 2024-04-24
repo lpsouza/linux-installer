@@ -28,53 +28,10 @@ bash ./generate-inventory.sh
 
 # Tip: Edit the inventory file and modify as needed
 
-# Install basic software and configure some initial settings and passwordless sudo
-ansible-playbook playbooks/initial.yaml playbooks/passwordless.yaml --ask-become-pass
-
 # After that, you can run any playbook as you need.
 ```
 
-### Initial playbook
-
-The `initial.yaml` playbook installs the following software:
-
-- ansible-lint: Checks playbooks for practices and behaviour that could potentially be improved
-- apt-transport-https: Allows the use of repositories accessed via the HTTP Secure protocol
-- apt-utils: Package manager related utility programs
-- asciinema: Terminal session recorder
-- bat: Cat clone with syntax highlighting and Git integration
-- build-essential: Packages for building Debian packages
-- ca-certificates: Common CA certificates
-- coreutils: GNU core utilities
-- csvkit: Utilities for working with CSV files
-- curl: Command line tool for transferring data with URL syntax
-- fuse: Filesystem in Userspace
-- elinks: Advanced and well-established feature-rich text mode web browser
-- htop: Interactive process viewer
-- iputils-ping: Tools to test the reachability of network hosts
-- jq: Command line JSON processor
-- libasound2: Shared library for ALSA applications
-- libgtk-3-0: GTK graphical user interface library
-- libnss3: Network Security Service libraries
-- lsb-release: Linux Standard Base version reporting utility
-- lm-sensors: Hardware monitoring sensors
-- mc: Midnight Commander file manager
-- mtr: Network diagnostic tool
-- nano: Nano text editor (inspired by Pico)
-- ncdu: Disk usage analyzer with an ncurses interface
-- neofetch: Fast, highly customizable system info script
-- net-tools: Legacy network management utilities
-- pandoc: Universal document converter
-- python-is-python3: Symlink /usr/bin/python to python3
-- python3-pip: Python package installer
-- software-properties-common: Common software needed to manage software repositories
-- sqlite3: Command line interface for SQLite
-- unzip: De-archiver for .zip files
-- wget: Command line tool for retrieving files using HTTP, HTTPS, and FTP
-- whois: Intelligent WHOIS client
-- zip: Archiver for .zip files
-
-## Playbooks installation
+## Playbooks
 
 ### AWS CLI
 
@@ -358,7 +315,7 @@ ansible-playbook playbooks/tz.yaml
 Install X Windows System
 
 ```bash
-\ansible-playbook playbooks/x-windows.yaml
+ansible-playbook playbooks/x-windows.yaml
 ```
 
 ### ZSH
