@@ -5,6 +5,11 @@
   become: true
 
   tasks:
+    - name: AWS CLI | Installing dependencies
+      apt:
+        name: unzip
+        state: present
+
     - name: AWS CLI | Checking if is already installed
       command: "which aws"
       register: aws_cli_check

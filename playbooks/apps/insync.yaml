@@ -5,6 +5,12 @@
   become: true
 
   tasks:
+    - name: Insync | Install dependencies
+      apt:
+        name: libasound2
+        state: present
+        update_cache: true
+
     - name: Insync | Add key
       apt_key:
         url: https://d2t3ff60b2tol4.cloudfront.net/repomd.xml.key
