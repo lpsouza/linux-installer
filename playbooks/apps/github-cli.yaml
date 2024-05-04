@@ -53,9 +53,9 @@
         path: ~/.zshrc
         block: |
           alias copilot='gh copilot suggest'
-          alias ??='gh copilot suggest -t shell'
-          alias ?gh='gh copilot suggest -t gh'
-          alias ?git='gh copilot suggest -t git'
+          alias \?\?='gh copilot suggest -t shell'
+          alias \?gh='gh copilot suggest -t gh'
+          alias \?git='gh copilot suggest -t git'
         marker: "# {mark} ANSIBLE MANAGED BLOCK - GITHUB CLI"
       when: gh is defined and gh.changed and zshrc.stat.exists
       become: false
@@ -71,9 +71,9 @@
         path: ~/.bashrc
         block: |
           alias copilot='gh copilot suggest'
-          alias ??='gh copilot suggest -t shell'
-          alias ?gh='gh copilot suggest -t gh'
-          alias ?git='gh copilot suggest -t git'
+          alias \?\?='gh copilot suggest -t shell'
+          alias \?gh='gh copilot suggest -t gh'
+          alias \?git='gh copilot suggest -t git'
         marker: "# {mark} ANSIBLE MANAGED BLOCK - GITHUB CLI"
       when: gh is defined and gh.changed and bashrc.stat.exists
       become: false

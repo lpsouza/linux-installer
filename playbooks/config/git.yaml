@@ -20,7 +20,7 @@
       when: git_email == "not set"
 
     - name: Git | Install
-      package:
+      apt:
         name: git
         state: present
         update_cache: yes
