@@ -5,15 +5,6 @@
   gather_facts: true
 
   tasks:
-    - name: Create .hushlogin file
-      file:
-        path: /home/{{ ansible_user }}/.hushlogin
-        state: touch
-        mode: '0644'
-        owner: "{{ ansible_user }}"
-        group: "{{ ansible_user }}"
-      tags: hushlogin
-
     - name: Check if universe repository is enabled
       shell: |
         set -o pipefail
@@ -59,40 +50,18 @@
     - name: Install essential packages
       apt:
         name:
-          - ansible-lint
           - apt-transport-https
           - apt-utils
-          - asciinema
-          - bat
           - build-essential
           - ca-certificates
           - coreutils
-          - csvkit
-          - curl
           - fuse
-          - elinks
-          - htop
-          - iputils-ping
-          - jq
           - libasound2
           - libgtk-3-0
           - libnss3
           - lsb-release
           - lm-sensors
-          - mc
-          - mtr
-          - nano
-          - ncdu
-          - neofetch
-          - net-tools
-          - pandoc
-          - python-is-python3
-          - python3-pip
           - software-properties-common
           - sqlite3
-          - unzip
-          - wget
-          - whois
-          - zip
         state: present
         update_cache: true
