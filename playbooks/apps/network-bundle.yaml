@@ -1,0 +1,16 @@
+---
+- name: Network Bundle | Install
+  hosts: linux
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Network Bundle | Install iputils-ping, mtr, net-tools, whois
+      apt:
+        name:
+          - iputils-ping
+          - mtr
+          - net-tools
+          - whois
+        state: present
+        update_cache: true

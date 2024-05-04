@@ -1,0 +1,17 @@
+---
+- name: CLI Utils Bundle | Install
+  hosts: linux
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: CLI Utils Bundle | Install htop, mc, ncdu, neofetch, pandoc
+      apt:
+        name:
+          - htop
+          - mc
+          - ncdu
+          - neofetch
+          - pandoc
+        state: present
+        update_cache: true

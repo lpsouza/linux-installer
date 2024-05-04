@@ -1,0 +1,14 @@
+---
+- name: Hushlogin | Configuration
+  hosts: linux
+  become: false
+  gather_facts: false
+
+  tasks:
+    - name: Create .hushlogin file
+      file:
+        path: /home/{{ ansible_user }}/.hushlogin
+        state: touch
+        mode: "0644"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"

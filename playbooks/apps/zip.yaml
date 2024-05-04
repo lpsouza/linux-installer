@@ -1,0 +1,14 @@
+---
+- name: Zip | Install
+  hosts: linux
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Zip | Install
+      apt:
+        name:
+          - zip
+          - unzip
+        state: present
+        update_cache: yes

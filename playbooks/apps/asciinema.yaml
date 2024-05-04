@@ -1,0 +1,12 @@
+---
+- name: Asciinema | Install
+  hosts: linux
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Asciinema | Install
+      apt:
+        name: asciinema
+        state: present
+        update_cache: yes

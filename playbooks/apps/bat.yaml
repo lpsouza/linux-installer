@@ -1,0 +1,36 @@
+---
+- name: Bat | Install
+  hosts: linux
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Bat | Install
+      apt:
+        name: bat
+        state: present
+        update_cache: yes
+
+    - name: Bat | Create symbolic link
+      file:
+        src: /usr/bin/batcat
+        dest: /usr/bin/bat
+        state: link
+        force: yes
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Bat | Add alias to .bashrc
+      blockinfile:
+        path: ~/.bashrc
+        block: |
+          alias cat='bat'
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - BAT"
+
+    - name: Bat | Add alias to .zshrc
+      blockinfile:
+        path: ~/.zshrc
+        block: |
+          alias cat='bat'
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - BAT"

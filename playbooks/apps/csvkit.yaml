@@ -1,0 +1,12 @@
+---
+- name: CSVKit | Install
+  hosts: linux
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: CSVKit | Install
+      apt:
+        name: csvkit
+        state: present
+        update_cache: yes
