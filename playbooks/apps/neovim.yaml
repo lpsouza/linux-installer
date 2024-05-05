@@ -5,6 +5,12 @@
   become: true
 
   tasks:
+    - name: Neovim | Install dependencies
+      apt:
+        name: fuse
+        state: present
+        update_cache: true
+
     - name: Neovim | Download appimage
       get_url:
         url: "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage"
