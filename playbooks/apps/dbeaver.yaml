@@ -1,23 +1,23 @@
 ---
-- name: Install DBeaver
+- name: DBeaver | Install
   hosts: linux
   become: true
   gather_facts: false
 
   tasks:
-    - name: Check if dbeaver is already installed
+    - name: DBeaver | Check is already installed
       shell: dpkg-query -W -f='${Status}' dbeaver-ce || echo "not installed"
       register: dbeaver_package_status
       changed_when: false
       failed_when: dbeaver_package_status.rc != 0
 
-    - name: Download dbeaver
+    - name: DBeaver | Download
       get_url:
         url: https://dbeaver.io/files/dbeaver-ce_latest_amd64.deb
         dest: /tmp/dbeaver-ce_latest_amd64.deb
       when: "'not installed' in dbeaver_package_status.stdout"
 
-    - name: Install dbeaver
+    - name: DBeaver | Install
       apt:
         deb: /tmp/dbeaver-ce_latest_amd64.deb
         state: present
