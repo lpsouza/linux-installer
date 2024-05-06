@@ -9,20 +9,23 @@
 
   tasks:
     - name: .NET | Checking if is already installed
-      command: apt-cache search dotnet-sdk-{{ dotnet_version }}
+      command: dotnet --version
       register: dotnet_sdk
       changed_when: false
-      failed_when: dotnet_sdk.rc != 0
+      failed_when: false
+
+    - debug:
+        var: dotnet_sdk
 
     - name: .NET | Download packages from Microsoft
       get_url:
         url: https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb
         dest: /tmp/packages-microsoft-prod.deb
-      when: "dotnet_sdk.stdout == ''"
+      when: dotnet_sdk.rc != 0
 
     - name: .NET | Install packages from Microsoft
       command: dpkg -i /tmp/packages-microsoft-prod.deb
-      when: "dotnet_sdk.stdout == ''"
+      when: dotnet_sdk.rc != 0
 
     - name: .NET | Install
       apt:
@@ -30,18 +33,7 @@
         state: present
         update_cache: true
       register: dotnet_install
-      when: "dotnet_sdk.stdout == ''"
-
-    - name: .NET | Update PATH for .dotnet/tools in .zshrc
-      blockinfile:
-        path: ~/.zshrc
-        block: |
-          if [ -d "$HOME/.dotnet/tools" ] ; then
-            PATH="$HOME/.dotnet/tools:$PATH"
-          fi
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - DOTNET"
-      when: dotnet_install is defined and dotnet_install.changed
-      become: false
+      when: dotnet_sdk.rc != 0
 
     - name: .NET | Update PATH for .dotnet/tools in .bashrc
       blockinfile:
@@ -52,4 +44,20 @@
           fi
         marker: "# {mark} ANSIBLE MANAGED BLOCK - DOTNET"
       when: dotnet_install is defined and dotnet_install.changed
+      become: false
+
+    - name: .NET | Check if .zshrc exists
+      stat:
+        path: ~/.zshrc
+      register: zshrc
+
+    - name: .NET | Update PATH for .dotnet/tools in .zshrc
+      blockinfile:
+        path: ~/.zshrc
+        block: |
+          if [ -d "$HOME/.dotnet/tools" ] ; then
+            PATH="$HOME/.dotnet/tools:$PATH"
+          fi
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - DOTNET"
+      when: dotnet_install is defined and dotnet_install.changed and zshrc.stat.exists
       become: false
