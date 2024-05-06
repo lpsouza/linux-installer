@@ -15,3 +15,9 @@
           - pandoc
         state: present
         update_cache: true
+
+    - name: CLI Utils Bundle | Download mc ini configuation
+      get_url:
+        url: https://gist.github.com/lpsouza/68b1158119a9d1a74dda7dc560348d50/raw/
+        dest: ~/.config/mc/ini
+      become: false
