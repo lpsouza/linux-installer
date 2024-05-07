@@ -47,6 +47,7 @@
       stat:
         path: ~/.zshrc
       register: zshrc
+      become: false
 
     - name: .NET | Update PATH for .dotnet/tools in .zshrc
       blockinfile:
