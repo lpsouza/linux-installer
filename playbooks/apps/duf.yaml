@@ -5,23 +5,23 @@
   become: true
 
   vars:
-    duf_version: "0.8.0"
+    duf_version: "0.8.1"
 
   tasks:
     - name: duf | Check if is already installed
-      shell: dpkg-query -W -f='${Status}' duf || echo "not installed"
-      register: duf_package_status
+      command: duf --version
+      register: duf_installed
       changed_when: false
-      failed_when: duf_package_status.rc != 0
+      failed_when: false
 
     - name: duf | Download
       get_url:
         url: https://github.com/muesli/duf/releases/download/v{{ duf_version }}/duf_{{ duf_version }}_linux_amd64.deb
         dest: /tmp/duf_{{ duf_version }}_linux_amd64.deb
-      when: "'not installed' in duf_package_status.stdout"
+      when: duf_installed.rc != 0
 
     - name: duf | Install
       apt:
         deb: /tmp/duf_{{ duf_version }}_linux_amd64.deb
         state: present
-      when: "'not installed' in duf_package_status.stdout"
+      when: duf_installed.rc != 0
