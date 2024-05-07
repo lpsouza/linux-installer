@@ -11,15 +11,6 @@
         state: present
       register: exa
 
-    - name: exa | Configure alias for exa to .zshrc if exa is installed
-      blockinfile:
-        path: ~/.zshrc
-        block: |
-          alias ls='exa --icons -F -H --group-directories-first'
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - exa"
-      when: exa is defined and exa.changed
-      become: false
-
     - name: exa | Configure alias for exa to .bashrc if exa is installed
       blockinfile:
         path: ~/.bashrc
@@ -27,4 +18,19 @@
           alias ls='exa --icons -F -H --group-directories-first'
         marker: "# {mark} ANSIBLE MANAGED BLOCK - exa"
       when: exa is defined and exa.changed
+      become: false
+
+    - name: exa | Check if .zshrc exists
+      stat:
+        path: ~/.zshrc
+      register: zshrc
+      become: false
+
+    - name: exa | Configure alias for exa to .zshrc if exa is installed
+      blockinfile:
+        path: ~/.zshrc
+        block: |
+          alias ls='exa --icons -F -H --group-directories-first'
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - exa"
+      when: exa is defined and exa.changed and zshrc.stat.exists
       become: false
