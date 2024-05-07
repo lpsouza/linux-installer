@@ -4,8 +4,8 @@
   gather_facts: false
 
   vars:
-    hass_server: "{{ lookup('env', 'HASS_SERVER') }}"
-    hass_token: "{{ lookup('env', 'HASS_TOKEN') }}"
+    hass_server: "{{ lookup('env', 'HASS_SERVER') | default('no set', true) }}"
+    hass_token: "{{ lookup('env', 'HASS_TOKEN') | default('no set', true) }}"
 
   tasks:
     - name: Home Assistant CLI | Check if homeassistant-cli is installed
@@ -13,7 +13,6 @@
       register: homeassistant_cli_installed
       changed_when: false
       failed_when: false
-      check_mode: false
 
     - name: Home Assistant CLI | Install
       pip:
@@ -22,14 +21,6 @@
       register: homeassistant_cli_installer
       when: homeassistant_cli_installed.rc != 0
 
-    - name: Home Assistant CLI | Configure (on zshrc)
-      blockinfile:
-        path: ~/.zshrc
-        block: |
-          export HASS_SERVER={{ hass_server }}
-          export HASS_TOKEN={{ hass_token }}
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - HASS_CLI_ENV"
-
     - name: Home Assistant CLI | Configure (on bashrc)
       blockinfile:
         path: ~/.bashrc
@@ -37,3 +28,18 @@
           export HASS_SERVER={{ hass_server }}
           export HASS_TOKEN={{ hass_token }}
         marker: "# {mark} ANSIBLE MANAGED BLOCK - HASS_CLI_ENV"
+      when: hass_server != "no set" and hass_token != "no set"
+
+    - name: Home Assistant CLI | Check if .zshrc exists
+      stat:
+        path: ~/.zshrc
+      register: zshrc_exists
+
+    - name: Home Assistant CLI | Configure (on zshrc)
+      blockinfile:
+        path: ~/.zshrc
+        block: |
+          export HASS_SERVER={{ hass_server }}
+          export HASS_TOKEN={{ hass_token }}
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - HASS_CLI_ENV"
+      when: zshrc_exists.stat.exists and hass_server != "no set" and hass_token != "no set"
