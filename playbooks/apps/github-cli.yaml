@@ -33,7 +33,10 @@
         set -o pipefail
         export GH_TOKEN={{ gh_token }}
         gh extension install github/gh-copilot
-      when: gh is defined and gh.changed and gh_token != "no set"
+      when: gh is defined and gh_token != "no set"
+      register: gh_copilot
+      failed_when: false
+      changed_when: gh_copilot.rc == 0
       become: false
 
     - name: Github CLI | Add aliases for copilot to .bashrc
@@ -45,7 +48,7 @@
           alias \?gh='gh copilot suggest -t gh'
           alias \?git='gh copilot suggest -t git'
         marker: "# {mark} ANSIBLE MANAGED BLOCK - GITHUB CLI"
-      when: gh is defined and gh.changed and gh_token != "no set"
+      when: gh is defined and gh_token != "no set"
       become: false
 
     - name: Github CLI | Check if .zshrc exists
@@ -63,5 +66,5 @@
           alias \?gh='gh copilot suggest -t gh'
           alias \?git='gh copilot suggest -t git'
         marker: "# {mark} ANSIBLE MANAGED BLOCK - GITHUB CLI"
-      when: gh is defined and gh.changed and zshrc.stat.exists and gh_token != "no set"
+      when: gh is defined and zshrc.stat.exists and gh_token != "no set"
       become: false
