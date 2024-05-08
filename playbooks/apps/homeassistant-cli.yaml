@@ -2,12 +2,18 @@
 - name: Home Assistant CLI | Installation
   hosts: linux
   gather_facts: false
+  become: true
 
   vars:
     hass_server: "{{ lookup('env', 'HASS_SERVER') | default('no set', true) }}"
     hass_token: "{{ lookup('env', 'HASS_TOKEN') | default('no set', true) }}"
 
   tasks:
+    - name: Home Assistant CLI | Install dependencies
+      apt:
+        name: python3-pip
+        state: present
+
     - name: Home Assistant CLI | Check if homeassistant-cli is installed
       command: hass-cli --version
       register: homeassistant_cli_installed
@@ -20,6 +26,7 @@
         state: present
       register: homeassistant_cli_installer
       when: homeassistant_cli_installed.rc != 0
+      become: false
 
     - name: Home Assistant CLI | Configure (on bashrc)
       blockinfile:
@@ -29,11 +36,21 @@
           export HASS_TOKEN={{ hass_token }}
         marker: "# {mark} ANSIBLE MANAGED BLOCK - HASS_CLI_ENV"
       when: hass_server != "no set" and hass_token != "no set"
+      become: false
+
+    - name: Home Assistant CLI | Configure python PATH (on bashrc)
+      blockinfile:
+        path: ~/.bashrc
+        block: |
+          export PATH=$PATH:~/.local/bin
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - Python PATH"
+      become: false
 
     - name: Home Assistant CLI | Check if .zshrc exists
       stat:
         path: ~/.zshrc
       register: zshrc_exists
+      become: false
 
     - name: Home Assistant CLI | Configure (on zshrc)
       blockinfile:
@@ -43,3 +60,13 @@
           export HASS_TOKEN={{ hass_token }}
         marker: "# {mark} ANSIBLE MANAGED BLOCK - HASS_CLI_ENV"
       when: zshrc_exists.stat.exists and hass_server != "no set" and hass_token != "no set"
+      become: false
+
+    - name: Home Assistant CLI | Configure python PATH (on zshrc)
+      blockinfile:
+        path: ~/.zshrc
+        block: |
+          export PATH=$PATH:~/.local/bin
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - Python PATH"
+      when: zshrc_exists.stat.exists
+      become: false
