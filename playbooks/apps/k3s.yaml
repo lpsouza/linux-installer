@@ -4,6 +4,9 @@
   gather_facts: false
   become: true
 
+  vars:
+    k3s_token: "{{ lookup('K3S_TOKEN') | default('no set', true) }}"
+
   tasks:
     - name: K3S | Check if is already installed
       command: which k3s
@@ -18,6 +21,8 @@
         mode: "0755"
       when: k3s_check.rc == 1
 
-    - name: K3S | Install
-      command: /tmp/install.sh
+    - name: K3S | Install (server)
+      shell: |
+        export K3S_TOKEN={{ k3s_token }}
+        /tmp/install.sh server --write-kubeconfig-mode 644
       when: k3s_check.rc == 1
