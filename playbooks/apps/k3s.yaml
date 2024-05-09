@@ -5,7 +5,7 @@
   become: true
 
   vars:
-    k3s_token: "{{ lookup('K3S_TOKEN') | default('no set', true) }}"
+    k3s_token: "{{ lookup('env', 'K3S_TOKEN') | default('no set', true) }}"
 
   tasks:
     - name: K3S | Check if is already installed
@@ -23,6 +23,8 @@
 
     - name: K3S | Install (server)
       shell: |
-        export K3S_TOKEN={{ k3s_token }}
+        if [ "{{ k3s_token }}" != "no set" ]; then
+          export K3S_TOKEN="{{ k3s_token }}"
+        fi
         /tmp/install.sh server --write-kubeconfig-mode 644
       when: k3s_check.rc == 1
