@@ -23,7 +23,7 @@
       when: k3s_check.rc == 1
 
     - name: K3S | Install (server)
-      conmmand: /tmp/install.sh --write-kubeconfig-mode 644 --write-kubeconfig /root/.kube/config
+      command: /tmp/install.sh --write-kubeconfig-mode 644 --write-kubeconfig /root/.kube/config
       when: k3s_check.rc == 1 and k3s_url == "no set" and k3s_token == "no set"
 
     - name: K3S | Install (agent)
