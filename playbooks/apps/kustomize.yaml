@@ -23,4 +23,4 @@
 
     - name: Move kustomize binary to /usr/local/bin
       command: mv ./kustomize /usr/local/bin/kustomize
-      when: kustomize_check.rc == 1  # yaml: disable=trailing-spaces
+      when: kustomize_check.rc == 1
