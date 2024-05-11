@@ -24,29 +24,6 @@
       script: /tmp/nvm.sh
       when: not nvm_directory_stat.stat.exists
 
-    - name: NVM | Check if nvm plugin is already added to oh-my-zsh (ZSH)
-      shell: grep -E "^plugins=\(.*nvm.*\)" ~/.zshrc
-      register: nvm_plugin_check
-      changed_when: false
-      failed_when: false
-
-    - name: NVM | Add nvm to oh-my-zsh plugins (ZSH)
-      lineinfile:
-        path: ~/.zshrc
-        regexp: '^plugins=\((.*)\)'
-        line: 'plugins=(\1 nvm)'
-        backrefs: true
-      when: nvm_plugin_check.rc != 0
-
-
-    - name: NVM | Configure zstyle sources on oh-my-zsh (ZSH)
-      blockinfile:
-        dest: ~/.zshrc
-        insertbefore: plugins=\(
-        block: |
-          zstyle ':omz:plugins:nvm' lazy yes
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - nvm"
-
     - name: NVM | Check if nvm is configured on .bashrc (BASH)
       shell: grep -E "^export NVM_DIR=" ~/.bashrc
       register: nvm_bashrc_check
@@ -60,3 +37,42 @@
         line: 'export NVM_DIR="$HOME/.nvm"'
         backrefs: true
       when: nvm_bashrc_check.rc != 0
+
+    - name: NVM | Check if .zshrc exists (ZSH)
+      stat:
+        path: ~/.zshrc
+      register: zshrc_check
+      failed_when: false
+
+    - name: NVM | Check if nvm plugin is already added to oh-my-zsh (ZSH)
+      shell: grep -E "^plugins=\(.*nvm.*\)" ~/.zshrc
+      register: nvm_plugin_check
+      when: zshrc_check.stat.exists
+      changed_when: false
+      failed_when: false
+
+    - name: NVM | Add nvm to oh-my-zsh plugins (ZSH)
+      lineinfile:
+        path: ~/.zshrc
+        regexp: '^plugins=\((.*)\)'
+        line: 'plugins=(\1 nvm)'
+        backrefs: true
+      when: nvm_plugin_check.rc != 0 and zshrc_check.stat.exists
+
+
+    - name: NVM | Configure zstyle sources on oh-my-zsh (ZSH)
+      blockinfile:
+        dest: ~/.zshrc
+        insertbefore: plugins=\(
+        block: |
+          zstyle ':omz:plugins:nvm' lazy yes
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - nvm"
+      when: zshrc_check.stat.exists
+
+    - name: NVM | Configure nvm on .zshrc (ZSH)
+      blockinfile:
+        dest: ~/.zshrc
+        block: |
+          export NVM_DIR="$HOME/.nvm"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - nvm dir"
+      when: zshrc_check.stat.exists
