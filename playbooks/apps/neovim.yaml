@@ -24,14 +24,13 @@
       failed_when: false
       become: false
 
-
     - name: Neovim | If not exists, create configuration directory
       file:
         path: ~/.config
         state: directory
         mode: "0755"
-      become: false
       when: not config_directory_stat.stat.exists
+      become: false
 
     - name: Neovim | Clone configuration repository
       git:
