@@ -5,7 +5,7 @@
   become: true
 
   tasks:
-    - name: Python3 | Install
+    - name: Python3 | Install python3 and pip
       apt:
         name:
           - python-is-python3
