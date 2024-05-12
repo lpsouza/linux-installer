@@ -5,34 +5,18 @@
   become: true
 
   tasks:
-    - name: Starship | Check if is installed
-      stat:
-        path: /usr/local/bin/starship
-      register: starship_file_stat
-      failed_when: false
-
     - name: Starship | Download
       get_url:
         url: https://starship.rs/install.sh
         dest: /tmp/starship_install.sh
         mode: "0755"
-      when: not starship_file_stat.stat.exists
 
     - name: Starship | Install
       command: /tmp/starship_install.sh -y
-      when: not starship_file_stat.stat.exists
+      register: starship_install
+      changed_when: starship_install.rc == 0
 
-    - name: Starship | Set up execution in Zsh
-      blockinfile:
-        dest: ~/.zshrc
-        block: |
-          if [ -x "$(command -v starship)" ]; then
-              eval "$(starship init zsh)"
-          fi
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - starship"
-      become: false
-
-    - name: Starship | Set up execution in Bash
+    - name: Starship | Configure ~/.bashrc
       blockinfile:
         dest: ~/.bashrc
         block: |
@@ -42,13 +26,30 @@
         marker: "# {mark} ANSIBLE MANAGED BLOCK - starship"
       become: false
 
+    - name: Check if ~/.zshrc exists
+      stat:
+        path: ~/.zshrc
+      register: zshrc_stat
+      failed_when: false
+      become: false
+
+    - name: Starship | Configure ~/.zshrc
+      blockinfile:
+        dest: ~/.zshrc
+        block: |
+          if [ -x "$(command -v starship)" ]; then
+              eval "$(starship init zsh)"
+          fi
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - starship"
+      when: zshrc_stat.stat.exists
+      become: false
+
     - name: Starship | Check if configuration directory exists
       stat:
         path: ~/.config
       register: config_directory_stat
       failed_when: false
       become: false
-
 
     - name: Starship | If not exists, create configuration directory
       file:
