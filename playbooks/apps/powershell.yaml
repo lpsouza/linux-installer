@@ -1,21 +1,16 @@
 ---
 - name: Powershell | Installation
   hosts: linux
-  gather_facts: false
+  gather_facts: true
   become: true
 
   tasks:
-    - name: Powershell | Get Ubuntu release version
-      command: lsb_release -rs
-      register: ubuntu_release
-      changed_when: false
-
-    - name: Powershell | Download the Microsoft repository GPG keys
+    - name: Powershell | Download packages from Microsoft
       get_url:
-        url: https://packages.microsoft.com/config/ubuntu/{{ ubuntu_release.stdout }}/packages-microsoft-prod.deb
+        url: https://packages.microsoft.com/config/{{ ansible_distribution | lower }}/{{ ansible_distribution_version }}/packages-microsoft-prod.deb
         dest: /tmp/packages-microsoft-prod.deb
 
-    - name: Powershell | Install the Microsoft repository GPG keys
+    - name: Powershell | Install packages from Microsoft
       apt:
         deb: /tmp/packages-microsoft-prod.deb
 
