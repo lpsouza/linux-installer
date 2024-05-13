@@ -11,12 +11,12 @@
     - name: Terraform | Download
       get_url:
         url: https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip
-        dest: /tmp/terraform_{{ terraform_version }}_linux_amd64.zip
+        dest: /tmp/terraform_installer.zip
         mode: 0644
 
     - name: Terraform | Unzip
       unarchive:
-        src: /tmp/terraform_{{ terraform_version }}_linux_amd64.zip
+        src: /tmp/terraform_installer.zip
         dest: /usr/local/bin
         remote_src: true
         mode: 0755
