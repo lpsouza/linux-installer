@@ -5,6 +5,12 @@
   become: true
 
   tasks:
+    - name: ZSH | Install dependencies
+      apt:
+        name: curl
+        state: present
+        update_cache: true
+
     - name: ZSH | Install
       apt:
         name: zsh
@@ -36,13 +42,11 @@
       when: not zsh_autosuggestions_installed.stat.exists
       become: false
 
-
     - name: ZSH | Check if zsh-syntax-highlighting plugin is installed
       stat:
         path: ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
       register: zsh_syntax_highlighting_installed
       become: false
-
 
     - name: ZSH | If not installed, install zsh-syntax-highlighting plugin
       git:
@@ -52,14 +56,12 @@
       when: not zsh_syntax_highlighting_installed.stat.exists
       become: false
 
-
     - name: ZSH | Check if zsh-autosuggestions plugin is already added
       shell: grep -E "^plugins=\(.*zsh\-autosuggestions.*\)" ~/.zshrc
       register: autosuggestions_plugin_check
       changed_when: false
       failed_when: false
       become: false
-
 
     - name: ZSH | If not added, configure zsh-autosuggestions plugin
       lineinfile:
@@ -70,14 +72,12 @@
       become: false
       when: autosuggestions_plugin_check.rc != 0
 
-
     - name: ZSH | Check if zsh-syntax-highlighting plugin is already added
       shell: grep -E "^plugins=\(.*zsh\-syntax\-highlighting.*\)" ~/.zshrc
       register: syntax_highlighting_plugin_check
       changed_when: false
       failed_when: false
       become: false
-
 
     - name: ZSH | If not added, configure zsh-syntax-highlighting plugin
       lineinfile:
@@ -88,7 +88,6 @@
       become: false
       when: syntax_highlighting_plugin_check.rc != 0
 
-
     - name: ZSH | Configure ZSH_THEME to kafeitu
       lineinfile:
         path: ~/.zshrc
@@ -96,14 +95,12 @@
         line: 'ZSH_THEME="kafeitu"'
       become: false
 
-
     - name: ZSH | Disable auto title
       lineinfile:
         path: ~/.zshrc
         regexp: "^# DISABLE_AUTO_TITLE="
         line: 'DISABLE_AUTO_TITLE="true"'
       become: false
-
 
     - name: ZSH | Add bin folder to PATH
       blockinfile:
@@ -114,7 +111,6 @@
           fi
         marker: "# {mark} ANSIBLE MANAGED BLOCK - bin folder"
       become: false
-
 
     - name: ZSH | Add .local/bin folder to PATH
       blockinfile:
