@@ -29,6 +29,24 @@
         state: present
         update_cache: true
 
+    - name: Insync | Add Insync startup on .bashrc
+      blockinfile:
+        dest: ~/.bashrc
+        block: |
+          if ! pgrep -x "insync" > /dev/null
+          then
+            if [[ -f /usr/bin/insync ]]; then
+              insync start
+            fi
+          fi
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - Insync"
+      become: false
+
+    - name: Insync | Check if .zshrc exists
+      stat:
+        path: ~/.zshrc
+      register: zshrc
+
     - name: Insync | Add Insync startup on .zshrc
       blockinfile:
         dest: ~/.zshrc
@@ -40,4 +58,5 @@
             fi
           fi
         marker: "# {mark} ANSIBLE MANAGED BLOCK - Insync"
+      when: zshrc.stat.exists
       become: false
