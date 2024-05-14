@@ -2,12 +2,20 @@
 - name: CaskaydiaCove NerdFont | Installation
   hosts: linux
   gather_facts: false
+  become: true
 
   tasks:
+    - name: CaskaydiaCove NerdFont | Install dependencies
+      package:
+        name: unzip
+        state: present
+        update_cache: true
+
     - name: CaskaydiaCove NerdFont | Check if is already installed
       stat:
         path: "~/.fonts/CascadiaCode"
       register: caskaydia_cove_nerd_font
+      become: false
 
     - name: CaskaydiaCove NerdFont | Download
       get_url:
@@ -15,6 +23,7 @@
         dest: "/tmp/CascadiaCode.zip"
         mode: 0644
       when: not caskaydia_cove_nerd_font.stat.exists
+      become: false
 
     - name: CaskaydiaCove NerdFont | Create local .fonts directory
       file:
@@ -22,6 +31,7 @@
         state: directory
         mode: 0755
       when: not caskaydia_cove_nerd_font.stat.exists
+      become: false
 
     - name: CaskaydiaCove NerdFont | Unzip
       unarchive:
@@ -29,3 +39,4 @@
         dest: "~/.fonts/CascadiaCode"
         mode: 0644
       when: not caskaydia_cove_nerd_font.stat.exists
+      become: false
