@@ -4,7 +4,10 @@
   gather_facts: false
   become: true
 
+  vars:
+    timezone: "{{ lookup('env', 'TZ') | default('America/Sao_Paulo', true) }}"
+
   tasks:
-    - name: Timezone | Set timezone to America/Sao_Paulo
+    - name: Timezone | Set timezone {{ timezone }}
       timezone:
-        name: America/Sao_Paulo
+        name: "{{ timezone }}"
