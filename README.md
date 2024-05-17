@@ -49,7 +49,7 @@ bash ./generate-inventory.sh
 | `playbooks/apps/exa.yaml`               | Install [exa](https://the.exa.website/)                                        |
 | `playbooks/apps/github-cli.yaml`        | Install [GitHub CLI](https://cli.github.com/)                                  |
 | `playbooks/apps/helm.yaml`              | Install [Helm](https://helm.sh/)                                               |
-| `playbooks/apps/homeassistant-cli.yaml` | Install [Home Assistant CLI]()                                                 |
+| `playbooks/apps/homeassistant-cli.yaml` | Install [Home Assistant CLI](https://www.home-assistant.io/)                   |
 | `playbooks/apps/k3s.yaml`               | Install [k3s](https://k3s.io/)                                                 |
 | `playbooks/apps/k9s.yaml`               | Install [k9s](https://k9scli.io/)                                              |
 | `playbooks/apps/kubecm.yaml`            | Install [kubecm](https://kubecm.cloud/)                                        |
@@ -72,3 +72,11 @@ bash ./generate-inventory.sh
 | `playbooks/apps/x/insync.yaml`          | Install [Insync](https://www.insync.io/) (X Window System required)            |
 | `playbooks/apps/x/mqtt-explorer.yaml`   | Install [MQTT Explorer](https://mqtt-explorer.com/) (X Window System required) |
 | `playbooks/apps/x/x-windows.yaml`       | Install X Windows System (xorg, xinit, xrdp and optional desktop environment)  |
+| `playbooks/config/bash.yaml`            | Configure Bash shell                                                           |
+| `playbooks/config/git.yaml`             | Configure Git                                                                  |
+| `playbooks/config/hushlogin.yaml`       | Create a `.hushlogin` file                                                     |
+| `playbooks/config/lid-closing.yaml`     | Configure lid closing behavior                                                 |
+| `playbooks/config/nerdfont.yaml`        | Install Nerd Fonts                                                             |
+| `playbooks/config/passwordless.yaml`    | Configure passwordless sudo                                                    |
+| `playbooks/config/pubkey.yaml`          | Configure public key authentication                                            |
+| `playbooks/config/tz.yaml`              | Configure timezone                                                             |
