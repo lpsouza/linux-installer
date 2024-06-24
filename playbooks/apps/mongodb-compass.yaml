@@ -1,0 +1,19 @@
+---
+- name: Install MongoDB Compass
+  hosts: linux
+  become: true
+  gather_facts: false
+
+  vars:
+    compass_version: "1.43.1"
+
+  tasks:
+    - name: Download MongoDB Compass
+      get_url:
+        url: https://downloads.mongodb.com/compass/mongodb-compass_{{ compass_version }}_amd64.deb
+        dest: /tmp/mongodb-compass_{{ compass_version }}_amd64.deb
+
+    - name: Install MongoDB Compass
+      apt:
+        deb: /tmp/mongodb-compass_{{ compass_version }}_amd64.deb
+        state: present

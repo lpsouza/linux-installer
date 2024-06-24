@@ -55,7 +55,9 @@ bash ./generate-inventory.sh
 | `playbooks/apps/kubecm.yaml`            | Install [kubecm](https://kubecm.cloud/)                                        |
 | `playbooks/apps/kubectl.yaml`           | Install [kubectl](https://kubernetes.io/docs/reference/kubectl/overview/)      |
 | `playbooks/apps/kustomize.yaml`         | Install [kustomize](https://kustomize.io/)                                     |
-| `playbooks/apps/mongosh.yaml`           | Install [MongoDB Shell](https://docs.mongodb.com/mongodb-shell/)               |
+| `playbooks/apps/mongodb-compass.yaml`   | Install [MongoDB Compass](https://www.mongodb.com/products/compass)            |
+| `playbooks/apps/mongodb-shell.yaml`     | Install [MongoDB Shell](https://docs.mongodb.com/mongodb-shell/)               |
+| `playbooks/apps/mongodb-tools.yaml`     | Install [MongoDB Tools](https://docs.mongodb.com/database-tools/)              |
 | `playbooks/apps/neovim.yaml`            | Install [Neovim](https://neovim.io/)                                           |
 | `playbooks/apps/network-bundle.yaml`    | Install a bundle of network utilities (iputils-ping, mtr, net-tools, whois)    |
 | `playbooks/apps/nvm.yaml`               | Install [Node Version Manager](https://github.com/nvm-sh/nvm)                  |

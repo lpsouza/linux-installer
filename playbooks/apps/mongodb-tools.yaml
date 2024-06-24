@@ -1,0 +1,21 @@
+---
+- name: Install MongoDB Tools
+  hosts: linux
+  become: true
+  gather_facts: true
+
+  vars:
+    tools_version: "100.9.5"
+    tools_distro: "{{ ansible_distribution | lower }}{{ ansible_distribution_version | regex_replace('(\\.)', '')}}"
+    tools_arch: "x86_64"
+
+  tasks:
+    - name: Download MongoDB Tools
+      get_url:
+        url: https://fastdl.mongodb.org/tools/db/mongodb-database-tools-{{ tools_distro }}-{{ tools_arch }}-{{ tools_version }}.deb
+        dest: /tmp/mongodb-tools_{{ tools_version }}_amd64.deb
+
+    - name: Install MongoDB Tools
+      apt:
+        deb: /tmp/mongodb-tools_{{ tools_version }}_amd64.deb
+        state: present
