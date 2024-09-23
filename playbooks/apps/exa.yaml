@@ -10,6 +10,15 @@
         name: exa
         state: present
       register: exa
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int <= 23
+
+    - name: exa | Install (alternative)
+      package:
+        name: eza
+        state: present
+      register: exa
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int > 23
+
 
     - name: exa | Configure alias for exa to .bashrc if exa is installed
       blockinfile:

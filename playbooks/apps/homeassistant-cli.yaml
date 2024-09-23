@@ -11,18 +11,27 @@
   tasks:
     - name: Home Assistant CLI | Install dependencies
       apt:
-        name: python3-pip
+        name:
+          - python3-pip
+          - python3-venv
         state: present
 
     - name: Home Assistant CLI | Check if homeassistant-cli is installed
-      command: hass-cli --version
+      command: ~/.hassio/bin/hass-cli --version
       register: homeassistant_cli_installed
       changed_when: false
       failed_when: false
+      become: false
+
+    - name: Home Assistant CLI | Create virtualenv
+      command: python3 -m venv ~/.hassio
+      when: homeassistant_cli_installed.rc != 0
+      become: false
 
     - name: Home Assistant CLI | Install
       pip:
         name: homeassistant-cli
+        virtualenv: ~/.hassio
         state: present
       register: homeassistant_cli_installer
       when: homeassistant_cli_installed.rc != 0

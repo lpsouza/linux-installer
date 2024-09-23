@@ -5,31 +5,14 @@
   become: true
 
   tasks:
-    - name: Lid closing | Check if handleLidSwitch is already set to ignore
-      command: grep -E "^HandleLidSwitch=ignore" /etc/systemd/logind.conf
-      register: lid_switch_check
-      changed_when: false
-      failed_when: false
-
-
     - name: Lid closing | Configure handleLidSwitch to ignore
       lineinfile:
         path: /etc/systemd/logind.conf
         regexp: "^#HandleLidSwitch="
         line: "HandleLidSwitch=ignore"
-      when: lid_switch_check.rc == 1
-
-
-    - name: Lid closing | Check if LidSwitchIgnoreInhibited is already set to no
-      command: grep -E "^LidSwitchIgnoreInhibited=no" /etc/systemd/logind.conf
-      register: lid_switch_ignore_check
-      changed_when: false
-      failed_when: false
-
 
     - name: Lid closing | Configure LidSwitchIgnoreInhibited to no
       lineinfile:
         path: /etc/systemd/logind.conf
         regexp: "^#LidSwitchIgnoreInhibited="
         line: "LidSwitchIgnoreInhibited=no"
-      when: lid_switch_ignore_check.rc == 1

@@ -5,11 +5,12 @@
   become: true
 
   tasks:
-    - name: Bashtop | Install PPA repository
+    - name: Bashtop | Install PPA repository (necessary for Ubuntu 23.04 and below)
       apt_repository:
         repo: ppa:bashtop-monitor/bashtop
         state: present
         filename: bashtop
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int <= 23
 
     - name: Bashtop | Install
       apt:
