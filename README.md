@@ -7,6 +7,7 @@ This repository contains Ansible playbooks to install and configure software on 
 The Ansible playbooks is compatible with the following operating systems:
 
 - Ubuntu 22.04.2 LTS (x86_64)
+- Ubuntu 24.04 LTS (x86_64)
 
 ## Usage
 
@@ -35,7 +36,6 @@ bash ./generate-inventory.sh
 
 | Playbook                                | Description                                                                    |
 | --------------------------------------- | ------------------------------------------------------------------------------ |
-| `playbooks/apps/1password-cli.yaml`     | Install [1Password CLI](https://1password.com/downloads/command-line/)         |
 | `playbooks/apps/asciinema.yaml`         | Install [asciinema](https://asciinema.org/)                                    |
 | `playbooks/apps/aws-cli.yaml`           | Install [AWS CLI](https://aws.amazon.com/cli/)                                 |
 | `playbooks/apps/azure-cli.yaml`         | Install [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/)               |
@@ -69,6 +69,7 @@ bash ./generate-inventory.sh
 | `playbooks/apps/web-cli-bundle.yaml`    | Install a bundle of web utilities (curl, elinks, jq, wget)                     |
 | `playbooks/apps/zip.yaml`               | Install compression utility (zip and unzip)                                    |
 | `playbooks/apps/zsh.yaml`               | Install [Zsh](https://www.zsh.org/) e [Oh My Zsh](https://ohmyz.sh/)           |
+| `playbooks/apps/x/1password.yaml`       | Install [1Password](https://1password.com/) (X Window System required)         |
 | `playbooks/apps/x/dbeaver.yaml`         | Install [DBeaver](https://dbeaver.io/) (X Window System required)              |
 | `playbooks/apps/x/gns3.yaml`            | Install [GNS3](https://www.gns3.com/) (X Window System required)               |
 | `playbooks/apps/x/insync.yaml`          | Install [Insync](https://www.insync.io/) (X Window System required)            |
