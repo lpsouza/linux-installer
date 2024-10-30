@@ -9,7 +9,7 @@
       apt:
         name: bat
         state: present
-        update_cache: yes
+        update_cache: true
 
     - name: Bat | Add alias to .bashrc
       blockinfile:
@@ -18,7 +18,7 @@
           alias bat='batcat'
           alias cat='batcat'
         marker: "# {mark} ANSIBLE MANAGED BLOCK - BAT"
-      become: false      
+      become: false
 
     - name: Bat | Check if .zshrc exists
       stat:
