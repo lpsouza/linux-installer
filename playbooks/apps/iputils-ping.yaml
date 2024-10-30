@@ -1,16 +1,13 @@
 ---
-- name: Network Bundle | Install
+- name: IPUtils-Ping | Install
   hosts: linux
   gather_facts: false
   become: true
 
   tasks:
-    - name: Network Bundle | Install iputils-ping, mtr, net-tools, whois
+    - name: IPUtils-Ping | Install iputils-ping
       apt:
         name:
           - iputils-ping
-          - mtr
-          - net-tools
-          - whois
         state: present
         update_cache: true

@@ -1,0 +1,12 @@
+---
+- name: Midnight Commander | Install
+  hosts: linux
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Midnight Commander | Install
+      apt:
+        name: mc
+        state: present
+        update_cache: true

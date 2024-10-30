@@ -1,0 +1,12 @@
+---
+- name: jq | Install
+  hosts: linux
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: jq | Install jq
+      apt:
+        name: jq
+        state: present
+        update_cache: true

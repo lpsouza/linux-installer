@@ -1,0 +1,12 @@
+---
+- name: Wget | Install
+  hosts: linux
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Wget | Install wget
+      apt:
+        name: wget
+        state: present
+        update_cache: true

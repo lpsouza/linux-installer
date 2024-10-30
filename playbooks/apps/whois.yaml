@@ -1,0 +1,13 @@
+---
+- name: Whois | Install
+  hosts: linux
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Whois | Install whois
+      apt:
+        name:
+          - whois
+        state: present
+        update_cache: true

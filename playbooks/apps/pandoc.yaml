@@ -1,0 +1,12 @@
+---
+- name: Pandoc | Install
+  hosts: linux
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Pandoc | Install
+      apt:
+        name: pandoc
+        state: present
+        update_cache: true

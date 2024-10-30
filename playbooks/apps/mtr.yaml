@@ -1,0 +1,13 @@
+---
+- name: MTR | Install
+  hosts: linux
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: MTR | Install mtr
+      apt:
+        name:
+          - mtr
+        state: present
+        update_cache: true

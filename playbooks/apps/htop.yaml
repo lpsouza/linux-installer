@@ -1,0 +1,12 @@
+---
+- name: htop | Install
+  hosts: linux
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: htop | Install
+      apt:
+        name: htop
+        state: present
+        update_cache: true

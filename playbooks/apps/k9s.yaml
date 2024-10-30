@@ -5,7 +5,7 @@
   become: true
 
   vars:
-    k9s_version: 0.27.4
+    k9s_version: 0.32.5
 
   tasks:
     - name: K9S | Check if is already installed
@@ -34,3 +34,54 @@
         dest: /usr/local/bin/k9s
         mode: 0755
       when: not k9s_installed.stat.exists
+
+    - name: K9S | Check .config/k9s directory
+      stat:
+        path: ./config/k9s
+      register: k9s_config_dir
+      become: false
+
+    - name: K9S | Create .config/k9s directory
+      file:
+        path: ~/.config/k9s
+        state: directory
+        mode: 0755
+      when: not k9s_config_dir.stat.exists
+
+    - name: K9S | Check .config/k9s/skins directory
+      stat:
+        path: ~/.config/k9s/skins
+      register: k9s_skins_dir
+      become: false
+
+    - name: K9S | Create .config/k9s/skins directory
+      file:
+        path: ~/.config/k9s/skins
+        state: directory
+        mode: 0755
+      when: not k9s_skins_dir.stat.exists
+      become: false
+
+    - name: K9S | Download Catppuccin skin
+      get_url:
+        url: https://github.com/catppuccin/k9s/archive/main.tar.gz
+        dest: /tmp/k9s-main.tar.gz
+        mode: 0644
+      when: not k9s_skins_dir.stat.exists
+      become: false
+
+    - name: K9S | Unarchive Catppuccin skin
+      unarchive:
+        src: /tmp/k9s-main.tar.gz
+        dest: /tmp/k9s-skin
+        remote_src: true
+        mode: 0755
+        strip_components: 1
+      when: not k9s_skins_dir.stat.exists
+      become: false
+
+    - name: K9S | Move extracted skin files to final destination
+      command: mv /tmp/k9s-extract/dist/* ~/.config/k9s/skins/
+      when: not k9s_skins_dir.stat.exists
+      become: false
+

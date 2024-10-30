@@ -1,0 +1,12 @@
+---
+- name: cURL | Install
+  hosts: linux
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: cURL | Install curl
+      apt:
+        name: curl
+        state: present
+        update_cache: true

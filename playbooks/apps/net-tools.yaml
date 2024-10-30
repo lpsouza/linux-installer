@@ -1,0 +1,13 @@
+---
+- name: Net Tools | Install
+  hosts: linux
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Net Tools | Install net-tools
+      apt:
+        name:
+          - net-tools
+        state: present
+        update_cache: true
