@@ -1,4 +1,9 @@
 ---
+# Install NVM
+# https://github.com/nvm-sh/nvm
+#
+# Description: Node Version Manager is a version manager for node.js, designed to be installed per-user, and invoked per-shell.
+#
 - name: NVM | Installation
   hosts: linux
   gather_facts: false

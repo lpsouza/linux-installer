@@ -1,4 +1,9 @@
 ---
+# Install cURL
+# https://curl.se/
+#
+# Description: cURL is a command-line tool for transferring data with URL syntax.
+#
 - name: cURL | Install
   hosts: linux
   gather_facts: false

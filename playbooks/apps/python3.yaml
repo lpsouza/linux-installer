@@ -1,4 +1,9 @@
 ---
+# Install python3 and pip
+# https://www.python.org/
+#
+# Description: Python is a programming language that lets you work quickly and integrate systems more effectively.
+#
 - name: Python3 | Install
   hosts: linux
   gather_facts: false

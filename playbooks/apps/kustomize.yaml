@@ -1,3 +1,9 @@
+---
+# Install kustomize
+# https://kustomize.io/
+#
+# Description: kustomize lets you customize raw, template-free YAML files for multiple purposes, leaving the original YAML untouched and usable as is.
+#
 - name: Install kustomize
   hosts: linux
   become: true

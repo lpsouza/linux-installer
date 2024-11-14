@@ -1,4 +1,9 @@
 ---
+# Install Starship prompt
+# https://starship.rs/
+#
+# Description: Starship is the minimal, blazing-fast, and infinitely customizable prompt for any shell!
+#
 - name: Starship | Installation
   hosts: linux
   gather_facts: false

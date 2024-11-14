@@ -1,4 +1,8 @@
 ---
+# Install X Windows
+#
+# Description: X Windows is a windowing system for bitmap displays, common on UNIX-like operating systems.
+#
 - name: X Windows | Installation
   hosts: linux
   gather_facts: false

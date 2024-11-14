@@ -1,4 +1,9 @@
 ---
+# Install .NET SDK
+# https://dotnet.microsoft.com/
+#
+# Description: .NET is a free, cross-platform, open-source developer platform for building many different types of applications.
+#
 - name: .NET | Installation
   hosts: linux
   gather_facts: true

@@ -1,4 +1,9 @@
 ---
+# Install ELinks
+# http://elinks.or.cz/
+#
+# Description: ELinks is an advanced and well-established feature-rich text mode web browser.
+#
 - name: ELinks | Install
   hosts: linux
   gather_facts: false

@@ -1,4 +1,9 @@
 ---
+# Install Home Assistant CLI
+# https://www.home-assistant.io/
+#
+# Description: Home Assistant is an open-source home automation platform running on Python 3. Track and control all devices at home and automate control.
+#
 - name: Home Assistant CLI | Installation
   hosts: linux
   gather_facts: false

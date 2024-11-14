@@ -1,4 +1,9 @@
 ---
+# Install CSVKit
+# https://csvkit.readthedocs.io/en/latest/
+#
+# Description: CSVKit is a suite of utilities for converting to and working with CSV, the king of tabular file formats.
+#
 - name: CSVKit | Install
   hosts: linux
   gather_facts: false

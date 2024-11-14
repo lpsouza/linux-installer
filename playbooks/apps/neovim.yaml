@@ -1,4 +1,9 @@
 ---
+# Install Neovim
+# https://neovim.io/
+#
+# Description: Neovim is a hyperextensible text editor based on Vim.
+#
 - name: Neovim | Installation
   hosts: linux
   gather_facts: false

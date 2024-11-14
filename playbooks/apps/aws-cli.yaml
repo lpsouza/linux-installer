@@ -1,4 +1,9 @@
 ---
+# Install AWS CLI
+# https://aws.amazon.com/cli/
+#
+# Description: The AWS Command Line Interface (CLI) is a unified tool to manage your AWS services.
+#
 - name: AWS CLI | Installation
   hosts: linux
   gather_facts: true

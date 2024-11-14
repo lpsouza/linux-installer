@@ -1,4 +1,9 @@
 ---
+# Install exa
+# https://the.exa.website/
+#
+# Description: exa is a modern replacement for ls, written in Rust.
+#
 - name: exa | Installation
   hosts: linux
   gather_facts: true

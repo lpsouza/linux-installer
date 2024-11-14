@@ -1,4 +1,8 @@
 ---
+# Install MQTT Explorer
+#
+# Description: MQTT Explorer is a comprehensive MQTT client that provides a structured overview of your MQTT topics and makes working with devices/services on your broker easier.
+#
 - name: MQTT Explorer | Installation
   hosts: linux
   gather_facts: false

@@ -1,4 +1,9 @@
 ---
+# Install ZSH
+# https://en.wikipedia.org/wiki/Z_shell
+#
+# Description: The Z shell is a Unix shell that can be used as an interactive login shell and as a command interpreter for shell scripting. Zsh is an extended Bourne shell with many improvements, including some features of Bash, ksh, and tcsh.
+#
 - name: ZSH | Installation
   hosts: linux
   gather_facts: false

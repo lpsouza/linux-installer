@@ -1,4 +1,9 @@
 ---
+# Install Midnight Commander
+# https://midnight-commander.org/
+#
+# Description: Midnight Commander is a free cross-platform orthodox file manager.
+#
 - name: Midnight Commander | Install
   hosts: linux
   gather_facts: false

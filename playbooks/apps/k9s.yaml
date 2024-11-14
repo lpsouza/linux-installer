@@ -1,4 +1,9 @@
 ---
+# Install K9S
+# https://k9scli.io/
+#
+# Description: K9s provides a terminal UI to interact with your Kubernetes clusters.
+#
 - name: K9S | Installation
   hosts: linux
   gather_facts: false

@@ -1,4 +1,9 @@
 ---
+# Install MongoDB Compass
+# https://www.mongodb.com/products/compass
+#
+# Description: MongoDB Compass is the GUI for MongoDB. Visually explore your data. Run ad hoc queries in seconds. Interact with your data with full CRUD functionality. View and optimize your query performance.
+#
 - name: Install MongoDB Compass
   hosts: linux
   become: true

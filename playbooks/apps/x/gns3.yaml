@@ -1,4 +1,9 @@
 ---
+# Install GNS3
+# https://www.gns3.com/
+#
+# Description: GNS3 is a graphical network simulator that allows simulation of complex networks.
+#
 - name: GNS3 | Installation
   hosts: linux
   gather_facts: false

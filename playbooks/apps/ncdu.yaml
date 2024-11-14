@@ -1,4 +1,9 @@
 ---
+# Install Ncdu
+# https://dev.yorhel.nl/ncdu
+#
+# Description: Ncdu is a disk usage analyzer with an ncurses interface.
+#
 - name: Ncdu | Install
   hosts: linux
   gather_facts: false

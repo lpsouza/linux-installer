@@ -1,4 +1,9 @@
 ---
+# Install Github CLI
+# https://cli.github.com/
+#
+# Description: Github CLI is a command-line tool for GitHub. It enables you to manage your repositories, issues, pull requests, and more.
+#
 - name: Github CLI | Installation
   hosts: linux
   gather_facts: false

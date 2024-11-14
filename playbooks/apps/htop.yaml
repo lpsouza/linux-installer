@@ -1,4 +1,9 @@
 ---
+# Install htop
+# https://htop.dev/
+#
+# Description: htop is an interactive process viewer for Unix systems.
+#
 - name: htop | Install
   hosts: linux
   gather_facts: false

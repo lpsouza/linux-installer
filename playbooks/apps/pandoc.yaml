@@ -1,4 +1,9 @@
 ---
+# Install Pandoc
+# https://pandoc.org/
+#
+# Description: Pandoc is a universal document converter.
+#
 - name: Pandoc | Install
   hosts: linux
   gather_facts: false

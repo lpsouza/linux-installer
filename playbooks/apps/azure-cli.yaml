@@ -1,4 +1,9 @@
 ---
+# Install Azure CLI
+# https://docs.microsoft.com/en-us/cli/azure/
+#
+# Description: Microsoft Azure CLI is a set of open-source, cross-platform commands for managing resources in Microsoft Azure.
+#
 - name: Azure CLI | Installation
   hosts: linux
   gather_facts: true

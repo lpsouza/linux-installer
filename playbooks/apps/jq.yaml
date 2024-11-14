@@ -1,4 +1,9 @@
 ---
+# Install jq
+# https://stedolan.github.io/jq/
+#
+# Description: jq is a lightweight and flexible command-line JSON processor.
+#
 - name: jq | Install
   hosts: linux
   gather_facts: false

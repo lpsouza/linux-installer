@@ -1,4 +1,9 @@
 ---
+# Install K3S
+# https://k3s.io/
+#
+# Description: K3s is a lightweight Kubernetes distribution designed for edge computing.
+#
 - name: K3S | Installation
   hosts: linux
   gather_facts: false

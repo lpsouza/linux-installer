@@ -1,4 +1,9 @@
 ---
+# Install MongoDB Shell
+# https://www.mongodb.com/try/download/shell
+#
+# Description: MongoDB Shell is a shell-centric cross-platform MongoDB tool. It provides a rich shell with autocompletion, syntax highlighting, and contextual help, and a powerful scripting environment with a built-in JavaScript engine.
+#
 - name: Install MongoDB Shell
   hosts: linux
   become: true

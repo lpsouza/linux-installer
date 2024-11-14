@@ -1,4 +1,9 @@
 ---
+# Install Bashtop
+# https://github.com/aristocratos/bashtop
+#
+# Description: Bashtop is a resource monitor that shows usage and stats for processor, memory, disks, network and processes.
+#
 - name: Bashtop | Installation
   hosts: linux
   gather_facts: true

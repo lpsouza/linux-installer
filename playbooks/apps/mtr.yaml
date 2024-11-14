@@ -1,4 +1,9 @@
 ---
+# Install MTR
+# https://www.bitwizard.nl/mtr/
+#
+# Description: MTR combines the functionality of the 'traceroute' and 'ping' programs in a single network diagnostic tool.
+#
 - name: MTR | Install
   hosts: linux
   gather_facts: false

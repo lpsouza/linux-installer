@@ -1,4 +1,9 @@
 ---
+# Install duf
+# https://github.com/muesli/duf
+#
+# Description: Disk Usage/Free Utility is a better 'df' alternative, providing more information and a better layout.
+#
 - name: duf | Installation
   hosts: linux
   gather_facts: false

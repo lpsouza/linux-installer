@@ -1,4 +1,9 @@
 ---
+# Install Bat
+# https://github.com/sharkdp/bat
+#
+# Description: Bat is a cat clone with wings. It provides syntax highlighting for a large number of programming and markup languages.
+#
 - name: Bat | Install
   hosts: linux
   gather_facts: false

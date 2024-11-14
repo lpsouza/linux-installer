@@ -1,4 +1,8 @@
 ---
+# Install Neofetch
+#
+# Description: Neofetch is a command-line system information tool written in bash 3.2+.
+#
 - name: Neofetch | Install
   hosts: linux
   gather_facts: false

@@ -1,4 +1,9 @@
 ---
+# Install Kubectl
+# https://kubernetes.io/docs/tasks/tools/install-kubectl/
+#
+# Description: Kubectl is a command-line tool for interacting with Kubernetes clusters.
+#
 - name: Kubectl | Installation
   hosts: linux
   gather_facts: false

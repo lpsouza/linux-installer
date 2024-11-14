@@ -1,4 +1,9 @@
 ---
+# Install Tmux
+# https://github.com/tmux/tmux
+#
+# Description: Tmux is a terminal multiplexer that allows you to access multiple terminal sessions inside a single window.
+#
 - name: Tmux | Installation
   hosts: linux
   gather_facts: false

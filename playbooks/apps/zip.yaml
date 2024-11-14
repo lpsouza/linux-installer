@@ -1,4 +1,9 @@
 ---
+# Install zip
+# https://en.wikipedia.org/wiki/Zip_(file_format)
+#
+# Description: ZIP is an archive file format that supports lossless data compression. A .ZIP file may contain one or more files or directories that may have been compressed.
+#
 - name: Zip | Install
   hosts: linux
   gather_facts: false

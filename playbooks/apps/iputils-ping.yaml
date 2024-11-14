@@ -1,4 +1,8 @@
 ---
+# Install iputils-ping
+#
+# Description: The iputils-ping package contains tools for network testing and management, including ping.
+#
 - name: IPUtils-Ping | Install
   hosts: linux
   gather_facts: false

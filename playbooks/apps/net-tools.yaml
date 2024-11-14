@@ -1,4 +1,8 @@
 ---
+# Install net-tools package
+#
+# Description: The net-tools package contains basic networking tools, including ifconfig, netstat, route, and others.
+#
 - name: Net Tools | Install
   hosts: linux
   gather_facts: false

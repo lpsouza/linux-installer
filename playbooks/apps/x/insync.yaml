@@ -1,4 +1,9 @@
 ---
+# Install Insync
+# https://www.insynchq.com/
+#
+# Description: Insync is a Google Drive client that allows you to sync your Google Drive files to your computer.
+#
 - name: Insync | Installation
   hosts: linux
   gather_facts: false
