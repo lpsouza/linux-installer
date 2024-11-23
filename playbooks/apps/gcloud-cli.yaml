@@ -1,0 +1,45 @@
+---
+# Install gcloud CLI
+# https://cloud.google.com/sdk/gcloud/
+#
+# Description: Google Cloud SDK is a set of tools that you can use to manage resources and applications hosted on Google Cloud Platform.
+#
+- name: gcloud CLI | Installation
+  hosts: linux
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: gcloud CLI | Install dependencies
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - gnupg
+          - curl
+        state: present
+        update_cache: true
+
+    - name: gcloud CLI | Download apt key
+      get_url:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        dest: /tmp/cloud.google.gpg
+
+    - name: gcloud CLI | Install apt key
+      shell: |
+        set -o pipefail
+        cat /tmp/cloud.google.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+      args:
+        creates: /usr/share/keyrings/cloud.google.gpg
+
+    - name: gcloud CLI | Add apt repository
+      apt_repository:
+        repo: deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main
+        state: present
+        filename: google-cloud-sdk
+
+    - name: gcloud CLI | Install
+      apt:
+        name: google-cloud-sdk
+        state: present
+        update_cache: true
