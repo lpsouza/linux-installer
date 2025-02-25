@@ -1,0 +1,31 @@
+---
+#
+# This playbook installs and configures the initial setup for any Ubuntu machine.
+#
+- name: Install and configure initial setup
+  hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Update and upgrade apt packages
+      apt:
+        update_cache: yes
+        upgrade: yes
+
+    - name: Install essential packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - build-essential
+        - curl
+        - git
+        - htop
+        - jq
+        - neofetch
+        - nmap
+        - software-properties-common
+        - tree
+        - unzip
+        - wget
+        - zip
