@@ -17,15 +17,28 @@
         name: "{{ item }}"
         state: present
       with_items:
+        - apt-transport-https
+        - apt-utils
+        - asciinema
         - build-essential
+        - ca-certificates
+        - coreutils
         - curl
+        - fontconfig
+        - fuse
         - git
         - htop
         - jq
-        - neofetch
-        - nmap
+        - lsb-release
+        - mc
+        - ncdu
+        - net-tools
+        - pandoc
         - software-properties-common
-        - tree
+        - stow
+        - tmux
         - unzip
         - wget
+        - whois
         - zip
+
