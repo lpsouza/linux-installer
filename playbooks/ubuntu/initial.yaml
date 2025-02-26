@@ -42,3 +42,25 @@
         - whois
         - zip
 
+    - name: Install default editor
+      vars:
+        NEOVIM_VERSION: "0.10.4"
+      block:
+        - name: Download Neovim appimage
+          get_url:
+            url: "https://github.com/neovim/neovim/releases/download/v{{ NEOVIM_VERSION }}/nvim-linux-x86_64.appimage"
+            dest: /usr/local/bin/nvim
+            mode: 0755
+
+        - name: Create alias for Neovim in shell configuration files
+          blockinfile:
+            path: "{{ item }}"
+            block: |
+              alias vim='nvim'
+              alias vi='nvim'
+            mode: 0644
+            create: yes
+          with_items:
+            - ~/.bashrc
+            - ~/.zshrc
+          become: false
