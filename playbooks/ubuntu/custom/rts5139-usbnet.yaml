@@ -1,0 +1,41 @@
+---
+#
+# This playbook installs and configures the Realtek RTS5129/RTS5139 USB MMC Reader driver
+#
+- name: Install and configure home server
+  hosts: linux
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Install external network adapter
+      block:
+        - name: Download and install Realtek RTS5129/RTS5139 USB MMC Reader driver
+          git:
+            repo: https://github.com/asymingt/rts5139.git
+            dest: /tmp/rts5139
+            version: master
+
+        - name: Compile Realtek RTS5129/RTS5139 USB MMC Reader driver
+          shell: |
+            cd /tmp/rts5139
+            make
+          register: make_output
+          changed_when: make_output.rc != 0
+
+        - name: Install Realtek RTS5129/RTS5139 USB MMC Reader driver
+          shell: |
+            cd /tmp/rts5139
+            make install
+          register: make_install_output
+          changed_when: make_install_output.rc != 0
+
+        - name: Blacklist Realtek RTS5129/RTS5139 USB MMC Reader driver
+          copy:
+            content: "blacklist rtsx_usb_sdmmc\nblacklist rtsx_usb_ms\nblacklist rtsx_usb"
+            dest: /etc/modprobe.d/blacklist-rtsx_usb.conf
+            mode: 0644
+
+        - name: Depmod Realtek RTS5129/RTS5139 USB MMC Reader driver
+          command: depmod -a
+          register: depmod_output
+          changed_when: depmod_output.rc != 0
