@@ -1,0 +1,22 @@
+---
+#
+# This playbook configure the laptop to ignore the lid closing event
+#
+- name: Configure laptop to ignore lid closing event
+  hosts: linux
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Configure Lid closing
+      block:
+        - name: Configure handleLidSwitch to ignore
+          lineinfile:
+            path: /etc/systemd/logind.conf
+            regexp: "^#HandleLidSwitch="
+            line: "HandleLidSwitch=ignore"
+
+        - name: Configure LidSwitchIgnoreInhibited to no
+          lineinfile:
+            path: /etc/systemd/logind.conf
+            regexp: "^#LidSwitchIgnoreInhibited="
+            line: "LidSwitchIgnoreInhibited=no"
