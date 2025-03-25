@@ -1,0 +1,188 @@
+---
+#
+# This playbook install and customize a desktop environment for my needs.
+#
+- name: Install and configure desktop environment
+  hosts: linux
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Install CascadiaCode NerdFonts
+      block:
+        - name: Check if CascadiaCode NerdFonts is already installed
+          stat:
+            path: "~/.fonts/CascadiaCode"
+          register: caskaydia_cove_nerd_font
+          become: no
+
+        - name: Download CascadiaCode NerdFonts
+          get_url:
+            url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/CascadiaCode.zip"
+            dest: "/tmp/CascadiaCode.zip"
+            mode: 0644
+          when: not caskaydia_cove_nerd_font.stat.exists
+          become: no
+
+        - name: Create local .fonts directory
+          file:
+            path: "~/.fonts/CascadiaCode"
+            state: directory
+            mode: 0755
+          when: not caskaydia_cove_nerd_font.stat.exists
+          become: no
+
+        - name: Unzip CascadiaCode NerdFonts
+          unarchive:
+            src: "/tmp/CascadiaCode.zip"
+            dest: "~/.fonts/CascadiaCode"
+            mode: 0644
+            remote_src: yes
+          when: not caskaydia_cove_nerd_font.stat.exists
+          become: no
+
+    - name: Install Google Chrome
+      block:
+        - name: Download Google Chrome
+          get_url:
+            url: "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+            dest: "/tmp/google-chrome-stable_current_amd64.deb"
+            mode: 0644
+          become: no
+
+        - name: Install Google Chrome
+          apt:
+            deb: "/tmp/google-chrome-stable_current_amd64.deb"
+            state: present
+
+    - name: Install vscode
+      block:
+        - name: Download vscode
+          get_url:
+            url: "https://go.microsoft.com/fwlink/?LinkID=760868"
+            dest: "/tmp/vscode.deb"
+            mode: 0644
+          become: no
+
+        - name: Install vscode
+          apt:
+            deb: "/tmp/vscode.deb"
+            state: present
+
+    - name: Install Obsidian
+      snap:
+        name: obsidian
+        state: present
+        channel: latest/stable
+        classic: yes
+
+    - name: Install Insync
+      block:
+        - name: Donwload Insync key
+          apt_key:
+            url: https://d2t3ff60b2tol4.cloudfront.net/repomd.xml.key
+            state: present
+
+        - name: Add Insync repository
+          apt_repository:
+            repo: deb http://apt.insync.io/ubuntu noble non-free contrib
+            state: present
+            filename: insync
+            update_cache: true
+
+        - name: Install Insync
+          apt:
+            name: insync
+            state: present
+            update_cache: true
+
+    - name: Install 1password Desktop
+      block:
+        - name: Download 1Password key
+          get_url:
+            url: https://downloads.1password.com/linux/keys/1password.asc
+            dest: /tmp/1password.asc
+            mode: 0755
+
+        - name: Add 1Password keyring
+          command: gpg --batch --yes --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg /tmp/1password.asc
+          changed_when: false
+
+        - name: Get dpkg architecture
+          command: "dpkg --print-architecture"
+          register: dpkg_arch
+          changed_when: false
+          failed_when: false
+
+        - name: Add 1Password repository
+          apt_repository:
+            repo: "deb [arch={{ dpkg_arch.stdout }} signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/{{ dpkg_arch.stdout }} stable main"
+            state: present
+            filename: 1password
+
+        - name: Download 1Password policy
+          get_url:
+            url: https://downloads.1password.com/linux/debian/debsig/1password.pol
+            dest: /tmp/1password.pol
+            mode: 0755
+
+        - name: Create 1Password policy directory
+          file:
+            path: /etc/debsig/policies/AC2D62742012EA22/
+            state: directory
+            mode: 0755
+
+        - name: Add 1Password policy
+          copy:
+            src: /tmp/1password.pol
+            dest: /etc/debsig/policies/AC2D62742012EA22/1password.pol
+            mode: 0755
+            remote_src: yes
+
+        - name: Create 1Password keyring directory
+          file:
+            path: /usr/share/debsig/keyrings/AC2D62742012EA22
+            state: directory
+            mode: 0755
+
+        - name: Add 1Password keyring
+          copy:
+            src: /tmp/1password.asc
+            dest: /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
+            mode: 0755
+            remote_src: yes
+
+        - name: Install 1Password
+          apt:
+            name:
+              - 1password
+            state: present
+            update_cache: true
+
+        - name: Configure 1Password plugin for bash
+          blockinfile:
+            path: ~/.bashrc
+            block: |
+              alias start-op-desktop='1password --silent'
+              if [ -f ~/.config/op/plugins.sh ]; then
+                source ~/.config/op/plugins.sh
+              fi
+            marker: "# {mark} ANSIBLE MANAGED BLOCK - 1Password Plugin"
+          become: false
+
+        - name: Check if .zshrc exists
+          stat:
+            path: ~/.zshrc
+          register: zshrc_check
+          become: false
+
+        - name: If .zshrc exists, configure 1Password plugin for zsh
+          blockinfile:
+            path: ~/.zshrc
+            block: |
+              alias start-op-desktop='1password --silent'
+              if [ -f ~/.config/op/plugins.sh ]; then
+                source ~/.config/op/plugins.sh
+              fi
+            marker: "# {mark} ANSIBLE MANAGED BLOCK - 1Password Plugin"
+          when: zshrc_check.stat.exists
+          become: false
