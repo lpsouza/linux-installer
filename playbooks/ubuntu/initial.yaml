@@ -25,15 +25,17 @@
         - coreutils
         - curl
         - fontconfig
-        - fuse
         - git
         - htop
+        - iputils-ping
         - jq
         - lsb-release
         - mc
         - ncdu
         - net-tools
+        - neovim
         - pandoc
+        - rsync
         - software-properties-common
         - stow
         - tmux
@@ -42,57 +44,13 @@
         - whois
         - zip
 
-    - name: Install default editor
-      vars:
-        NEOVIM_VERSION: "0.10.4"
-      block:
-        - name: Download Neovim appimage
-          get_url:
-            url: "https://github.com/neovim/neovim/releases/download/v{{ NEOVIM_VERSION }}/nvim-linux-x86_64.appimage"
-            dest: /usr/local/bin/nvim
-            mode: 0755
+    - name: Set Neovim as default editor
+      alternatives:
+        name: editor
+        path: /usr/bin/nvim
 
-        - name: Create alias for Neovim in shell configuration files
-          blockinfile:
-            path: "{{ item }}"
-            block: |
-              alias vim='nvim'
-              alias vi='nvim'
-            mode: 0644
-            create: yes
-          with_items:
-            - ~/.bashrc
-            - ~/.zshrc
-          become: false
-
-    - name: Install NerdFonts
-      block:
-        - name: Check if is already installed
-          stat:
-            path: "~/.fonts/CascadiaCode"
-          register: caskaydia_cove_nerd_font
-          become: no
-
-        - name: Download NerdFonts
-          get_url:
-            url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/CascadiaCode.zip"
-            dest: "/tmp/CascadiaCode.zip"
-            mode: 0644
-          when: not caskaydia_cove_nerd_font.stat.exists
-          become: no
-
-        - name: Create local .fonts directory
-          file:
-            path: "~/.fonts/CascadiaCode"
-            state: directory
-            mode: 0755
-          when: not caskaydia_cove_nerd_font.stat.exists
-          become: no
-
-        - name: Unzip NerdFonts
-          unarchive:
-            src: "/tmp/CascadiaCode.zip"
-            dest: "~/.fonts/CascadiaCode"
-            mode: 0644
-          when: not caskaydia_cove_nerd_font.stat.exists
-          become: no
+    - name: Configure hushlogin
+      copy:
+        content: ""
+        dest: "~/.hushlogin"
+      become: no
