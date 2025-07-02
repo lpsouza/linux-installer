@@ -1,0 +1,31 @@
+---
+- name: Install DevOps Tools
+  hosts: linux
+  gather_facts: no
+  become: yes
+  
+  vars:
+    terraform_version: "1.7.3"
+  
+  tasks:
+    - name: Install Terraform
+      block:
+        - name: Install dependencies
+          package:
+            name: unzip
+            state: present
+
+        - name: Download Terraform
+          get_url:
+            url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
+            dest: "/tmp/terraform_installer.zip"
+            mode: 0644
+
+        - name: Unzip Terraform
+          unarchive:
+            src: "/tmp/terraform_installer.zip"
+            dest: "/usr/local/bin"
+            remote_src: yes
+            mode: 0755
+            creates: "/usr/local/bin/terraform"
+        

@@ -155,6 +155,7 @@
           apt:
             name:
               - 1password
+              - 1password-cli
             state: present
             update_cache: true
 
@@ -186,3 +187,25 @@
             marker: "# {mark} ANSIBLE MANAGED BLOCK - 1Password Plugin"
           when: zshrc_check.stat.exists
           become: false
+
+    - name: Install LNXlink
+      block:
+        - name: Check if LNXlink is already installed
+          stat:
+            path: "~/.local/bin/lnxlink"
+          register: lnxlink_check
+          become: no
+
+        - name: Download LNXlink
+          get_url:
+            url: "https://raw.githubusercontent.com/bkbilly/lnxlink/master/install.sh"
+            dest: "/tmp/install_lnxlink.sh"
+            mode: 0755
+          when: not lnxlink_check.stat.exists
+
+        - name: Install LNXlink
+          command: "bash /tmp/install_lnxlink.sh"
+          args:
+            chdir: "/tmp"
+          when: not lnxlink_check.stat.exists
+          become: no

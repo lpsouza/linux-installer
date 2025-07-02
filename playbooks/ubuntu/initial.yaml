@@ -27,6 +27,7 @@
         - fontconfig
         - git
         - htop
+        - iotop
         - iputils-ping
         - jq
         - lsb-release
