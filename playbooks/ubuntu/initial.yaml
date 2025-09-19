@@ -23,9 +23,12 @@
         - build-essential
         - ca-certificates
         - coreutils
+        - csvkit
         - curl
         - fontconfig
         - git
+        - git-crypt
+        - gnupg
         - htop
         - iotop
         - iputils-ping
