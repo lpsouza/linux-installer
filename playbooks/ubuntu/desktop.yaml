@@ -6,6 +6,7 @@
   hosts: linux
   gather_facts: no
   become: yes
+
   tasks:
     - name: Install CascadiaCode NerdFonts
       block:
@@ -39,48 +40,84 @@
             remote_src: yes
           when: not caskaydia_cove_nerd_font.stat.exists
           become: no
+      tags: cascadia_nerdfonts
 
     - name: Install Google Chrome
       block:
+        - name: Check if Google Chrome is already installed
+          stat:
+            path: "/usr/bin/google-chrome"
+          register: google_chrome_installed
+          become: no
+
         - name: Download Google Chrome
           get_url:
             url: "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
             dest: "/tmp/google-chrome-stable_current_amd64.deb"
             mode: 0644
           become: no
+          when: not google_chrome_installed.stat.exists
 
         - name: Install Google Chrome
           apt:
             deb: "/tmp/google-chrome-stable_current_amd64.deb"
             state: present
+          when: not google_chrome_installed.stat.exists
+      tags: google_chrome
 
     - name: Install vscode
       block:
+        - name: Check if VSCode is already installed
+          stat:
+            path: "/usr/bin/code"
+          register: vscode_installed
+          become: no
+
         - name: Download vscode
           get_url:
             url: "https://go.microsoft.com/fwlink/?LinkID=760868"
             dest: "/tmp/vscode.deb"
             mode: 0644
           become: no
+          when: not vscode_installed.stat.exists
 
         - name: Install vscode
           apt:
             deb: "/tmp/vscode.deb"
             state: present
+          when: not vscode_installed.stat.exists
+      tags: vscode
 
     - name: Install Obsidian
-      snap:
-        name: obsidian
-        state: present
-        channel: latest/stable
-        classic: yes
+      block:
+        - name: Check if Obsidian is already installed
+          stat:
+            path: "/snap/bin/obsidian"
+          register: obsidian_installed
+          become: no
+
+        - name: Install Obsidian
+          snap:
+            name: obsidian
+            state: present
+            channel: latest/stable
+            classic: yes
+          when: not obsidian_installed.stat.exists
+      tags: obsidian
 
     - name: Install Insync
       block:
+        - name: Check if Insync is already installed
+          stat:
+            path: "/usr/bin/insync"
+          register: insync_installed
+          become: no
+
         - name: Donwload Insync key
           apt_key:
             url: https://d2t3ff60b2tol4.cloudfront.net/repomd.xml.key
             state: present
+          when: not insync_installed.stat.exists
 
         - name: Add Insync repository
           apt_repository:
@@ -88,48 +125,63 @@
             state: present
             filename: insync
             update_cache: true
+          when: not insync_installed.stat.exists
 
         - name: Install Insync
           apt:
             name: insync
             state: present
             update_cache: true
+          when: not insync_installed.stat.exists
+      tags: insync
 
     - name: Install 1password Desktop
       block:
+        - name: Check if 1Password is already installed
+          stat:
+            path: "/usr/bin/1password"
+          register: onepassword_installed
+          become: no
+
         - name: Download 1Password key
           get_url:
             url: https://downloads.1password.com/linux/keys/1password.asc
             dest: /tmp/1password.asc
             mode: 0755
+          when: not onepassword_installed.stat.exists
 
         - name: Add 1Password keyring
           command: gpg --batch --yes --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg /tmp/1password.asc
           changed_when: false
+          when: not onepassword_installed.stat.exists
 
         - name: Get dpkg architecture
           command: "dpkg --print-architecture"
           register: dpkg_arch
           changed_when: false
           failed_when: false
+          when: not onepassword_installed.stat.exists
 
         - name: Add 1Password repository
           apt_repository:
             repo: "deb [arch={{ dpkg_arch.stdout }} signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/{{ dpkg_arch.stdout }} stable main"
             state: present
             filename: 1password
+          when: not onepassword_installed.stat.exists
 
         - name: Download 1Password policy
           get_url:
             url: https://downloads.1password.com/linux/debian/debsig/1password.pol
             dest: /tmp/1password.pol
             mode: 0755
+          when: not onepassword_installed.stat.exists
 
         - name: Create 1Password policy directory
           file:
             path: /etc/debsig/policies/AC2D62742012EA22/
             state: directory
             mode: 0755
+          when: not onepassword_installed.stat.exists
 
         - name: Add 1Password policy
           copy:
@@ -137,12 +189,14 @@
             dest: /etc/debsig/policies/AC2D62742012EA22/1password.pol
             mode: 0755
             remote_src: yes
+          when: not onepassword_installed.stat.exists
 
         - name: Create 1Password keyring directory
           file:
             path: /usr/share/debsig/keyrings/AC2D62742012EA22
             state: directory
             mode: 0755
+          when: not onepassword_installed.stat.exists
 
         - name: Add 1Password keyring
           copy:
@@ -150,6 +204,7 @@
             dest: /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
             mode: 0755
             remote_src: yes
+          when: not onepassword_installed.stat.exists
 
         - name: Install 1Password
           apt:
@@ -158,35 +213,8 @@
               - 1password-cli
             state: present
             update_cache: true
-
-        - name: Configure 1Password plugin for bash
-          blockinfile:
-            path: ~/.bashrc
-            block: |
-              alias start-op-desktop='1password --silent'
-              if [ -f ~/.config/op/plugins.sh ]; then
-                source ~/.config/op/plugins.sh
-              fi
-            marker: "# {mark} ANSIBLE MANAGED BLOCK - 1Password Plugin"
-          become: false
-
-        - name: Check if .zshrc exists
-          stat:
-            path: ~/.zshrc
-          register: zshrc_check
-          become: false
-
-        - name: If .zshrc exists, configure 1Password plugin for zsh
-          blockinfile:
-            path: ~/.zshrc
-            block: |
-              alias start-op-desktop='1password --silent'
-              if [ -f ~/.config/op/plugins.sh ]; then
-                source ~/.config/op/plugins.sh
-              fi
-            marker: "# {mark} ANSIBLE MANAGED BLOCK - 1Password Plugin"
-          when: zshrc_check.stat.exists
-          become: false
+          when: not onepassword_installed.stat.exists
+      tags: onepassword
 
     - name: Install LNXlink
       block:
@@ -209,3 +237,69 @@
             chdir: "/tmp"
           when: not lnxlink_check.stat.exists
           become: no
+      tags: lnxlink
+
+    - name: Install Rio Terminal
+      block:
+        - name: Check if Rio Terminal is already installed
+          stat:
+            path: "/usr/bin/rio"
+          register: rio_installed
+          become: no
+
+        - name: Download Rio Terminal
+          get_url:
+            url: "https://github.com/raphamorim/rio/releases/download/v0.2.21/rioterm_0.2.21_amd64_x11.deb"
+            dest: "/tmp/rioterm_0.2.21_amd64_x11.deb"
+            mode: 0644
+          become: no
+          when: not rio_installed.stat.exists
+
+        - name: Install Rio Terminal
+          apt:
+            deb: "/tmp/rioterm_0.2.21_amd64_x11.deb"
+            state: present
+          when: not rio_installed.stat.exists
+      tags: rio_terminal
+
+    - name: Install RustDesk
+      block:
+        - name: Check if RustDesk is already installed
+          stat:
+            path: "/usr/bin/rustdesk"
+          register: rustdesk_installed
+          become: no
+
+        - name: Download RustDesk
+          get_url:
+            url: "https://github.com/rustdesk/rustdesk/releases/download/1.4.1/rustdesk-1.4.1-x86_64.deb"
+            dest: "/tmp/rustdesk-1.4.1-x86_64.deb"
+            mode: 0644
+          when: not rustdesk_installed.stat.exists
+
+        - name: Install RustDesk
+          apt:
+            deb: "/tmp/rustdesk-1.4.1-x86_64.deb"
+            state: present
+          when: not rustdesk_installed.stat.exists
+      tags: rustdesk
+
+    - name: Install Todoist
+      block:
+        - name: Check if Todoist is already installed
+          stat:
+            path: "/snap/bin/todoist"
+          register: todoist_installed
+          become: no
+
+        - name: Install Todoist (snap)
+          snap:
+            name: todoist
+            state: present
+            channel: latest/stable
+          when: not todoist_installed.stat.exists
+
+        - name: Set Snap core experimental refresh-app-awareness
+          command: snap set core experimental.refresh-app-awareness=true
+          when: not todoist_installed.stat.exists
+      tags: todoist
