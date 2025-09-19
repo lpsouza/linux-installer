@@ -1,20 +1,18 @@
 ---
+#
+# Playbook to install DevOps tools on Ubuntu systems
+#
 - name: Install DevOps Tools
   hosts: linux
   gather_facts: no
   become: yes
-  
+
   vars:
     terraform_version: "1.7.3"
-  
+
   tasks:
     - name: Install Terraform
       block:
-        - name: Install dependencies
-          package:
-            name: unzip
-            state: present
-
         - name: Download Terraform
           get_url:
             url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
@@ -28,4 +26,24 @@
             remote_src: yes
             mode: 0755
             creates: "/usr/local/bin/terraform"
-        
+
+    - name: Install AWS CLI
+      block:
+        - name: Download AWS CLI
+          get_url:
+            url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+            dest: "/tmp/awscliv2.zip"
+            mode: 0644
+
+        - name: Unzip AWS CLI
+          unarchive:
+            src: "/tmp/awscliv2.zip"
+            dest: "/tmp"
+            remote_src: yes
+            mode: 0755
+            creates: "/tmp/aws"
+
+        - name: Install AWS CLI
+          command: "/tmp/aws/install"
+          args:
+            warn: false
