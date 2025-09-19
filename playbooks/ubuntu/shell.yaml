@@ -20,51 +20,16 @@
             name: "{{ ansible_user }}"
             shell: /bin/zsh
 
-        - name: Configure ZSH_THEME to kafeitu
-          lineinfile:
-            path: ~/.zshrc
-            regexp: "^ZSH_THEME="
-            line: 'ZSH_THEME="kafeitu"'
-          become: false
-
-        - name: Disable auto title in ZSH
-          lineinfile:
-            path: ~/.zshrc
-            regexp: "^# DISABLE_AUTO_TITLE="
-            line: 'DISABLE_AUTO_TITLE="true"'
-          become: false
-
-        - name: Add $HOME/bin folder to PATH
-          blockinfile:
-            path: ~/.zshrc
-            block: |
-              if [ -d "$HOME/bin" ] ; then
-                PATH="$HOME/bin:$PATH"
-              fi
-            marker: "# {mark} ANSIBLE MANAGED BLOCK - bin folder"
-          become: false
-
-        - name: Add $HOME/.local/bin folder to PATH
-          blockinfile:
-            path: ~/.zshrc
-            block: |
-              if [ -d "$HOME/.local/bin" ] ; then
-                PATH="$HOME/.local/bin:$PATH"
-              fi
-            marker: "# {mark} ANSIBLE MANAGED BLOCK - .local/bin folder"
-          become: false
-
     - name: Installing and configure Oh-My-Zsh
       block:
         - name: Check if Oh-My-Zsh is installed
           stat:
-            path: "{{ lookup('env', 'HOME') }}/.oh-my-zsh"
+            path: "~/.oh-my-zsh"
           register: ohmyzsh_installed
+          become: no
 
         - name: Installing Oh-My-Zsh
-          shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-          args:
-            executable: /bin/zsh
+          shell: RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
           when: not ohmyzsh_installed.stat.exists
           become: no
 
@@ -72,56 +37,30 @@
           block:
             - name: Check if zsh-autosuggestions plugin is installed
               stat:
-                path: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+                path: "~/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
               register: zsh_autosuggestions_installed
               become: no
 
             - name: Installing zsh-autosuggestions plugin
               git:
                 repo: https://github.com/zsh-users/zsh-autosuggestions
-                dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+                dest: "~/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
                 version: master
               when: not zsh_autosuggestions_installed.stat.exists
               become: no
 
             - name: Check if zsh-syntax-highlighting plugin is installed
               stat:
-                path: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+                path: "~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
               register: zsh_syntax_highlighting_installed
               become: no
 
             - name: Installing zsh-syntax-highlighting plugin
               git:
                 repo: https://github.com/zsh-users/zsh-syntax-highlighting
-                dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+                dest: "~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
                 version: master
               when: not zsh_syntax_highlighting_installed.stat.exists
-              become: no
-
-        - name: Ensure plugins are configured in .zshrc
-          block:
-            - name: Ensure "plugins=" line exists
-              lineinfile:
-                path: "{{ lookup('env', 'HOME') }}/.zshrc"
-                regexp: "^plugins="
-                line: "plugins=(git)"
-                state: present
-              become: no
-
-            - name: Add zsh-autosuggestions to plugins list
-              lineinfile:
-                path: "{{ lookup('env', 'HOME') }}/.zshrc"
-                insertafter: "^plugins="
-                line: 'plugins+=("zsh-autosuggestions")'
-                state: present
-              become: no
-
-            - name: Add zsh-syntax-highlighting to plugins list
-              lineinfile:
-                path: "{{ lookup('env', 'HOME') }}/.zshrc"
-                insertafter: "^plugins="
-                line: 'plugins+=("zsh-syntax-highlighting")'
-                state: present
               become: no
 
     - name: Installing and configure Starship prompt
@@ -137,11 +76,3 @@
           args:
             executable: /bin/zsh
           when: not starship_installed.stat.exists
-
-        - name: Configure Starship prompt
-          lineinfile:
-            path: "{{ lookup('env', 'HOME') }}/.zshrc"
-            regexp: '^eval "$(starship init zsh)"'
-            line: 'eval "$(starship init zsh)"'
-            state: present
-          become: no
