@@ -1,0 +1,72 @@
+---
+#
+# This playbook installs and configures apps for Windows Subsystem for Linux (WSL).
+#
+- name: Install and configure WSL apps
+  hosts: linux
+  gather_facts: no
+  become: yes
+
+  tasks:
+    - name: Install 1password CLI
+      block:
+        - name: Download 1Password key
+          get_url:
+            url: https://downloads.1password.com/linux/keys/1password.asc
+            dest: /tmp/1password.asc
+            mode: 0755
+
+        - name: Add 1Password keyring
+          command: gpg --batch --yes --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg /tmp/1password.asc
+          changed_when: false
+
+        - name: Get dpkg architecture
+          command: "dpkg --print-architecture"
+          register: dpkg_arch
+          changed_when: false
+          failed_when: false
+
+        - name: Add 1Password repository
+          apt_repository:
+            repo: "deb [arch={{ dpkg_arch.stdout }} signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/{{ dpkg_arch.stdout }} stable main"
+            state: present
+            filename: 1password
+
+        - name: Download 1Password policy
+          get_url:
+            url: https://downloads.1password.com/linux/debian/debsig/1password.pol
+            dest: /tmp/1password.pol
+            mode: 0755
+
+        - name: Create 1Password policy directory
+          file:
+            path: /etc/debsig/policies/AC2D62742012EA22/
+            state: directory
+            mode: 0755
+
+        - name: Add 1Password policy
+          copy:
+            src: /tmp/1password.pol
+            dest: /etc/debsig/policies/AC2D62742012EA22/1password.pol
+            mode: 0755
+            remote_src: yes
+
+        - name: Create 1Password keyring directory
+          file:
+            path: /usr/share/debsig/keyrings/AC2D62742012EA22
+            state: directory
+            mode: 0755
+
+        - name: Add 1Password keyring
+          copy:
+            src: /tmp/1password.asc
+            dest: /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
+            mode: 0755
+            remote_src: yes
+
+        - name: Install 1Password
+          apt:
+            name:
+              - 1password-cli
+            state: present
+            update_cache: true
