@@ -239,28 +239,45 @@
           become: no
       tags: lnxlink
 
-    - name: Install Rio Terminal
+    - name: Install WezTerm
       block:
-        - name: Check if Rio Terminal is already installed
+        - name: Check if WezTerm is already installed
           stat:
-            path: "/usr/bin/rio"
-          register: rio_installed
+            path: "/usr/bin/wezterm"
+          register: wezterm_installed
           become: no
 
-        - name: Download Rio Terminal
+        - name: Download WezTerm GPG key
           get_url:
-            url: "https://github.com/raphamorim/rio/releases/download/v0.2.21/rioterm_0.2.21_amd64_x11.deb"
-            dest: "/tmp/rioterm_0.2.21_amd64_x11.deb"
+            url: https://apt.fury.io/wez/gpg.key
+            dest: /tmp/wezterm-fury.gpg.key
             mode: 0644
-          become: no
-          when: not rio_installed.stat.exists
+          when: not wezterm_installed.stat.exists
 
-        - name: Install Rio Terminal
-          apt:
-            deb: "/tmp/rioterm_0.2.21_amd64_x11.deb"
+        - name: Add WezTerm GPG key to keyring
+          command: gpg --batch --yes --dearmor --output /usr/share/keyrings/wezterm-fury.gpg /tmp/wezterm-fury.gpg.key
+          when: not wezterm_installed.stat.exists
+
+        - name: Set correct permissions on WezTerm keyring
+          file:
+            path: /usr/share/keyrings/wezterm-fury.gpg
+            mode: 0644
+          when: not wezterm_installed.stat.exists
+
+        - name: Add WezTerm repository
+          apt_repository:
+            repo: "deb [signed-by=/usr/share/keyrings/wezterm-fury.gpg] https://apt.fury.io/wez/ * *"
             state: present
-          when: not rio_installed.stat.exists
-      tags: rio_terminal
+            filename: wezterm
+            update_cache: true
+          when: not wezterm_installed.stat.exists
+
+        - name: Install WezTerm
+          apt:
+            name: wezterm
+            state: present
+          when: not wezterm_installed.stat.exists
+      tags: wezterm
 
     - name: Install RustDesk
       block:
@@ -303,3 +320,19 @@
           command: snap set core experimental.refresh-app-awareness=true
           when: not todoist_installed.stat.exists
       tags: todoist
+
+    - name: Install remmina
+      block:
+        - name: Check if Remmina is already installed
+          stat:
+            path: "/usr/bin/remmina"
+          register: remmina_installed
+          become: no
+
+        - name: Install Remmina
+          apt:
+            name: remmina
+            state: present
+            update_cache: true
+          when: not remmina_installed.stat.exists
+      tags: remmina
