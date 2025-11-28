@@ -1,0 +1,35 @@
+---
+#
+# This playbook install and customize a CLI environment for my needs.
+#
+- name: Install and configure CLI environment
+  hosts: linux
+  gather_facts: no
+  become: yes
+
+  tasks:
+    - name: Install Github CLI
+      block:
+        - name: Install GitHub CLI
+          apt:
+            name: gh
+            state: present
+            update_cache: yes
+
+    - name: Install Node Version Manager (NVM)
+      block:
+        - name: Download and install NVM
+          shell: |
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+          args:
+            creates: "~/.nvm/nvm.sh"
+          become: no
+
+        - name: Load NVM and install latest Node.js LTS
+          shell: |
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install --lts
+          args:
+            executable: /bin/bash
+          become: no
