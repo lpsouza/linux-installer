@@ -336,3 +336,44 @@
             update_cache: true
           when: not remmina_installed.stat.exists
       tags: remmina
+
+    - name: Install Google Antigravity
+      block:
+        - name: Check if Google Antigravity is already installed
+          stat:
+            path: "/usr/bin/antigravity"
+          register: antigravity_installed
+          become: no
+
+        - name: Download Google Antigravity GPG key
+          get_url:
+            url: https://us-central1-apt.pkg.dev/doc/repo-signing-key.gpg
+            dest: /tmp/antigravity-repo-key.gpg
+            mode: 0644
+          when: not antigravity_installed.stat.exists
+
+        - name: Add Google Antigravity GPG key to keyring
+          command: gpg --batch --yes --dearmor --output /usr/share/keyrings/antigravity-repo-key.gpg /tmp/antigravity-repo-key.gpg
+          changed_when: false
+          when: not antigravity_installed.stat.exists
+
+        - name: Set correct permissions on Antigravity keyring
+          file:
+            path: /usr/share/keyrings/antigravity-repo-key.gpg
+            mode: 0644
+          when: not antigravity_installed.stat.exists
+
+        - name: Add Google Antigravity repository
+          apt_repository:
+            repo: "deb [signed-by=/usr/share/keyrings/antigravity-repo-key.gpg] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev/ antigravity-debian main"
+            state: present
+            filename: antigravity
+            update_cache: true
+          when: not antigravity_installed.stat.exists
+
+        - name: Install Google Antigravity
+          apt:
+            name: antigravity
+            state: present
+          when: not antigravity_installed.stat.exists
+      tags: antigravity
