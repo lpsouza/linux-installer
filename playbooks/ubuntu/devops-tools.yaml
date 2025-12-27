@@ -26,6 +26,7 @@
             remote_src: yes
             mode: 0755
             creates: "/usr/local/bin/terraform"
+      tags: terraform
 
     - name: Install AWS CLI
       block:
@@ -47,3 +48,4 @@
           command: "/tmp/aws/install"
           args:
             warn: false
+      tags: aws_cli

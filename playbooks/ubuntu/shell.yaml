@@ -19,6 +19,7 @@
           user:
             name: "{{ ansible_user }}"
             shell: /bin/zsh
+      tags: zsh
 
     - name: Installing and configure Oh-My-Zsh
       block:
@@ -62,6 +63,7 @@
                 version: master
               when: not zsh_syntax_highlighting_installed.stat.exists
               become: no
+      tags: ohmyzsh
 
     - name: Installing and configure Starship prompt
       block:
@@ -76,3 +78,4 @@
           args:
             executable: /bin/zsh
           when: not starship_installed.stat.exists
+      tags: starship

@@ -15,6 +15,7 @@
             name: gh
             state: present
             update_cache: yes
+      tags: github_cli
 
     - name: Install Node Version Manager (NVM)
       block:
@@ -33,3 +34,4 @@
           args:
             executable: /bin/bash
           become: no
+      tags: nvm
