@@ -4,8 +4,43 @@ This repo contains the playbooks to install and configure my linux environments.
 
 ## Requirements
 
+### Installing Ansible
+
+Choose your Linux distribution below:
+
+#### Ubuntu/Debian
 ```bash
-sudo apt-get install -y ansible
+sudo apt update
+sudo apt install -y ansible
+```
+
+#### CentOS/RHEL/Fedora
+```bash
+# For CentOS/RHEL 8+ and Fedora
+sudo dnf install -y ansible
+
+# For CentOS/RHEL 7
+sudo yum install -y ansible
+```
+
+#### Arch Linux
+```bash
+sudo pacman -S ansible
+```
+
+#### openSUSE
+```bash
+sudo zypper install -y ansible
+```
+
+#### Using Pip (Universal)
+```bash
+pip install ansible
+```
+
+#### Using Snap (Universal)
+```bash
+sudo snap install ansible --classic
 ```
 
 ## How to Use
