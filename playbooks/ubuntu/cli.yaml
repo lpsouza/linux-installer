@@ -17,6 +17,23 @@
             update_cache: yes
       tags: github_cli
 
+    - name: Install GitHub Copilot CLI
+      block:
+        - name: Check if GitHub Copilot CLI is already installed
+          stat:
+            path: "~/.local/bin/copilot"
+          register: copilot_cli_installed
+          become: no
+
+        - name: Install GitHub Copilot CLI
+          shell: |
+            curl -fsSL https://gh.io/copilot-install | bash
+          args:
+            executable: /bin/bash
+          when: not copilot_cli_installed.stat.exists
+          become: no
+      tags: copilot_cli
+
     - name: Install Node Version Manager (NVM)
       block:
         - name: Download and install NVM
@@ -35,3 +52,53 @@
             executable: /bin/bash
           become: no
       tags: nvm
+
+    - name: Install Google Gemini CLI
+      block:
+        - name: Check if Gemini CLI is already installed
+          shell: |
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            npm list -g @google/gemini-cli
+          args:
+            executable: /bin/bash
+          register: gemini_cli_check
+          failed_when: false
+          changed_when: false
+          become: no
+
+        - name: Install Gemini CLI
+          shell: |
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            npm install -g @google/gemini-cli
+          args:
+            executable: /bin/bash
+          when: gemini_cli_check.rc != 0
+          become: no
+      tags: gemini_cli
+
+    - name: Install OpenCode CLI
+      block:
+        - name: Check if OpenCode CLI is already installed
+          shell: |
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            npm list -g opencode-ai
+          args:
+            executable: /bin/bash
+          register: opencode_cli_check
+          failed_when: false
+          changed_when: false
+          become: no
+
+        - name: Install OpenCode CLI
+          shell: |
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            npm install -g opencode-ai@latest
+          args:
+            executable: /bin/bash
+          when: opencode_cli_check.rc != 0
+          become: no
+      tags: opencode_cli
