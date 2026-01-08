@@ -102,3 +102,51 @@
           when: opencode_cli_check.rc != 0
           become: no
       tags: opencode_cli
+
+    - name: Install uv (Python package installer)
+      block:
+        - name: Install required system packages for uv
+          apt:
+            name:
+              - curl
+              - python3-pip
+              - python3-venv
+            state: present
+            update_cache: yes
+
+        - name: Download and install uv
+          shell: |
+            curl -LsSf https://astral.sh/uv/install.sh | sh
+          args:
+            creates: "{{ ansible_env.HOME }}/.cargo/bin/uv"
+            executable: /bin/bash
+          become: no
+
+        - name: Add uv to PATH in .bashrc
+          lineinfile:
+            path: "{{ ansible_env.HOME }}/.bashrc"
+            line: 'export PATH="$HOME/.cargo/bin:$PATH"'
+            create: yes
+            state: present
+          become: no
+      tags: uv
+
+    - name: Install GitHub Spec-Kit
+      block:
+        - name: Install specify-cli using uv tool
+          shell: |
+            source {{ ansible_env.HOME }}/.bashrc
+            {{ ansible_env.HOME }}/.cargo/bin/uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+          args:
+            executable: /bin/bash
+            creates: "{{ ansible_env.HOME }}/.local/bin/specify"
+          become: no
+
+        - name: Add specify to PATH in .bashrc
+          lineinfile:
+            path: "{{ ansible_env.HOME }}/.bashrc"
+            line: 'export PATH="$HOME/.local/bin:$PATH"'
+            create: yes
+            state: present
+          become: no
+      tags: speckit
