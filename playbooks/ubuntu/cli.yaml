@@ -114,39 +114,30 @@
             state: present
             update_cache: yes
 
-        - name: Download and install uv
-          shell: |
-            curl -LsSf https://astral.sh/uv/install.sh | sh
-          args:
-            creates: "{{ ansible_env.HOME }}/.cargo/bin/uv"
-            executable: /bin/bash
+        - name: Download uv installer script
+          get_url:
+            url: https://astral.sh/uv/install.sh
+            dest: /tmp/uv-install.sh
+            mode: "0755"
           become: no
 
-        - name: Add uv to PATH in .bashrc
-          lineinfile:
-            path: "{{ ansible_env.HOME }}/.bashrc"
-            line: 'export PATH="$HOME/.cargo/bin:$PATH"'
-            create: yes
-            state: present
+        - name: Install uv
+          shell: |
+            /tmp/uv-install.sh
+          args:
+            creates: "~/.local/bin/uv"
+            executable: /bin/bash
           become: no
-      tags: uv
+      tags: uv, speckit
 
     - name: Install GitHub Spec-Kit
       block:
         - name: Install specify-cli using uv tool
           shell: |
-            source {{ ansible_env.HOME }}/.bashrc
-            {{ ansible_env.HOME }}/.cargo/bin/uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+            export PATH="$HOME/.local/bin:$PATH"
+            uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
           args:
             executable: /bin/bash
-            creates: "{{ ansible_env.HOME }}/.local/bin/specify"
-          become: no
-
-        - name: Add specify to PATH in .bashrc
-          lineinfile:
-            path: "{{ ansible_env.HOME }}/.bashrc"
-            line: 'export PATH="$HOME/.local/bin:$PATH"'
-            create: yes
-            state: present
+            creates: "~/.local/bin/specify"
           become: no
       tags: speckit
