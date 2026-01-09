@@ -127,15 +127,16 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 
 **Playbook:** `playbooks/ubuntu/cli.yaml`
 
-| Application/Tool              | Tag            | Command                                                          |
-| ----------------------------- | -------------- | ---------------------------------------------------------------- |
-| Node Version Manager (NVM)    | `nvm`          | `ansible-playbook playbooks/ubuntu/cli.yaml --tags nvm`          |
-| uv (Python package installer) | `uv`           | `ansible-playbook playbooks/ubuntu/cli.yaml --tags uv`           |
-| Github CLI                    | `github_cli`   | `ansible-playbook playbooks/ubuntu/cli.yaml --tags github_cli`   |
-| GitHub Copilot CLI            | `copilot_cli`  | `ansible-playbook playbooks/ubuntu/cli.yaml --tags copilot_cli`  |
-| Google Gemini CLI             | `gemini_cli`   | `ansible-playbook playbooks/ubuntu/cli.yaml --tags gemini_cli`   |
-| OpenCode CLI                  | `opencode_cli` | `ansible-playbook playbooks/ubuntu/cli.yaml --tags opencode_cli` |
-| GitHub Spec-Kit               | `speckit`      | `ansible-playbook playbooks/ubuntu/cli.yaml --tags speckit`      |
+| Application/Tool              | Tag                | Command                                                              |
+| ----------------------------- | ------------------ | -------------------------------------------------------------------- |
+| Node Version Manager (NVM)    | `nvm`              | `ansible-playbook playbooks/ubuntu/cli.yaml --tags nvm`              |
+| uv (Python package installer) | `uv`               | `ansible-playbook playbooks/ubuntu/cli.yaml --tags uv`               |
+| Github CLI                    | `github_cli`       | `ansible-playbook playbooks/ubuntu/cli.yaml --tags github_cli`       |
+| GitHub Copilot CLI            | `copilot_cli`      | `ansible-playbook playbooks/ubuntu/cli.yaml --tags copilot_cli`      |
+| Google Gemini CLI             | `gemini_cli`       | `ansible-playbook playbooks/ubuntu/cli.yaml --tags gemini_cli`       |
+| OpenCode CLI                  | `opencode_cli`     | `ansible-playbook playbooks/ubuntu/cli.yaml --tags opencode_cli`     |
+| GitHub Spec-Kit               | `speckit`          | `ansible-playbook playbooks/ubuntu/cli.yaml --tags speckit`          |
+| Dev Container CLI             | `devcontainer_cli` | `ansible-playbook playbooks/ubuntu/cli.yaml --tags devcontainer_cli` |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/cli.yaml`
 

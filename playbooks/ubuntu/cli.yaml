@@ -51,7 +51,7 @@
           args:
             executable: /bin/bash
           become: no
-      tags: nvm, gemini_cli, opencode_cli
+      tags: nvm, gemini_cli, opencode_cli, devcontainer_cli
 
     - name: Install Google Gemini CLI
       block:
@@ -141,3 +141,28 @@
             creates: "~/.local/bin/specify"
           become: no
       tags: speckit
+
+    - name: Install Dev Container CLI
+      block:
+        - name: Check if Dev Container CLI is already installed
+          shell: |
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            npm list -g @devcontainers/cli
+          args:
+            executable: /bin/bash
+          register: devcontainer_cli_check
+          failed_when: false
+          changed_when: false
+          become: no
+
+        - name: Install Dev Container CLI
+          shell: |
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            npm install -g @devcontainers/cli
+          args:
+            executable: /bin/bash
+          when: devcontainer_cli_check.rc != 0
+          become: no
+      tags: devcontainer_cli
