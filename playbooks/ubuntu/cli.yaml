@@ -166,3 +166,45 @@
           when: devcontainer_cli_check.rc != 0
           become: no
       tags: devcontainer_cli
+
+    - name: Install 1password CLI
+      block:
+        - name: Check if 1Password CLI is already installed
+          stat:
+            path: "/usr/bin/op"
+          register: onepassword_cli_installed
+          become: no
+
+        - name: Download 1Password key
+          get_url:
+            url: https://downloads.1password.com/linux/keys/1password.asc
+            dest: /tmp/1password.asc
+            mode: 0755
+          when: not onepassword_cli_installed.stat.exists
+
+        - name: Add 1Password keyring
+          command: gpg --batch --yes --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg /tmp/1password.asc
+          changed_when: false
+          when: not onepassword_cli_installed.stat.exists
+
+        - name: Get dpkg architecture
+          command: "dpkg --print-architecture"
+          register: dpkg_arch
+          changed_when: false
+          failed_when: false
+          when: not onepassword_cli_installed.stat.exists
+
+        - name: Add 1Password repository
+          apt_repository:
+            repo: "deb [arch={{ dpkg_arch.stdout }} signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/{{ dpkg_arch.stdout }} stable main"
+            state: present
+            filename: 1password
+          when: not onepassword_cli_installed.stat.exists
+
+        - name: Install 1Password CLI
+          apt:
+            name: 1password-cli
+            state: present
+            update_cache: true
+          when: not onepassword_cli_installed.stat.exists
+      tags: onepassword_cli
