@@ -170,18 +170,6 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 
 ---
 
-### WSL Applications
-
-This playbook installs and configures apps for Windows Subsystem for Linux (WSL).
-
-**Playbook:** `playbooks/ubuntu/wsl.yaml`
-
-| Application/Tool | Command                                      |
-| ---------------- | -------------------------------------------- |
-| 1Password CLI    | `ansible-playbook playbooks/ubuntu/wsl.yaml` |
-
----
-
 ### Custom Configurations
 
 #### Lid Closing
