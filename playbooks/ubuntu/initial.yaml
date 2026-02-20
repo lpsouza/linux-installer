@@ -13,19 +13,40 @@
       ignore_errors: true
       changed_when: false
 
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+      changed_when: false
+
+    - name: Get Tailscale installed and candidate versions
+      shell: apt-cache policy tailscale
+      register: tailscale_policy
+      changed_when: false
+      when: tailscale_package_status.rc == 0
+
+    - name: Set Tailscale version facts
+      set_fact:
+        tailscale_installed: "{{ tailscale_policy.stdout | regex_search('Installed: (.*)', '\\1') | first }}"
+        tailscale_candidate: "{{ tailscale_policy.stdout | regex_search('Candidate: (.*)', '\\1') | first }}"
+      when: tailscale_package_status.rc == 0
+
     - name: Asynchronously update Tailscale to prevent SSH connection drop
       apt:
         name: tailscale
         state: latest
-        update_cache: yes
       async: 60
       poll: 0
-      when: tailscale_package_status.rc == 0
+      when:
+        - tailscale_package_status.rc == 0
+        - tailscale_installed != tailscale_candidate
 
     - name: Update and upgrade apt packages
       apt:
-        update_cache: yes
         upgrade: yes
+      register: apt_result
+      until: apt_result is success
+      retries: 10
+      delay: 10
 
     - name: Install essential packages
       apt:
