@@ -7,6 +7,21 @@
   gather_facts: no
   become: yes
   tasks:
+    - name: Check if tailscale is installed
+      command: dpkg -s tailscale
+      register: tailscale_package_status
+      ignore_errors: true
+      changed_when: false
+
+    - name: Asynchronously update Tailscale to prevent SSH connection drop
+      apt:
+        name: tailscale
+        state: latest
+        update_cache: yes
+      async: 60
+      poll: 0
+      when: tailscale_package_status.rc == 0
+
     - name: Update and upgrade apt packages
       apt:
         update_cache: yes
