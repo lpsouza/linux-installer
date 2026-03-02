@@ -279,28 +279,6 @@
           when: not wezterm_installed.stat.exists
       tags: wezterm
 
-    - name: Install RustDesk
-      block:
-        - name: Check if RustDesk is already installed
-          stat:
-            path: "/usr/bin/rustdesk"
-          register: rustdesk_installed
-          become: no
-
-        - name: Download RustDesk
-          get_url:
-            url: "https://github.com/rustdesk/rustdesk/releases/download/1.4.1/rustdesk-1.4.1-x86_64.deb"
-            dest: "/tmp/rustdesk-1.4.1-x86_64.deb"
-            mode: 0644
-          when: not rustdesk_installed.stat.exists
-
-        - name: Install RustDesk
-          apt:
-            deb: "/tmp/rustdesk-1.4.1-x86_64.deb"
-            state: present
-          when: not rustdesk_installed.stat.exists
-      tags: rustdesk
-
     - name: Install Todoist
       block:
         - name: Check if Todoist is already installed

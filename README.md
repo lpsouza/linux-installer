@@ -114,7 +114,6 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 | 1Password Desktop      | `onepassword`        | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags onepassword`        |
 | LNXlink                | `lnxlink`            | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags lnxlink`            |
 | WezTerm                | `wezterm`            | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags wezterm`            |
-| RustDesk               | `rustdesk`           | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags rustdesk`           |
 | Todoist                | `todoist`            | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags todoist`            |
 | Remmina                | `remmina`            | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags remmina`            |
 | Google Antigravity     | `antigravity`        | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags antigravity`        |
