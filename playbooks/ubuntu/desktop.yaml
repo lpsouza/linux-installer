@@ -315,6 +315,22 @@
           when: not remmina_installed.stat.exists
       tags: remmina
 
+    - name: Install flameshot
+      block:
+        - name: Check if Flameshot is already installed
+          stat:
+            path: "/usr/bin/flameshot"
+          register: flameshot_installed
+          become: no
+
+        - name: Install Flameshot
+          apt:
+            name: flameshot
+            state: present
+            update_cache: true
+          when: not flameshot_installed.stat.exists
+      tags: flameshot
+
     - name: Install Google Antigravity
       block:
         - name: Check if Google Antigravity is already installed
