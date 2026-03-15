@@ -69,6 +69,7 @@
         - iotop
         - iputils-ping
         - jq
+        - lolcat
         - lsb-release
         - mc
         - mtr
