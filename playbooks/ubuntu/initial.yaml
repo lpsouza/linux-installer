@@ -53,6 +53,7 @@
         name: "{{ item }}"
         state: present
       with_items:
+        - p7zip-full
         - apt-transport-https
         - apt-utils
         - asciinema
@@ -77,10 +78,13 @@
         - net-tools
         - neovim
         - pandoc
+        - rar
         - rsync
         - software-properties-common
         - stow
+        - tesseract-ocr
         - tmux
+        - unrar
         - unzip
         - wget
         - whois
