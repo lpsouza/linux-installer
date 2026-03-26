@@ -88,6 +88,29 @@
           when: not vscode_installed.stat.exists
       tags: vscode
 
+    - name: Install Kiro IDE
+      block:
+        - name: Check if Kiro IDE is already installed
+          stat:
+            path: "/usr/bin/kiro"
+          register: kiro_installed
+          become: no
+
+        - name: Download Kiro IDE
+          get_url:
+            url: "https://cli.kiro.dev/download/linux/debian/latest"
+            dest: "/tmp/kiro.deb"
+            mode: 0644
+          become: no
+          when: not kiro_installed.stat.exists
+
+        - name: Install Kiro IDE
+          apt:
+            deb: "/tmp/kiro.deb"
+            state: present
+          when: not kiro_installed.stat.exists
+      tags: kiro
+
     - name: Install Obsidian
       block:
         - name: Check if Obsidian is already installed

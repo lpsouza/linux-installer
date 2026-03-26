@@ -78,6 +78,23 @@
           become: no
       tags: gemini_cli
 
+    - name: Install Kiro CLI
+      block:
+        - name: Check if Kiro CLI is already installed
+          stat:
+            path: "~/.local/bin/kiro-cli"
+          register: kiro_cli_installed
+          become: no
+
+        - name: Install Kiro CLI
+          shell: |
+            curl -fsSL https://cli.kiro.dev/install | bash
+          args:
+            executable: /bin/bash
+          when: not kiro_cli_installed.stat.exists
+          become: no
+      tags: kiro_cli
+
     - name: Install OpenCode CLI
       block:
         - name: Check if OpenCode CLI is already installed

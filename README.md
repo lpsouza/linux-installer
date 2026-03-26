@@ -109,6 +109,7 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 | CascadiaCode NerdFonts | `cascadia_nerdfonts` | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags cascadia_nerdfonts` |
 | Google Chrome          | `google_chrome`      | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags google_chrome`      |
 | VSCode                 | `vscode`             | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags vscode`             |
+| Kiro IDE (AWS)         | `kiro`               | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags kiro`               |
 | Obsidian               | `obsidian`           | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags obsidian`           |
 | Insync                 | `insync`             | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags insync`             |
 | 1Password Desktop      | `onepassword`        | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags onepassword`        |
@@ -134,6 +135,7 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 | Github CLI                    | `github_cli`       | `ansible-playbook playbooks/ubuntu/cli.yaml --tags github_cli`           |
 | GitHub Copilot CLI            | `copilot_cli`      | `ansible-playbook playbooks/ubuntu/cli.yaml --tags copilot_cli`          |
 | Google Gemini CLI             | `gemini_cli`       | `ansible-playbook playbooks/ubuntu/cli.yaml --tags gemini_cli`           |
+| Kiro CLI                     | `kiro_cli`         | `ansible-playbook playbooks/ubuntu/cli.yaml --tags kiro_cli`             |
 | OpenCode CLI                  | `opencode_cli`     | `ansible-playbook playbooks/ubuntu/cli.yaml --tags opencode_cli`         |
 | GitHub Spec-Kit               | `speckit`          | `ansible-playbook playbooks/ubuntu/cli.yaml --tags speckit`              |
 | Dev Container CLI             | `devcontainer_cli` | `ansible-playbook playbooks/ubuntu/cli.yaml --tags devcontainer_cli`     |
