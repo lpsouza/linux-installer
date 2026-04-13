@@ -149,10 +149,12 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 
 **Playbook:** `playbooks/ubuntu/devops-tools.yaml`
 
-| Application/Tool | Tag         | Command                                                                |
-| ---------------- | ----------- | ---------------------------------------------------------------------- |
-| Terraform        | `terraform` | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags terraform` |
-| AWS CLI          | `aws_cli`   | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags aws_cli`   |
+| Application/Tool | Tag          | Command                                                                 |
+| ---------------- | ------------ | ----------------------------------------------------------------------- |
+| Terraform        | `terraform`  | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags terraform`  |
+| AWS CLI          | `aws_cli`    | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags aws_cli`    |
+| Azure CLI        | `azure_cli`  | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags azure_cli`  |
+| Google Cloud CLI | `gcloud_cli` | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags gcloud_cli` |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/devops-tools.yaml`
 
