@@ -18,6 +18,7 @@
             url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
             dest: "/tmp/terraform_installer.zip"
             mode: 0644
+            timeout: 60
 
         - name: Unzip Terraform
           unarchive:
@@ -35,6 +36,7 @@
             url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
             dest: "/tmp/awscliv2.zip"
             mode: 0644
+            timeout: 60
 
         - name: Unzip AWS CLI
           unarchive:
@@ -49,3 +51,38 @@
           args:
             warn: false
       tags: aws_cli
+
+    - name: Install Azure CLI
+      block:
+        - name: Download Azure CLI installation script
+          get_url:
+            url: "https://aka.ms/InstallAzureCLIDeb"
+            dest: "/tmp/install_az_cli.sh"
+            mode: 0755
+            timeout: 60
+
+        - name: Run Azure CLI installation script
+          shell: "/tmp/install_az_cli.sh"
+          args:
+            creates: "/usr/bin/az"
+      tags: azure_cli
+
+    - name: Install Google Cloud CLI
+      block:
+        - name: Add Google Cloud CLI GPG key
+          apt_key:
+            url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
+            state: present
+
+        - name: Add Google Cloud CLI repository
+          apt_repository:
+            repo: "deb https://packages.cloud.google.com/apt cloud-sdk main"
+            filename: google-cloud-sdk
+            state: present
+
+        - name: Install Google Cloud CLI
+          apt:
+            name: google-cloud-cli
+            state: present
+            update_cache: yes
+      tags: gcloud_cli
