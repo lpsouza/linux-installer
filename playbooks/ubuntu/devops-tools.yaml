@@ -48,8 +48,6 @@
 
         - name: Install AWS CLI
           command: "/tmp/aws/install"
-          args:
-            warn: false
       tags: aws_cli
 
     - name: Install Azure CLI
