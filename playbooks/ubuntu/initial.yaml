@@ -59,6 +59,7 @@
         - asciinema
         - build-essential
         - ca-certificates
+        - cloud-utils
         - coreutils
         - csvkit
         - curl
