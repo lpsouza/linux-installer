@@ -118,7 +118,6 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 | Todoist                | `todoist`            | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags todoist`            |
 | Remmina                | `remmina`            | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags remmina`            |
 | Flameshot              | `flameshot`          | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags flameshot`          |
-| Google Antigravity     | `antigravity`        | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags antigravity`        |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/desktop.yaml`
 
