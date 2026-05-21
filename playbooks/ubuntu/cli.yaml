@@ -230,7 +230,7 @@
       block:
         - name: Check if Antigravity CLI is already installed
           stat:
-            path: "~/.local/bin/antigravity"
+            path: "~/.local/bin/agy"
           register: antigravity_cli_installed
           become: no
 
