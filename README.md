@@ -139,6 +139,7 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 | GitHub Spec-Kit               | `speckit`          | `ansible-playbook playbooks/ubuntu/cli.yaml --tags speckit`              |
 | Dev Container CLI             | `devcontainer_cli` | `ansible-playbook playbooks/ubuntu/cli.yaml --tags devcontainer_cli`     |
 | 1Password CLI                 | `onepassword_cli`  | `ansible-playbook playbooks/ubuntu/cli.yaml --tags onepassword_cli`      |
+| Antigravity CLI               | `antigravity_cli`  | `ansible-playbook playbooks/ubuntu/cli.yaml --tags antigravity_cli`      |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/cli.yaml`
 

@@ -225,3 +225,20 @@
             update_cache: true
           when: not onepassword_cli_installed.stat.exists
       tags: onepassword_cli
+
+    - name: Install Antigravity CLI
+      block:
+        - name: Check if Antigravity CLI is already installed
+          stat:
+            path: "~/.local/bin/antigravity"
+          register: antigravity_cli_installed
+          become: no
+
+        - name: Install Antigravity CLI
+          shell: |
+            curl -fsSL https://antigravity.google/cli/install.sh | bash
+          args:
+            executable: /bin/bash
+          when: not antigravity_cli_installed.stat.exists
+          become: no
+      tags: antigravity_cli
