@@ -140,6 +140,7 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 | Dev Container CLI             | `devcontainer_cli` | `ansible-playbook playbooks/ubuntu/cli.yaml --tags devcontainer_cli`     |
 | 1Password CLI                 | `onepassword_cli`  | `ansible-playbook playbooks/ubuntu/cli.yaml --tags onepassword_cli`      |
 | Antigravity CLI               | `antigravity_cli`  | `ansible-playbook playbooks/ubuntu/cli.yaml --tags antigravity_cli`      |
+| Go                            | `go`               | `ansible-playbook playbooks/ubuntu/cli.yaml --tags go`                   |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/cli.yaml`
 

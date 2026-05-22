@@ -242,3 +242,34 @@
           when: not antigravity_cli_installed.stat.exists
           become: no
       tags: antigravity_cli
+
+    - name: Install Go
+      block:
+        - name: Check if Go is already installed
+          stat:
+            path: /usr/local/go
+          register: go_installed
+
+        - name: Download Go archive
+          get_url:
+            url: "https://go.dev/dl/go{{ go_version }}.linux-amd64.tar.gz"
+            dest: "/tmp/go{{ go_version }}.linux-amd64.tar.gz"
+            mode: "0644"
+          when: not go_installed.stat.exists
+
+        - name: Extract Go archive
+          unarchive:
+            src: "/tmp/go{{ go_version }}.linux-amd64.tar.gz"
+            dest: /usr/local
+            remote_src: yes
+          when: not go_installed.stat.exists
+
+        - name: Add Go to system PATH
+          copy:
+            dest: /etc/profile.d/go.sh
+            content: "export PATH=$PATH:/usr/local/go/bin"
+            mode: "0644"
+          when: not go_installed.stat.exists
+      vars:
+        go_version: "1.26.3"
+      tags: go
