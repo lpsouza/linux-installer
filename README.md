@@ -134,13 +134,14 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 | Github CLI                    | `github_cli`       | `ansible-playbook playbooks/ubuntu/cli.yaml --tags github_cli`           |
 | GitHub Copilot CLI            | `copilot_cli`      | `ansible-playbook playbooks/ubuntu/cli.yaml --tags copilot_cli`          |
 | Google Gemini CLI             | `gemini_cli`       | `ansible-playbook playbooks/ubuntu/cli.yaml --tags gemini_cli`           |
-| Kiro CLI                     | `kiro_cli`         | `ansible-playbook playbooks/ubuntu/cli.yaml --tags kiro_cli`             |
+| Kiro CLI                      | `kiro_cli`         | `ansible-playbook playbooks/ubuntu/cli.yaml --tags kiro_cli`             |
 | OpenCode CLI                  | `opencode_cli`     | `ansible-playbook playbooks/ubuntu/cli.yaml --tags opencode_cli`         |
 | GitHub Spec-Kit               | `speckit`          | `ansible-playbook playbooks/ubuntu/cli.yaml --tags speckit`              |
 | Dev Container CLI             | `devcontainer_cli` | `ansible-playbook playbooks/ubuntu/cli.yaml --tags devcontainer_cli`     |
 | 1Password CLI                 | `onepassword_cli`  | `ansible-playbook playbooks/ubuntu/cli.yaml --tags onepassword_cli`      |
 | Antigravity CLI               | `antigravity_cli`  | `ansible-playbook playbooks/ubuntu/cli.yaml --tags antigravity_cli`      |
 | Go                            | `go`               | `ansible-playbook playbooks/ubuntu/cli.yaml --tags go`                   |
+| K9s                           | `k9s`              | `ansible-playbook playbooks/ubuntu/cli.yaml --tags k9s`                  |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/cli.yaml`
 

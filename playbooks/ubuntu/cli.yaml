@@ -273,3 +273,39 @@
       vars:
         go_version: "1.26.3"
       tags: go
+
+    - name: Install K9s
+      block:
+        - name: Check if K9s is already installed
+          stat:
+            path: "/usr/bin/k9s"
+          register: k9s_installed
+          become: no
+
+        - name: Get dpkg architecture
+          command: "dpkg --print-architecture"
+          register: dpkg_arch
+          changed_when: false
+          failed_when: false
+          when: not k9s_installed.stat.exists
+
+        - name: Download K9s deb package
+          get_url:
+            url: "https://github.com/derailed/k9s/releases/latest/download/k9s_linux_{{ dpkg_arch.stdout }}.deb"
+            dest: "/tmp/k9s_linux_{{ dpkg_arch.stdout }}.deb"
+            mode: "0644"
+          when: not k9s_installed.stat.exists
+
+        - name: Install K9s package
+          apt:
+            deb: "/tmp/k9s_linux_{{ dpkg_arch.stdout }}.deb"
+            state: present
+          when: not k9s_installed.stat.exists
+
+        - name: Clean up K9s deb package
+          file:
+            path: "/tmp/k9s_linux_{{ dpkg_arch.stdout }}.deb"
+            state: absent
+          when: not k9s_installed.stat.exists
+      tags: k9s
+
