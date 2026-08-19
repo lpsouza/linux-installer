@@ -6,12 +6,71 @@
   hosts: all
   gather_facts: no
   become: yes
+
+  vars:
+    essential_packages:
+      - p7zip-full
+      - apt-transport-https
+      - apt-utils
+      - asciinema
+      - build-essential
+      - ca-certificates
+      - cloud-utils
+      - coreutils
+      - csvkit
+      - curl
+      - fontconfig
+      - git
+      - git-crypt
+      - gnupg
+      - htop
+      - iotop
+      - iputils-ping
+      - jq
+      - lolcat
+      - lsb-release
+      - mc
+      - mtr
+      - ncdu
+      - net-tools
+      - neovim
+      - pandoc
+      - rsync
+      - software-properties-common
+      - stow
+      - tesseract-ocr
+      - tmux
+      - unrar
+      - unzip
+      - wget
+      - whois
+      - zip
+
+    optional_packages:
+      - rar
+
   tasks:
     - name: Check if tailscale is installed
       command: dpkg -s tailscale
       register: tailscale_package_status
       ignore_errors: true
       changed_when: false
+
+    - name: Ensure software-properties-common is installed
+      apt:
+        name: software-properties-common
+        state: present
+        update_cache: yes
+
+    - name: Check if multiverse repository is enabled
+      shell: grep -rq "multiverse" /etc/apt/sources.list /etc/apt/sources.list.d/
+      register: multiverse_check
+      ignore_errors: true
+      changed_when: false
+
+    - name: Enable multiverse repository
+      command: add-apt-repository -y multiverse
+      when: multiverse_check.rc != 0
 
     - name: Update apt cache
       apt:
@@ -50,46 +109,15 @@
 
     - name: Install essential packages
       apt:
+        name: "{{ essential_packages }}"
+        state: present
+
+    - name: Install optional or architecture-dependent packages
+      apt:
         name: "{{ item }}"
         state: present
-      with_items:
-        - p7zip-full
-        - apt-transport-https
-        - apt-utils
-        - asciinema
-        - build-essential
-        - ca-certificates
-        - cloud-utils
-        - coreutils
-        - csvkit
-        - curl
-        - fontconfig
-        - git
-        - git-crypt
-        - gnupg
-        - htop
-        - iotop
-        - iputils-ping
-        - jq
-        - lolcat
-        - lsb-release
-        - mc
-        - mtr
-        - ncdu
-        - net-tools
-        - neovim
-        - pandoc
-        - rar
-        - rsync
-        - software-properties-common
-        - stow
-        - tesseract-ocr
-        - tmux
-        - unrar
-        - unzip
-        - wget
-        - whois
-        - zip
+      loop: "{{ optional_packages }}"
+      ignore_errors: true
 
     - name: Set Neovim as default editor
       alternatives:
