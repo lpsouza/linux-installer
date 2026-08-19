@@ -36,12 +36,14 @@
       - neovim
       - pandoc
       - rsync
+      - socat
       - software-properties-common
       - stow
       - tesseract-ocr
       - tmux
       - unrar
       - unzip
+      - waypipe
       - wget
       - whois
       - zip
