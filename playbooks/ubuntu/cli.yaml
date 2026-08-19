@@ -309,3 +309,49 @@
           when: not k9s_installed.stat.exists
       tags: k9s
 
+    - name: Install Glow
+      block:
+        - name: Check if Glow is already installed
+          stat:
+            path: "/usr/bin/glow"
+          register: glow_installed
+          become: no
+
+        - name: Ensure /etc/apt/keyrings directory exists
+          file:
+            path: /etc/apt/keyrings
+            state: directory
+            mode: "0755"
+          when: not glow_installed.stat.exists
+
+        - name: Download Charm GPG key
+          get_url:
+            url: https://repo.charm.sh/apt/gpg.key
+            dest: /tmp/charm.gpg.key
+            mode: "0644"
+          when: not glow_installed.stat.exists
+
+        - name: Dearmor Charm GPG key
+          command: gpg --batch --yes --dearmor --output /etc/apt/keyrings/charm.gpg /tmp/charm.gpg.key
+          when: not glow_installed.stat.exists
+
+        - name: Clean up temporary Charm GPG key
+          file:
+            path: /tmp/charm.gpg.key
+            state: absent
+          when: not glow_installed.stat.exists
+
+        - name: Add Charm repository
+          apt_repository:
+            repo: "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *"
+            state: present
+            filename: charm
+            update_cache: true
+          when: not glow_installed.stat.exists
+
+        - name: Install Glow package
+          apt:
+            name: glow
+            state: present
+          when: not glow_installed.stat.exists
+      tags: glow

@@ -142,6 +142,7 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 | Antigravity CLI               | `antigravity_cli`  | `ansible-playbook playbooks/ubuntu/cli.yaml --tags antigravity_cli`      |
 | Go                            | `go`               | `ansible-playbook playbooks/ubuntu/cli.yaml --tags go`                   |
 | K9s                           | `k9s`              | `ansible-playbook playbooks/ubuntu/cli.yaml --tags k9s`                  |
+| Glow                          | `glow`             | `ansible-playbook playbooks/ubuntu/cli.yaml --tags glow`                 |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/cli.yaml`
 
