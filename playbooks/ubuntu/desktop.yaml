@@ -353,3 +353,63 @@
             update_cache: true
           when: not flameshot_installed.stat.exists
       tags: flameshot
+
+    - name: Install Antigravity Desktop (2.0)
+      block:
+        - name: Check if Antigravity Desktop is already installed
+          stat:
+            path: "/opt/antigravity/antigravity"
+          register: antigravity_desktop_installed
+          become: no
+
+        - name: Create Antigravity installation directory
+          file:
+            path: "/opt/antigravity"
+            state: directory
+            mode: "0755"
+          when: not antigravity_desktop_installed.stat.exists
+
+        - name: Download Antigravity Desktop archive
+          get_url:
+            url: "https://antigravity.google/download/linux/x64/antigravity-desktop.tar.gz"
+            dest: "/tmp/antigravity-desktop.tar.gz"
+            mode: "0644"
+          when: not antigravity_desktop_installed.stat.exists
+
+        - name: Extract Antigravity Desktop
+          unarchive:
+            src: "/tmp/antigravity-desktop.tar.gz"
+            dest: "/opt/antigravity"
+            remote_src: yes
+            extra_opts: [--strip-components=1]
+          when: not antigravity_desktop_installed.stat.exists
+
+        - name: Create symlink in /usr/local/bin
+          file:
+            src: "/opt/antigravity/antigravity"
+            dest: "/usr/local/bin/antigravity"
+            state: link
+          when: not antigravity_desktop_installed.stat.exists
+
+        - name: Create desktop launcher shortcut
+          copy:
+            dest: "/usr/share/applications/antigravity.desktop"
+            mode: "0644"
+            content: |
+              [Desktop Entry]
+              Name=Antigravity
+              Comment=Google Antigravity 2.0 Desktop Application
+              Exec=/opt/antigravity/antigravity %U
+              Icon=/opt/antigravity/resources/app/icon.png
+              Type=Application
+              Categories=Development;
+              Terminal=false
+              StartupNotify=true
+          when: not antigravity_desktop_installed.stat.exists
+
+        - name: Clean up Antigravity archive
+          file:
+            path: "/tmp/antigravity-desktop.tar.gz"
+            state: absent
+          when: not antigravity_desktop_installed.stat.exists
+      tags: antigravity
