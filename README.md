@@ -138,7 +138,8 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 | GitHub Spec-Kit               | `speckit`          | `ansible-playbook playbooks/ubuntu/cli.yaml --tags speckit`              |
 | Dev Container CLI             | `devcontainer_cli` | `ansible-playbook playbooks/ubuntu/cli.yaml --tags devcontainer_cli`     |
 | 1Password CLI                 | `onepassword_cli`  | `ansible-playbook playbooks/ubuntu/cli.yaml --tags onepassword_cli`      |
-| Antigravity CLI               | `antigravity_cli`  | `ansible-playbook playbooks/ubuntu/cli.yaml --tags antigravity_cli`      |
+| Antigravity CLI                   | `antigravity_cli`    | `ansible-playbook playbooks/ubuntu/cli.yaml --tags antigravity_cli`        |
+| Antigravity Remote Control Daemon | `antigravity_remote` | `ansible-playbook playbooks/ubuntu/cli.yaml --tags antigravity_remote`     |
 | Go                            | `go`               | `ansible-playbook playbooks/ubuntu/cli.yaml --tags go`                   |
 | K9s                           | `k9s`              | `ansible-playbook playbooks/ubuntu/cli.yaml --tags k9s`                  |
 | Glow                          | `glow`             | `ansible-playbook playbooks/ubuntu/cli.yaml --tags glow`                 |

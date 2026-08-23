@@ -218,6 +218,30 @@
           become: no
       tags: antigravity_cli
 
+    - name: Configure Antigravity Remote Control Daemon
+      block:
+        - name: Check if Antigravity Remote Control service is already configured
+          stat:
+            path: "~/.config/systemd/user/agy-remote-control.service"
+          register: antigravity_daemon_installed
+          become: no
+
+        - name: Enable linger for user
+          command: "loginctl enable-linger {{ ansible_user | default(ansible_user_id) }}"
+          changed_when: false
+          become: yes
+
+        - name: Install and configure Antigravity Remote Control Daemon
+          shell: |
+            curl -fsSL https://antigravity.google/cli/agy-daemon.sh | bash -s -- --no-prompt
+          environment:
+            XDG_RUNTIME_DIR: "/run/user/{{ ansible_user_uid | default('1000') }}"
+          args:
+            executable: /bin/bash
+          when: not antigravity_daemon_installed.stat.exists
+          become: no
+      tags: antigravity_remote
+
     - name: Install Go
       block:
         - name: Check if Go is already installed
