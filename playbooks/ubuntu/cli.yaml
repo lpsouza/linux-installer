@@ -51,32 +51,7 @@
           args:
             executable: /bin/bash
           become: no
-      tags: nvm, gemini_cli, opencode_cli, devcontainer_cli
-
-    - name: Install Google Gemini CLI
-      block:
-        - name: Check if Gemini CLI is already installed
-          shell: |
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            npm list -g @google/gemini-cli
-          args:
-            executable: /bin/bash
-          register: gemini_cli_check
-          failed_when: false
-          changed_when: false
-          become: no
-
-        - name: Install Gemini CLI
-          shell: |
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            npm install -g @google/gemini-cli
-          args:
-            executable: /bin/bash
-          when: gemini_cli_check.rc != 0
-          become: no
-      tags: gemini_cli
+      tags: nvm, opencode_cli, devcontainer_cli
 
     - name: Install Kiro CLI
       block:

@@ -133,7 +133,6 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 | uv (Python package installer) | `uv`               | `ansible-playbook playbooks/ubuntu/cli.yaml --tags uv`                   |
 | Github CLI                    | `github_cli`       | `ansible-playbook playbooks/ubuntu/cli.yaml --tags github_cli`           |
 | GitHub Copilot CLI            | `copilot_cli`      | `ansible-playbook playbooks/ubuntu/cli.yaml --tags copilot_cli`          |
-| Google Gemini CLI             | `gemini_cli`       | `ansible-playbook playbooks/ubuntu/cli.yaml --tags gemini_cli`           |
 | Kiro CLI                      | `kiro_cli`         | `ansible-playbook playbooks/ubuntu/cli.yaml --tags kiro_cli`             |
 | OpenCode CLI                  | `opencode_cli`     | `ansible-playbook playbooks/ubuntu/cli.yaml --tags opencode_cli`         |
 | GitHub Spec-Kit               | `speckit`          | `ansible-playbook playbooks/ubuntu/cli.yaml --tags speckit`              |
