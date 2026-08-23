@@ -233,7 +233,7 @@
 
         - name: Install and configure Antigravity Remote Control Daemon
           shell: |
-            curl -fsSL https://antigravity.google/cli/agy-daemon.sh | bash -s -- --no-prompt
+            curl -fsSL https://antigravity.google/cli/agy-daemon.sh | bash -s -- install --no-prompt
           environment:
             XDG_RUNTIME_DIR: "/run/user/{{ ansible_user_uid | default('1000') }}"
           args:
