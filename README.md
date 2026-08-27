@@ -51,6 +51,16 @@ sudo snap install ansible --classic
 
 ## How to Use
 
+### Setup Inventory
+
+Create your local inventory file from the example:
+
+```bash
+cp inventory.example inventory
+```
+
+Edit `inventory` to configure your target hosts and `ansible_user`.
+
 ### Install a specific application
 
 ```bash

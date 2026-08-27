@@ -1,0 +1,13 @@
+[linux]
+# Local execution
+# localhost ansible_connection=local
+
+# Remote hosts (SSH / IP / Tailscale)
+# host01 ansible_host=192.168.1.100
+# host02 ansible_host=100.116.126.20
+
+[linux:vars]
+ansible_user=your_username
+ansible_become_user=root
+ansible_become_method=sudo
+ansible_shell_executable=/bin/bash
