@@ -1,52 +1,24 @@
 # linux-installer
 
-This repo contains the playbooks to install and configure my linux environments. You can use like a reference to create your own playbooks.
+This repo contains the playbooks to install and configure my linux environments. You can use it as a reference to create your own playbooks.
 
 ## Requirements
 
 ### Installing Ansible
 
-Choose your Linux distribution below:
+This repository is tailored for **Ubuntu (24.04 / 26.04 LTS)**.
 
-#### Ubuntu/Debian
+#### Using Apt (Ubuntu/Debian)
 
 ```bash
 sudo apt update
 sudo apt install -y ansible
 ```
 
-#### CentOS/RHEL/Fedora
+#### Using Pip / Pipx (Virtual Environment)
 
 ```bash
-# For CentOS/RHEL 8+ and Fedora
-sudo dnf install -y ansible
-
-# For CentOS/RHEL 7
-sudo yum install -y ansible
-```
-
-#### Arch Linux
-
-```bash
-sudo pacman -S ansible
-```
-
-#### openSUSE
-
-```bash
-sudo zypper install -y ansible
-```
-
-#### Using Pip (Universal)
-
-```bash
-pip install ansible
-```
-
-#### Using Snap (Universal)
-
-```bash
-sudo snap install ansible --classic
+pipx install --include-deps ansible
 ```
 
 ## How to Use
@@ -104,9 +76,9 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 
 **Playbook:** `playbooks/ubuntu/initial.yaml`
 
-| Application/Tool | Command                                          |
-| ---------------- | ------------------------------------------------ |
-| Initial Setup    | `ansible-playbook playbooks/ubuntu/initial.yaml` |
+| Component     | Description                                                                                          | Command                                         |
+| ------------- | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| Initial Setup | Base packages (`git`, `curl`, `neovim`, `tmux`, `jq`), apt upgrades, Tailscale safety, and hushlogin | `ansible-playbook playbooks/ubuntu/initial.yaml` |
 
 ---
 
@@ -114,21 +86,21 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 
 **Playbook:** `playbooks/ubuntu/desktop.yaml`
 
-| Application/Tool       | Tag                  | Command                                                                    |
-| ---------------------- | -------------------- | -------------------------------------------------------------------------- |
-| CascadiaCode NerdFonts | `cascadia_nerdfonts` | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags cascadia_nerdfonts` |
-| Google Chrome          | `google_chrome`      | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags google_chrome`      |
-| VSCode                 | `vscode`             | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags vscode`             |
-| Kiro IDE (AWS)         | `kiro`               | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags kiro`               |
-| Obsidian               | `obsidian`           | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags obsidian`           |
-| Insync                 | `insync`             | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags insync`             |
-| 1Password Desktop      | `onepassword`        | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags onepassword`        |
-| LNXlink                | `lnxlink`            | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags lnxlink`            |
-| WezTerm                | `wezterm`            | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags wezterm`            |
-| Todoist                | `todoist`            | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags todoist`            |
-| Remmina                | `remmina`            | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags remmina`            |
-| Flameshot              | `flameshot`          | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags flameshot`          |
-| Antigravity (2.0)      | `antigravity`        | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags antigravity`        |
+| Application / Tool        | Tag                  | Description                                               | Command                                                                    |
+| ------------------------- | -------------------- | --------------------------------------------------------- | -------------------------------------------------------------------------- |
+| CascadiaCode NerdFonts    | `cascadia_nerdfonts` | Monospace Nerd Font with programming glyphs and ligatures | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags cascadia_nerdfonts` |
+| Google Chrome             | `google_chrome`      | Google Chrome web browser (stable 64-bit .deb)            | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags google_chrome`      |
+| VSCode                    | `vscode`             | Visual Studio Code editor                                 | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags vscode`             |
+| Kiro IDE (AWS)            | `kiro`               | Kiro AI development environment                           | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags kiro`               |
+| Obsidian                  | `obsidian`           | Markdown knowledge base and note-taking app (Snap)        | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags obsidian`           |
+| Insync                    | `insync`             | Google Drive and OneDrive sync client                     | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags insync`             |
+| 1Password Desktop         | `onepassword`        | 1Password desktop GUI application                         | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags onepassword`        |
+| LNXlink                   | `lnxlink`            | Linux-to-Home Assistant MQTT bridge                       | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags lnxlink`            |
+| WezTerm                   | `wezterm`            | GPU-accelerated terminal emulator and multiplexer         | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags wezterm`            |
+| Todoist                   | `todoist`            | Task manager and to-do list (Snap)                        | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags todoist`            |
+| Remmina                   | `remmina`            | Remote desktop client (RDP, VNC, SSH)                     | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags remmina`            |
+| Flameshot                 | `flameshot`          | Screen capture and annotation tool                        | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags flameshot`          |
+| Antigravity Desktop (2.0) | `antigravity`        | Google Antigravity 2.0 desktop application                | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags antigravity`        |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/desktop.yaml`
 
@@ -138,22 +110,22 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 
 **Playbook:** `playbooks/ubuntu/cli.yaml`
 
-| Application/Tool                  | Tag                  | Command                                                                |
-| --------------------------------- | -------------------- | ---------------------------------------------------------------------- |
-| Node Version Manager (NVM)        | `nvm`                | `ansible-playbook playbooks/ubuntu/cli.yaml --tags nvm`                |
-| uv (Python package installer)     | `uv`                 | `ansible-playbook playbooks/ubuntu/cli.yaml --tags uv`                 |
-| Github CLI                        | `github_cli`         | `ansible-playbook playbooks/ubuntu/cli.yaml --tags github_cli`         |
-| GitHub Copilot CLI                | `copilot_cli`        | `ansible-playbook playbooks/ubuntu/cli.yaml --tags copilot_cli`        |
-| Kiro CLI                          | `kiro_cli`           | `ansible-playbook playbooks/ubuntu/cli.yaml --tags kiro_cli`           |
-| OpenCode CLI                      | `opencode_cli`       | `ansible-playbook playbooks/ubuntu/cli.yaml --tags opencode_cli`       |
-| GitHub Spec-Kit                   | `speckit`            | `ansible-playbook playbooks/ubuntu/cli.yaml --tags speckit`            |
-| Dev Container CLI                 | `devcontainer_cli`   | `ansible-playbook playbooks/ubuntu/cli.yaml --tags devcontainer_cli`   |
-| 1Password CLI                     | `onepassword_cli`    | `ansible-playbook playbooks/ubuntu/cli.yaml --tags onepassword_cli`    |
-| Antigravity CLI                   | `antigravity_cli`    | `ansible-playbook playbooks/ubuntu/cli.yaml --tags antigravity_cli`    |
-| Antigravity Remote Control Daemon | `antigravity_remote` | `ansible-playbook playbooks/ubuntu/cli.yaml --tags antigravity_remote` |
-| Go                                | `go`                 | `ansible-playbook playbooks/ubuntu/cli.yaml --tags go`                 |
-| K9s                               | `k9s`                | `ansible-playbook playbooks/ubuntu/cli.yaml --tags k9s`                |
-| Glow                              | `glow`               | `ansible-playbook playbooks/ubuntu/cli.yaml --tags glow`               |
+| Application / Tool                | Tag                  | Description                                          | Command                                                                |
+| --------------------------------- | -------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------- |
+| Node Version Manager (NVM)        | `nvm`                | Node version manager with latest Node.js LTS         | `ansible-playbook playbooks/ubuntu/cli.yaml --tags nvm`                |
+| uv                                | `uv`                 | Fast Python package and project manager              | `ansible-playbook playbooks/ubuntu/cli.yaml --tags uv`                 |
+| GitHub CLI                        | `github_cli`         | Official GitHub command-line tool (`gh`)             | `ansible-playbook playbooks/ubuntu/cli.yaml --tags github_cli`         |
+| GitHub Copilot CLI                | `copilot_cli`        | GitHub Copilot command-line interface                | `ansible-playbook playbooks/ubuntu/cli.yaml --tags copilot_cli`        |
+| Kiro CLI                          | `kiro_cli`           | Kiro AI developer CLI tool                           | `ansible-playbook playbooks/ubuntu/cli.yaml --tags kiro_cli`           |
+| OpenCode CLI                      | `opencode_cli`       | OpenCode AI coding agent CLI                         | `ansible-playbook playbooks/ubuntu/cli.yaml --tags opencode_cli`       |
+| GitHub Spec-Kit                   | `speckit`            | Specification-driven development toolkit (`specify`) | `ansible-playbook playbooks/ubuntu/cli.yaml --tags speckit`            |
+| Dev Container CLI                 | `devcontainer_cli`   | Development Containers reference CLI tool            | `ansible-playbook playbooks/ubuntu/cli.yaml --tags devcontainer_cli`   |
+| 1Password CLI                     | `onepassword_cli`    | Official 1Password command-line tool (`op`)          | `ansible-playbook playbooks/ubuntu/cli.yaml --tags onepassword_cli`    |
+| Antigravity CLI                   | `antigravity_cli`    | Google Antigravity CLI tool (`agy`)                  | `ansible-playbook playbooks/ubuntu/cli.yaml --tags antigravity_cli`    |
+| Antigravity Remote Control Daemon | `antigravity_remote` | Remote control systemd user daemon for AGY           | `ansible-playbook playbooks/ubuntu/cli.yaml --tags antigravity_remote` |
+| Go                                | `go`                 | The Go programming language compiler & toolchain     | `ansible-playbook playbooks/ubuntu/cli.yaml --tags go`                 |
+| K9s                               | `k9s`                | Terminal-based UI for Kubernetes clusters            | `ansible-playbook playbooks/ubuntu/cli.yaml --tags k9s`                |
+| Glow                              | `glow`               | Terminal markdown renderer from Charm                | `ansible-playbook playbooks/ubuntu/cli.yaml --tags glow`               |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/cli.yaml`
 
@@ -163,12 +135,12 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 
 **Playbook:** `playbooks/ubuntu/devops-tools.yaml`
 
-| Application/Tool | Tag          | Command                                                                 |
-| ---------------- | ------------ | ----------------------------------------------------------------------- |
-| Terraform        | `terraform`  | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags terraform`  |
-| AWS CLI          | `aws_cli`    | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags aws_cli`    |
-| Azure CLI        | `azure_cli`  | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags azure_cli`  |
-| Google Cloud CLI | `gcloud_cli` | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags gcloud_cli` |
+| Application / Tool | Tag          | Description                                | Command                                                                 |
+| ------------------ | ------------ | ------------------------------------------ | ----------------------------------------------------------------------- |
+| Terraform          | `terraform`  | HashiCorp Infrastructure as Code CLI       | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags terraform`  |
+| AWS CLI            | `aws_cli`    | Official Amazon Web Services CLI v2        | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags aws_cli`    |
+| Azure CLI          | `azure_cli`  | Official Microsoft Azure CLI (`az`)        | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags azure_cli`  |
+| Google Cloud CLI   | `gcloud_cli` | Official Google Cloud SDK & CLI (`gcloud`) | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags gcloud_cli` |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/devops-tools.yaml`
 
@@ -178,11 +150,11 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 
 **Playbook:** `playbooks/ubuntu/shell.yaml`
 
-| Application/Tool | Tag        | Command                                                        |
-| ---------------- | ---------- | -------------------------------------------------------------- |
-| Z Shell (zsh)    | `zsh`      | `ansible-playbook playbooks/ubuntu/shell.yaml --tags zsh`      |
-| Oh-My-Zsh        | `ohmyzsh`  | `ansible-playbook playbooks/ubuntu/shell.yaml --tags ohmyzsh`  |
-| Starship prompt  | `starship` | `ansible-playbook playbooks/ubuntu/shell.yaml --tags starship` |
+| Application / Tool | Tag        | Description                                                      | Command                                                        |
+| ------------------ | ---------- | ---------------------------------------------------------------- | -------------------------------------------------------------- |
+| Z Shell (zsh)      | `zsh`      | Zsh package configured as default user shell                     | `ansible-playbook playbooks/ubuntu/shell.yaml --tags zsh`      |
+| Oh-My-Zsh          | `ohmyzsh`  | Oh-My-Zsh framework with autosuggestions and syntax highlighting | `ansible-playbook playbooks/ubuntu/shell.yaml --tags ohmyzsh`  |
+| Starship prompt    | `starship` | Fast, customizable cross-shell prompt                            | `ansible-playbook playbooks/ubuntu/shell.yaml --tags starship` |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/shell.yaml`
 
@@ -192,23 +164,27 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 
 #### Lid Closing
 
-This playbook configure the laptop to ignore the lid closing event.
+This playbook configures the laptop to ignore the lid closing event.
 
 **Playbook:** `playbooks/ubuntu/custom/lid-closing.yaml`
 
-| Action             | Command                                                     |
-| ------------------ | ----------------------------------------------------------- |
-| Ignore Lid Closing | `ansible-playbook playbooks/ubuntu/custom/lid-closing.yaml` |
+| Application / Tool | Tag           | Description                                                   | Command                                                                        |
+| ------------------ | ------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Ignore Lid Closing | `lid_closing` | Configures systemd logind to ignore laptop lid closing events | `ansible-playbook playbooks/ubuntu/custom/lid-closing.yaml --tags lid_closing` |
 
-#### Realtek RTS5129/RTS5139 USB MMC Reader driver
+**Install all:** `ansible-playbook playbooks/ubuntu/custom/lid-closing.yaml`
+
+#### Realtek RTS5129/RTS5139 USB MMC Reader Driver
 
 This playbook installs and configures the Realtek RTS5129/RTS5139 USB MMC Reader driver.
 
 **Playbook:** `playbooks/ubuntu/custom/rts5139-usbnet.yaml`
 
-| Action         | Command                                                        |
-| -------------- | -------------------------------------------------------------- |
-| Install Driver | `ansible-playbook playbooks/ubuntu/custom/rts5139-usbnet.yaml` |
+| Application / Tool     | Tag       | Description                                                               | Command                                                                       |
+| ---------------------- | --------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Realtek RTS5139 Driver | `rts5139` | Compiles RTS5139 kernel module and blacklists conflicting default modules | `ansible-playbook playbooks/ubuntu/custom/rts5139-usbnet.yaml --tags rts5139` |
+
+**Install all:** `ansible-playbook playbooks/ubuntu/custom/rts5139-usbnet.yaml`
 
 #### GPU Setup (Hybrid Intel iGPU + NVIDIA dGPU)
 
@@ -216,13 +192,13 @@ This playbook configures the Intel UHD 630 iGPU (VA-API/QuickSync) and NVIDIA GT
 
 **Playbook:** `playbooks/ubuntu/custom/gpu-setup.yaml`
 
-| Application/Tool                  | Tag              | Command                                                                         |
-| --------------------------------- | ---------------- | ------------------------------------------------------------------------------- |
-| Intel iGPU Tools & VA-API         | `igpu`           | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags igpu`           |
-| GRUB IOMMU Configuration          | `grub_iommu`     | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags grub_iommu`     |
-| NVIDIA Driver & Persistence       | `nvidia_driver`  | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags nvidia_driver`  |
-| NVIDIA Container Toolkit (Docker) | `docker_toolkit` | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags docker_toolkit` |
-| KVM, Libvirt, VFIO & swtpm        | `kvm_vfio`       | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags kvm_vfio`       |
-| Dynamic GPU Switcher & Hooks      | `gpu_switch`     | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags gpu_switch`     |
+| Application / Tool                | Tag              | Description                                                            | Command                                                                         |
+| --------------------------------- | ---------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Intel iGPU Tools & VA-API         | `igpu`           | Intel media drivers, VA-API, and GPU monitoring utilities              | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags igpu`           |
+| GRUB IOMMU Configuration          | `grub_iommu`     | Configures GRUB with `intel_iommu=on`, `iommu=pt`, and KVM MSR ignores | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags grub_iommu`     |
+| NVIDIA Driver & Persistence       | `nvidia_driver`  | Proprietary NVIDIA drivers and `nvidia-persistenced` service           | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags nvidia_driver`  |
+| NVIDIA Container Toolkit (Docker) | `docker_toolkit` | Configures NVIDIA Container Toolkit runtime for Docker / Ollama        | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags docker_toolkit` |
+| KVM, Libvirt, VFIO & swtpm        | `kvm_vfio`       | Virtualization packages, swtpm TPM emulator, and VFIO boot modules     | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags kvm_vfio`       |
+| Dynamic GPU Switcher & Hooks      | `gpu_switch`     | Installs `gpu-mode` CLI and libvirt QEMU lifecycle hooks               | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags gpu_switch`     |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml`
