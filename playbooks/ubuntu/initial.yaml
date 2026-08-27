@@ -3,8 +3,8 @@
 # This playbook installs and configures the initial setup for any Ubuntu machine.
 #
 - name: Install and configure initial setup
-  hosts: all
-  gather_facts: no
+  hosts: linux
+  gather_facts: yes
   become: yes
 
   vars:
@@ -130,4 +130,5 @@
       copy:
         content: ""
         dest: "~/.hushlogin"
+        mode: '0644'
       become: no

@@ -3,11 +3,11 @@
 # This playbook installs and configures shell customizations for Ubuntu.
 #
 - name: Install and configure shell customizations
-  hosts: all
-  gather_facts: no
+  hosts: linux
+  gather_facts: yes
   become: yes
   tasks:
-    - name: Installing and set Z Shell (zsh) as default shell
+    - name: Install and set Z Shell (zsh) as default shell
       block:
         - name: Install zsh
           apt:
@@ -21,7 +21,7 @@
             shell: /bin/zsh
       tags: zsh
 
-    - name: Installing and configure Oh-My-Zsh
+    - name: Install and configure Oh-My-Zsh
       block:
         - name: Check if Oh-My-Zsh is installed
           stat:
@@ -29,7 +29,7 @@
           register: ohmyzsh_installed
           become: no
 
-        - name: Installing Oh-My-Zsh
+        - name: Install Oh-My-Zsh
           shell: RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
           when: not ohmyzsh_installed.stat.exists
           become: no
@@ -42,7 +42,7 @@
               register: zsh_autosuggestions_installed
               become: no
 
-            - name: Installing zsh-autosuggestions plugin
+            - name: Install zsh-autosuggestions plugin
               git:
                 repo: https://github.com/zsh-users/zsh-autosuggestions
                 dest: "~/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
@@ -56,7 +56,7 @@
               register: zsh_syntax_highlighting_installed
               become: no
 
-            - name: Installing zsh-syntax-highlighting plugin
+            - name: Install zsh-syntax-highlighting plugin
               git:
                 repo: https://github.com/zsh-users/zsh-syntax-highlighting
                 dest: "~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
@@ -65,7 +65,7 @@
               become: no
       tags: ohmyzsh
 
-    - name: Installing and configure Starship prompt
+    - name: Install and configure Starship prompt
       block:
         - name: Check if Starship prompt is installed
           stat:
