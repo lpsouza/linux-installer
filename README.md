@@ -138,22 +138,22 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 
 **Playbook:** `playbooks/ubuntu/cli.yaml`
 
-| Application/Tool              | Tag                | Command                                                                  |
-| ----------------------------- | ------------------ | ------------------------------------------------------------------------ |
-| Node Version Manager (NVM)    | `nvm`              | `ansible-playbook playbooks/ubuntu/cli.yaml --tags nvm`                  |
-| uv (Python package installer) | `uv`               | `ansible-playbook playbooks/ubuntu/cli.yaml --tags uv`                   |
-| Github CLI                    | `github_cli`       | `ansible-playbook playbooks/ubuntu/cli.yaml --tags github_cli`           |
-| GitHub Copilot CLI            | `copilot_cli`      | `ansible-playbook playbooks/ubuntu/cli.yaml --tags copilot_cli`          |
-| Kiro CLI                      | `kiro_cli`         | `ansible-playbook playbooks/ubuntu/cli.yaml --tags kiro_cli`             |
-| OpenCode CLI                  | `opencode_cli`     | `ansible-playbook playbooks/ubuntu/cli.yaml --tags opencode_cli`         |
-| GitHub Spec-Kit               | `speckit`          | `ansible-playbook playbooks/ubuntu/cli.yaml --tags speckit`              |
-| Dev Container CLI             | `devcontainer_cli` | `ansible-playbook playbooks/ubuntu/cli.yaml --tags devcontainer_cli`     |
-| 1Password CLI                 | `onepassword_cli`  | `ansible-playbook playbooks/ubuntu/cli.yaml --tags onepassword_cli`      |
-| Antigravity CLI                   | `antigravity_cli`    | `ansible-playbook playbooks/ubuntu/cli.yaml --tags antigravity_cli`        |
-| Antigravity Remote Control Daemon | `antigravity_remote` | `ansible-playbook playbooks/ubuntu/cli.yaml --tags antigravity_remote`     |
-| Go                            | `go`               | `ansible-playbook playbooks/ubuntu/cli.yaml --tags go`                   |
-| K9s                           | `k9s`              | `ansible-playbook playbooks/ubuntu/cli.yaml --tags k9s`                  |
-| Glow                          | `glow`             | `ansible-playbook playbooks/ubuntu/cli.yaml --tags glow`                 |
+| Application/Tool                  | Tag                  | Command                                                                |
+| --------------------------------- | -------------------- | ---------------------------------------------------------------------- |
+| Node Version Manager (NVM)        | `nvm`                | `ansible-playbook playbooks/ubuntu/cli.yaml --tags nvm`                |
+| uv (Python package installer)     | `uv`                 | `ansible-playbook playbooks/ubuntu/cli.yaml --tags uv`                 |
+| Github CLI                        | `github_cli`         | `ansible-playbook playbooks/ubuntu/cli.yaml --tags github_cli`         |
+| GitHub Copilot CLI                | `copilot_cli`        | `ansible-playbook playbooks/ubuntu/cli.yaml --tags copilot_cli`        |
+| Kiro CLI                          | `kiro_cli`           | `ansible-playbook playbooks/ubuntu/cli.yaml --tags kiro_cli`           |
+| OpenCode CLI                      | `opencode_cli`       | `ansible-playbook playbooks/ubuntu/cli.yaml --tags opencode_cli`       |
+| GitHub Spec-Kit                   | `speckit`            | `ansible-playbook playbooks/ubuntu/cli.yaml --tags speckit`            |
+| Dev Container CLI                 | `devcontainer_cli`   | `ansible-playbook playbooks/ubuntu/cli.yaml --tags devcontainer_cli`   |
+| 1Password CLI                     | `onepassword_cli`    | `ansible-playbook playbooks/ubuntu/cli.yaml --tags onepassword_cli`    |
+| Antigravity CLI                   | `antigravity_cli`    | `ansible-playbook playbooks/ubuntu/cli.yaml --tags antigravity_cli`    |
+| Antigravity Remote Control Daemon | `antigravity_remote` | `ansible-playbook playbooks/ubuntu/cli.yaml --tags antigravity_remote` |
+| Go                                | `go`                 | `ansible-playbook playbooks/ubuntu/cli.yaml --tags go`                 |
+| K9s                               | `k9s`                | `ansible-playbook playbooks/ubuntu/cli.yaml --tags k9s`                |
+| Glow                              | `glow`               | `ansible-playbook playbooks/ubuntu/cli.yaml --tags glow`               |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/cli.yaml`
 
@@ -216,8 +216,8 @@ This playbook configures the Intel UHD 630 iGPU (VA-API/QuickSync) and NVIDIA GT
 
 **Playbook:** `playbooks/ubuntu/custom/gpu-setup.yaml`
 
-| Application/Tool                  | Tag              | Command                                                                 |
-| --------------------------------- | ---------------- | ----------------------------------------------------------------------- |
+| Application/Tool                  | Tag              | Command                                                                         |
+| --------------------------------- | ---------------- | ------------------------------------------------------------------------------- |
 | Intel iGPU Tools & VA-API         | `igpu`           | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags igpu`           |
 | GRUB IOMMU Configuration          | `grub_iommu`     | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags grub_iommu`     |
 | NVIDIA Driver & Persistence       | `nvidia_driver`  | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags nvidia_driver`  |
