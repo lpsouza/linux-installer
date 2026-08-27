@@ -4,7 +4,7 @@
 #
 - name: Install and configure CLI environment
   hosts: linux
-  gather_facts: no
+  gather_facts: yes
   become: yes
 
   tasks:
@@ -110,7 +110,7 @@
           get_url:
             url: https://astral.sh/uv/install.sh
             dest: /tmp/uv-install.sh
-            mode: "0755"
+            mode: '0755'
           become: no
 
         - name: Install uv
@@ -171,7 +171,7 @@
           get_url:
             url: https://downloads.1password.com/linux/keys/1password.asc
             dest: /tmp/1password.asc
-            mode: 0755
+            mode: '0755'
           when: not onepassword_cli_installed.stat.exists
 
         - name: Add 1Password keyring
@@ -244,33 +244,45 @@
 
     - name: Install Go
       block:
-        - name: Check if Go is already installed
-          stat:
-            path: /usr/local/go
-          register: go_installed
+        - name: Check installed Go version
+          command: /usr/local/go/bin/go version
+          register: go_installed_version
+          failed_when: false
+          changed_when: false
 
         - name: Download Go archive
           get_url:
             url: "https://go.dev/dl/go{{ go_version }}.linux-amd64.tar.gz"
             dest: "/tmp/go{{ go_version }}.linux-amd64.tar.gz"
-            mode: "0644"
-          when: not go_installed.stat.exists
+            mode: '0644'
+          when: go_installed_version.rc != 0 or ('go' ~ go_version ~ ' ') not in go_installed_version.stdout
+
+        - name: Remove previous Go installation before upgrade
+          file:
+            path: /usr/local/go
+            state: absent
+          when: go_installed_version.rc == 0 and ('go' ~ go_version ~ ' ') not in go_installed_version.stdout
 
         - name: Extract Go archive
           unarchive:
             src: "/tmp/go{{ go_version }}.linux-amd64.tar.gz"
             dest: /usr/local
             remote_src: yes
-          when: not go_installed.stat.exists
+          when: go_installed_version.rc != 0 or ('go' ~ go_version ~ ' ') not in go_installed_version.stdout
 
         - name: Add Go to system PATH
           copy:
             dest: /etc/profile.d/go.sh
             content: "export PATH=$PATH:/usr/local/go/bin"
-            mode: "0644"
-          when: not go_installed.stat.exists
+            mode: '0644'
+
+        - name: Clean up Go archive
+          file:
+            path: "/tmp/go{{ go_version }}.linux-amd64.tar.gz"
+            state: absent
+          when: go_installed_version.rc != 0 or ('go' ~ go_version ~ ' ') not in go_installed_version.stdout
       vars:
-        go_version: "1.26.3"
+        go_version: "1.24.0"
       tags: go
 
     - name: Install K9s
@@ -292,7 +304,7 @@
           get_url:
             url: "https://github.com/derailed/k9s/releases/latest/download/k9s_linux_{{ dpkg_arch.stdout }}.deb"
             dest: "/tmp/k9s_linux_{{ dpkg_arch.stdout }}.deb"
-            mode: "0644"
+            mode: '0644'
           when: not k9s_installed.stat.exists
 
         - name: Install K9s package
@@ -320,14 +332,14 @@
           file:
             path: /etc/apt/keyrings
             state: directory
-            mode: "0755"
+            mode: '0755'
           when: not glow_installed.stat.exists
 
         - name: Download Charm GPG key
           get_url:
             url: https://repo.charm.sh/apt/gpg.key
             dest: /tmp/charm.gpg.key
-            mode: "0644"
+            mode: '0644'
           when: not glow_installed.stat.exists
 
         - name: Dearmor Charm GPG key

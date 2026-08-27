@@ -4,7 +4,7 @@
 #
 - name: Install DevOps Tools
   hosts: linux
-  gather_facts: no
+  gather_facts: yes
   become: yes
 
   vars:
@@ -13,20 +13,33 @@
   tasks:
     - name: Install Terraform
       block:
+        - name: Check installed Terraform version
+          command: /usr/local/bin/terraform version
+          register: terraform_installed_version
+          failed_when: false
+          changed_when: false
+
         - name: Download Terraform
           get_url:
             url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
             dest: "/tmp/terraform_installer.zip"
-            mode: 0644
+            mode: '0644'
             timeout: 60
+          when: terraform_installed_version.rc != 0 or ('v' ~ terraform_version) not in terraform_installed_version.stdout
 
         - name: Unzip Terraform
           unarchive:
             src: "/tmp/terraform_installer.zip"
             dest: "/usr/local/bin"
             remote_src: yes
-            mode: 0755
-            creates: "/usr/local/bin/terraform"
+            mode: '0755'
+          when: terraform_installed_version.rc != 0 or ('v' ~ terraform_version) not in terraform_installed_version.stdout
+
+        - name: Clean up Terraform installer archive
+          file:
+            path: "/tmp/terraform_installer.zip"
+            state: absent
+          when: terraform_installed_version.rc != 0 or ('v' ~ terraform_version) not in terraform_installed_version.stdout
       tags: terraform
 
     - name: Install AWS CLI
@@ -35,7 +48,7 @@
           get_url:
             url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
             dest: "/tmp/awscliv2.zip"
-            mode: 0644
+            mode: '0644'
             timeout: 60
 
         - name: Unzip AWS CLI
@@ -43,11 +56,11 @@
             src: "/tmp/awscliv2.zip"
             dest: "/tmp"
             remote_src: yes
-            mode: 0755
+            mode: '0755'
             creates: "/tmp/aws"
 
         - name: Install AWS CLI
-          command: "/tmp/aws/install"
+          command: "/tmp/aws/install --update"
       tags: aws_cli
 
     - name: Install Azure CLI
@@ -56,7 +69,7 @@
           get_url:
             url: "https://aka.ms/InstallAzureCLIDeb"
             dest: "/tmp/install_az_cli.sh"
-            mode: 0755
+            mode: '0755'
             timeout: 60
 
         - name: Run Azure CLI installation script
@@ -67,20 +80,37 @@
 
     - name: Install Google Cloud CLI
       block:
-        - name: Add Google Cloud CLI GPG key
-          apt_key:
+        - name: Ensure /etc/apt/keyrings directory exists
+          file:
+            path: /etc/apt/keyrings
+            state: directory
+            mode: '0755'
+
+        - name: Download Google Cloud CLI GPG key
+          get_url:
             url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
-            state: present
+            dest: "/tmp/gcloud.gpg"
+            mode: '0644'
+
+        - name: Dearmor Google Cloud CLI GPG key
+          command: gpg --batch --yes --dearmor --output /etc/apt/keyrings/google-cloud.gpg /tmp/gcloud.gpg
+          changed_when: false
+
+        - name: Clean up temporary Google Cloud GPG key
+          file:
+            path: /tmp/gcloud.gpg
+            state: absent
 
         - name: Add Google Cloud CLI repository
           apt_repository:
-            repo: "deb https://packages.cloud.google.com/apt cloud-sdk main"
+            repo: "deb [signed-by=/etc/apt/keyrings/google-cloud.gpg] https://packages.cloud.google.com/apt cloud-sdk main"
             filename: google-cloud-sdk
             state: present
+            update_cache: true
 
         - name: Install Google Cloud CLI
           apt:
             name: google-cloud-cli
             state: present
-            update_cache: yes
+            update_cache: true
       tags: gcloud_cli
