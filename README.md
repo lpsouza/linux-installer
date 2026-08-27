@@ -199,3 +199,20 @@ This playbook installs and configures the Realtek RTS5129/RTS5139 USB MMC Reader
 | Action         | Command                                                        |
 | -------------- | -------------------------------------------------------------- |
 | Install Driver | `ansible-playbook playbooks/ubuntu/custom/rts5139-usbnet.yaml` |
+
+#### GPU Setup (Hybrid Intel iGPU + NVIDIA dGPU)
+
+This playbook configures the Intel UHD 630 iGPU (VA-API/QuickSync) and NVIDIA GTX 1050 Ti dGPU for dual-mode operation (Host Docker Ollama + Dynamic VFIO KVM/Libvirt VM for Moonlight gaming).
+
+**Playbook:** `playbooks/ubuntu/custom/gpu-setup.yaml`
+
+| Application/Tool                  | Tag              | Command                                                                 |
+| --------------------------------- | ---------------- | ----------------------------------------------------------------------- |
+| Intel iGPU Tools & VA-API         | `igpu`           | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags igpu`           |
+| GRUB IOMMU Configuration          | `grub_iommu`     | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags grub_iommu`     |
+| NVIDIA Driver & Persistence       | `nvidia_driver`  | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags nvidia_driver`  |
+| NVIDIA Container Toolkit (Docker) | `docker_toolkit` | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags docker_toolkit` |
+| KVM, Libvirt, VFIO & swtpm        | `kvm_vfio`       | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags kvm_vfio`       |
+| Dynamic GPU Switcher & Hooks      | `gpu_switch`     | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags gpu_switch`     |
+
+**Install all:** `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml`

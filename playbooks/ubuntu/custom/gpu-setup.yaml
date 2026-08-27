@@ -1,0 +1,368 @@
+---
+#
+# This playbook configures Intel iGPU and NVIDIA dGPU hybrid setup
+# with dynamic VFIO passthrough and Docker GPU toolkit for Ollama and KVM.
+#
+- name: Configure Hybrid Intel iGPU and NVIDIA dGPU setup
+  hosts: linux
+  gather_facts: yes
+  become: yes
+
+  vars:
+    intel_packages:
+      - intel-media-va-driver-non-free
+      - libva-drm2
+      - libva2
+      - vainfo
+      - intel-gpu-tools
+      - mesa-va-drivers
+      - mesa-vulkan-drivers
+
+    kvm_packages:
+      - qemu-system-x86
+      - qemu-utils
+      - libvirt-daemon-system
+      - libvirt-clients
+      - bridge-utils
+      - virt-manager
+      - ovmf
+      - swtpm
+      - swtpm-tools
+
+    nvidia_packages:
+      - nvidia-driver-535
+      - nvidia-utils-535
+
+    gpu_pci_id: "0000:01:00.0"
+    audio_pci_id: "0000:01:00.1"
+
+  tasks:
+    #
+    # APT Repository Setup (NVIDIA Container Toolkit)
+    #
+    - name: Configure NVIDIA Container Toolkit APT repository
+      block:
+        - name: Ensure keyrings directory exists
+          file:
+            path: /usr/share/keyrings
+            state: directory
+            mode: '0755'
+
+        - name: Add NVIDIA Container Toolkit GPG key
+          shell: |
+            curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+          args:
+            creates: /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+
+        - name: Configure NVIDIA Container Toolkit repository
+          copy:
+            dest: /etc/apt/sources.list.d/nvidia-container-toolkit.list
+            mode: '0644'
+            content: |
+              deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://nvidia.github.io/libnvidia-container/stable/deb/$(ARCH) /
+      tags:
+        - always
+
+    #
+    # Intel iGPU & VA-API Configuration
+    #
+    - name: Configure Intel UHD 630 iGPU and VA-API tools
+      block:
+        - name: Install Intel VA-API and GPU monitoring tools
+          apt:
+            name: "{{ intel_packages }}"
+            state: present
+            update_cache: yes
+          ignore_errors: true
+
+        - name: Add user to video and render groups
+          user:
+            name: "{{ ansible_user }}"
+            groups:
+              - video
+              - render
+            append: yes
+      tags:
+        - igpu
+
+    #
+    # GRUB IOMMU Configuration
+    #
+    - name: Configure GRUB for Intel IOMMU and VFIO
+      block:
+        - name: Ensure /etc/default/grub.d directory exists
+          file:
+            path: /etc/default/grub.d
+            state: directory
+            mode: '0755'
+
+        - name: Create GRUB IOMMU configuration drop-in
+          copy:
+            dest: /etc/default/grub.d/gpu-passthrough.cfg
+            mode: '0644'
+            content: |
+              # Enable Intel IOMMU and KVM MSR ignore for GPU passthrough
+              GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT intel_iommu=on iommu=pt kvm.ignore_msrs=1"
+          register: grub_iommu_config
+
+        - name: Update GRUB configuration
+          command: update-grub
+          when: grub_iommu_config.changed
+      tags:
+        - grub_iommu
+        - kvm_vfio
+
+    #
+    # NVIDIA Host Drivers & Power Management
+    #
+    - name: Configure NVIDIA Host Drivers
+      block:
+        - name: Install NVIDIA proprietary drivers
+          apt:
+            name: "{{ nvidia_packages }}"
+            state: present
+            update_cache: yes
+
+        - name: Enable and start nvidia-persistenced service
+          systemd:
+            name: nvidia-persistenced
+            state: started
+            enabled: yes
+          ignore_errors: true
+
+        - name: Configure NVIDIA dynamic power management modprobe options
+          copy:
+            dest: /etc/modprobe.d/nvidia-pm.conf
+            mode: '0644'
+            content: |
+              # NVIDIA dynamic power management for mobile GPUs
+              options nvidia NVreg_DynamicPowerManagement=0x02
+      tags:
+        - nvidia_driver
+
+    #
+    # NVIDIA Container Toolkit Installation & Runtime Setup (Docker / Ollama)
+    #
+    - name: Configure NVIDIA Container Toolkit for Docker
+      block:
+        - name: Install nvidia-container-toolkit
+          apt:
+            name: nvidia-container-toolkit
+            state: present
+            update_cache: yes
+
+        - name: Configure Docker daemon runtime for NVIDIA
+          command: nvidia-ctk runtime configure --runtime=docker
+          register: nvidia_ctk_config
+          changed_when: "'Successfully configured' in nvidia_ctk_config.stdout or nvidia_ctk_config.rc == 0"
+
+        - name: Restart Docker service if active
+          systemd:
+            name: docker
+            state: restarted
+          ignore_errors: true
+      tags:
+        - docker_toolkit
+
+    #
+    # KVM / Libvirt / VFIO Virtualization Stack
+    #
+    - name: Configure KVM, Libvirt, and VFIO
+      block:
+        - name: Install KVM and virtualization packages
+          apt:
+            name: "{{ kvm_packages }}"
+            state: present
+
+        - name: Add user to libvirt and kvm groups
+          user:
+            name: "{{ ansible_user }}"
+            groups:
+              - libvirt
+              - kvm
+            append: yes
+
+        - name: Ensure libvirtd service is enabled and running
+          systemd:
+            name: libvirtd
+            state: started
+            enabled: yes
+
+        - name: Configure VFIO kernel modules to load on boot
+          copy:
+            dest: /etc/modules-load.d/vfio.conf
+            mode: '0644'
+            content: |
+              vfio
+              vfio_iommu_type1
+              vfio_pci
+
+        - name: Configure VFIO modprobe options
+          copy:
+            dest: /etc/modprobe.d/vfio.conf
+            mode: '0644'
+            content: |
+              options vfio_iommu_type1 allow_unsafe_interrupts=1
+      tags:
+        - kvm_vfio
+
+    #
+    # Dynamic GPU Switching CLI & Libvirt Lifecycle Hooks
+    #
+    - name: Configure Dynamic GPU Switching and Libvirt Hooks
+      block:
+        - name: Install gpu-mode CLI management script
+          copy:
+            dest: /usr/local/bin/gpu-mode
+            mode: '0755'
+            content: |
+              #!/usr/bin/env bash
+              set -euo pipefail
+
+              GPU_PCI="{{ gpu_pci_id }}"
+              AUDIO_PCI="{{ audio_pci_id }}"
+              STATE_FILE="/run/gpu-mode-stopped-containers"
+
+              get_driver() {
+                  local pci_id="$1"
+                  local driver_path="/sys/bus/pci/devices/${pci_id}/driver"
+                  if [ -d "$driver_path" ]; then
+                      basename "$(readlink -f "$driver_path")"
+                  else
+                      echo "none"
+                  fi
+              }
+
+              cmd_status() {
+                  echo "=== GPU Mode Status ==="
+                  echo "Host iGPU (0000:00:02.0): $(get_driver 0000:00:02.0)"
+                  echo "dGPU      (${GPU_PCI}): $(get_driver "${GPU_PCI}")"
+                  echo "dGPU Audio (${AUDIO_PCI}): $(get_driver "${AUDIO_PCI}")"
+                  echo ""
+                  echo "=== Docker GPU Containers ==="
+                  if command -v docker >/dev/null 2>&1 && systemctl is-active --quiet docker; then
+                      docker ps --filter "name=ollama"
+                  else
+                      echo "Docker is not running."
+                  fi
+              }
+
+              cmd_to_vm() {
+                  echo "[gpu-mode] Switching NVIDIA dGPU to VM mode (VFIO)..."
+
+                  # 1. Stop GPU containers (like Ollama)
+                  if command -v docker >/dev/null 2>&1 && systemctl is-active --quiet docker; then
+                      local running_gpu_containers
+                      running_gpu_containers=$(docker ps -q --filter "name=ollama" 2>/dev/null || true)
+                      if [ -n "$running_gpu_containers" ]; then
+                          echo "$running_gpu_containers" > "$STATE_FILE"
+                          echo "[gpu-mode] Stopping GPU container(s)..."
+                          docker stop $running_gpu_containers || true
+                      fi
+                  fi
+
+                  # 2. Stop nvidia-persistenced if running
+                  systemctl stop nvidia-persistenced 2>/dev/null || true
+
+                  # 3. Unbind from host drivers
+                  if [ -e "/sys/bus/pci/devices/${GPU_PCI}/driver/unbind" ]; then
+                      echo "$GPU_PCI" > "/sys/bus/pci/devices/${GPU_PCI}/driver/unbind" 2>/dev/null || true
+                  fi
+                  if [ -e "/sys/bus/pci/devices/${AUDIO_PCI}/driver/unbind" ]; then
+                      echo "$AUDIO_PCI" > "/sys/bus/pci/devices/${AUDIO_PCI}/driver/unbind" 2>/dev/null || true
+                  fi
+
+                  # 4. Load VFIO module
+                  modprobe vfio-pci || true
+
+                  # 5. Set driver override and probe
+                  echo "vfio-pci" > "/sys/bus/pci/devices/${GPU_PCI}/driver_override"
+                  echo "$GPU_PCI" > /sys/bus/pci/drivers_probe 2>/dev/null || true
+
+                  echo "vfio-pci" > "/sys/bus/pci/devices/${AUDIO_PCI}/driver_override"
+                  echo "$AUDIO_PCI" > /sys/bus/pci/drivers_probe 2>/dev/null || true
+
+                  echo "[gpu-mode] NVIDIA dGPU successfully bound to vfio-pci."
+              }
+
+              cmd_to_host() {
+                  echo "[gpu-mode] Switching NVIDIA dGPU to Host mode (NVIDIA driver)..."
+
+                  # 1. Unbind from vfio-pci
+                  if [ -e "/sys/bus/pci/devices/${GPU_PCI}/driver/unbind" ]; then
+                      echo "$GPU_PCI" > "/sys/bus/pci/devices/${GPU_PCI}/driver/unbind" 2>/dev/null || true
+                  fi
+                  if [ -e "/sys/bus/pci/devices/${AUDIO_PCI}/driver/unbind" ]; then
+                      echo "$AUDIO_PCI" > "/sys/bus/pci/devices/${AUDIO_PCI}/driver/unbind" 2>/dev/null || true
+                  fi
+
+                  # 2. Clear driver override
+                  echo "" > "/sys/bus/pci/devices/${GPU_PCI}/driver_override" 2>/dev/null || true
+                  echo "" > "/sys/bus/pci/devices/${AUDIO_PCI}/driver_override" 2>/dev/null || true
+
+                  # 3. Probe default host drivers
+                  echo "$GPU_PCI" > /sys/bus/pci/drivers_probe 2>/dev/null || true
+                  echo "$AUDIO_PCI" > /sys/bus/pci/drivers_probe 2>/dev/null || true
+
+                  # 4. Restart persistence daemon
+                  systemctl start nvidia-persistenced 2>/dev/null || true
+
+                  # 5. Restart previously stopped Docker containers
+                  if [ -f "$STATE_FILE" ]; then
+                      local saved_containers
+                      saved_containers=$(cat "$STATE_FILE")
+                      if [ -n "$saved_containers" ] && command -v docker >/dev/null 2>&1; then
+                          echo "[gpu-mode] Resuming Docker container(s): $saved_containers"
+                          docker start $saved_containers || true
+                      fi
+                      rm -f "$STATE_FILE"
+                  fi
+
+                  echo "[gpu-mode] NVIDIA dGPU successfully bound to host driver."
+              }
+
+              case "${1:-status}" in
+                  status)
+                      cmd_status
+                      ;;
+                  to-vm)
+                      cmd_to_vm
+                      ;;
+                  to-host)
+                      cmd_to_host
+                      ;;
+                  *)
+                      echo "Usage: $0 {status|to-vm|to-host}"
+                      exit 1
+                      ;;
+              esac
+
+        - name: Ensure libvirt hooks directory exists
+          file:
+            path: /etc/libvirt/hooks
+            state: directory
+            mode: '0755'
+
+        - name: Install Libvirt QEMU lifecycle hook for dynamic GPU switching
+          copy:
+            dest: /etc/libvirt/hooks/qemu
+            mode: '0755'
+            content: |
+              #!/usr/bin/env bash
+              #
+              # Libvirt QEMU Hook for Dynamic GPU Passthrough
+              # Called automatically on VM lifecycle events
+              #
+              OBJECT="$1"
+              OPERATION="$2"
+              SUB_OPERATION="$3"
+
+              # Only trigger for VMs configured for passthrough
+              if [ "$OPERATION" == "prepare" ] && [ "$SUB_OPERATION" == "begin" ]; then
+                  /usr/local/bin/gpu-mode to-vm
+              elif [ "$OPERATION" == "release" ] && [ "$SUB_OPERATION" == "end" ]; then
+                  /usr/local/bin/gpu-mode to-host
+              fi
+      tags:
+        - gpu_switch
+        - hooks
