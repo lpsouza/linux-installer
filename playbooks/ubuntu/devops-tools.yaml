@@ -114,3 +114,42 @@
             state: present
             update_cache: true
       tags: gcloud_cli
+
+    - name: Install eksctl
+      block:
+        - name: Check if eksctl is already installed
+          stat:
+            path: "/usr/local/bin/eksctl"
+          register: eksctl_installed
+          become: no
+
+        - name: Get dpkg architecture
+          command: "dpkg --print-architecture"
+          register: dpkg_arch
+          changed_when: false
+          failed_when: false
+          when: not eksctl_installed.stat.exists
+
+        - name: Download eksctl
+          get_url:
+            url: "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_Linux_{{ dpkg_arch.stdout }}.tar.gz"
+            dest: "/tmp/eksctl_Linux_{{ dpkg_arch.stdout }}.tar.gz"
+            mode: '0644'
+            timeout: 60
+          when: not eksctl_installed.stat.exists
+
+        - name: Extract eksctl
+          unarchive:
+            src: "/tmp/eksctl_Linux_{{ dpkg_arch.stdout }}.tar.gz"
+            dest: "/usr/local/bin"
+            remote_src: yes
+            mode: '0755'
+          when: not eksctl_installed.stat.exists
+
+        - name: Clean up eksctl archive
+          file:
+            path: "/tmp/eksctl_Linux_{{ dpkg_arch.stdout }}.tar.gz"
+            state: absent
+          when: not eksctl_installed.stat.exists
+      tags: eksctl
+

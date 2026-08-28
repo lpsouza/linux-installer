@@ -141,6 +141,7 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 | AWS CLI            | `aws_cli`    | Official Amazon Web Services CLI v2        | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags aws_cli`    |
 | Azure CLI          | `azure_cli`  | Official Microsoft Azure CLI (`az`)        | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags azure_cli`  |
 | Google Cloud CLI   | `gcloud_cli` | Official Google Cloud SDK & CLI (`gcloud`) | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags gcloud_cli` |
+| eksctl             | `eksctl`     | Official CLI for Amazon EKS                | `ansible-playbook playbooks/ubuntu/devops-tools.yaml --tags eksctl`     |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/devops-tools.yaml`
 
