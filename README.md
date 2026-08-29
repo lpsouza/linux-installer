@@ -203,3 +203,15 @@ This playbook configures the Intel UHD 630 iGPU (VA-API/QuickSync) and NVIDIA GT
 | Dynamic GPU Switcher & Hooks      | `gpu_switch`     | Installs `gpu-mode` CLI and libvirt QEMU lifecycle hooks               | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags gpu_switch`     |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml`
+
+#### Force Gigabit Ethernet
+
+This playbook forces the Ethernet network interface to advertise exclusively Gigabit Ethernet (1000Mbps Full Duplex) and configures a systemd service to persist the setting across reboots.
+
+**Playbook:** `playbooks/ubuntu/custom/force-gigabit.yaml`
+
+| Application / Tool     | Tag             | Description                                                                                 | Command                                                                          |
+| ---------------------- | --------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Force Gigabit Ethernet | `force_gigabit` | Configures ethtool speed advertisement and enables persistent systemd `force-gigabit` unit | `ansible-playbook playbooks/ubuntu/custom/force-gigabit.yaml --tags force_gigabit` |
+
+**Install all:** `ansible-playbook playbooks/ubuntu/custom/force-gigabit.yaml`

@@ -1,0 +1,58 @@
+---
+#
+# This playbook forces the network interface to advertise exclusively Gigabit Ethernet (1000Mbps Full Duplex)
+# and creates a persistent systemd service at boot time.
+#
+- name: Force Gigabit Ethernet speed advertisement
+  hosts: linux
+  gather_facts: yes
+  become: yes
+
+  vars:
+    network_interface: "enp60s0"
+    ethtool_advertise_hex: "0x020"  # 1000baseT/Full (1 Gbps Full Duplex)
+
+  tasks:
+    - name: Configure Gigabit Ethernet persistence
+      block:
+        - name: Ensure ethtool package is installed
+          apt:
+            name: ethtool
+            state: present
+            update_cache: yes
+
+        - name: Create systemd service for forcing Gigabit Ethernet
+          copy:
+            dest: /etc/systemd/system/force-gigabit.service
+            mode: '0644'
+            content: |
+              [Unit]
+              Description=Force Gigabit Ethernet on {{ network_interface }}
+              After=network.target
+
+              [Service]
+              Type=oneshot
+              ExecStart=/usr/sbin/ethtool -s {{ network_interface }} advertise {{ ethtool_advertise_hex }}
+              RemainAfterExit=yes
+
+              [Install]
+              WantedBy=multi-user.target
+
+        - name: Reload systemd daemon, enable and start force-gigabit service
+          systemd:
+            name: force-gigabit.service
+            daemon_reload: yes
+            enabled: yes
+            state: started
+
+        - name: Check interface speed and advertisement
+          command: "ethtool {{ network_interface }}"
+          register: ethtool_status
+          changed_when: false
+
+        - name: Display ethtool status
+          debug:
+            var: ethtool_status.stdout_lines
+      tags:
+        - force_gigabit
+        - gigabit
