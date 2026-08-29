@@ -9,6 +9,8 @@
 
   vars:
     terraform_version: "1.7.3"
+    arch_suffix: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+    arch_aws: "{{ 'aarch64' if ansible_architecture == 'aarch64' else 'x86_64' }}"
 
   tasks:
     - name: Install Terraform
@@ -21,7 +23,7 @@
 
         - name: Download Terraform
           get_url:
-            url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
+            url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_{{ arch_suffix }}.zip"
             dest: "/tmp/terraform_installer.zip"
             mode: '0644'
             timeout: 60
@@ -46,7 +48,7 @@
       block:
         - name: Download AWS CLI
           get_url:
-            url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+            url: "https://awscli.amazonaws.com/awscli-exe-linux-{{ arch_aws }}.zip"
             dest: "/tmp/awscliv2.zip"
             mode: '0644'
             timeout: 60
@@ -123,24 +125,17 @@
           register: eksctl_installed
           become: no
 
-        - name: Get dpkg architecture
-          command: "dpkg --print-architecture"
-          register: dpkg_arch
-          changed_when: false
-          failed_when: false
-          when: not eksctl_installed.stat.exists
-
         - name: Download eksctl
           get_url:
-            url: "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_Linux_{{ dpkg_arch.stdout }}.tar.gz"
-            dest: "/tmp/eksctl_Linux_{{ dpkg_arch.stdout }}.tar.gz"
+            url: "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_Linux_{{ arch_suffix }}.tar.gz"
+            dest: "/tmp/eksctl_Linux_{{ arch_suffix }}.tar.gz"
             mode: '0644'
             timeout: 60
           when: not eksctl_installed.stat.exists
 
         - name: Extract eksctl
           unarchive:
-            src: "/tmp/eksctl_Linux_{{ dpkg_arch.stdout }}.tar.gz"
+            src: "/tmp/eksctl_Linux_{{ arch_suffix }}.tar.gz"
             dest: "/usr/local/bin"
             remote_src: yes
             mode: '0755'
@@ -148,7 +143,7 @@
 
         - name: Clean up eksctl archive
           file:
-            path: "/tmp/eksctl_Linux_{{ dpkg_arch.stdout }}.tar.gz"
+            path: "/tmp/eksctl_Linux_{{ arch_suffix }}.tar.gz"
             state: absent
           when: not eksctl_installed.stat.exists
       tags: eksctl

@@ -7,6 +7,9 @@
   gather_facts: yes
   become: yes
 
+  vars:
+    arch_suffix: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+
   tasks:
     - name: Install Github CLI
       block:
@@ -179,16 +182,9 @@
           changed_when: false
           when: not onepassword_cli_installed.stat.exists
 
-        - name: Get dpkg architecture
-          command: "dpkg --print-architecture"
-          register: dpkg_arch
-          changed_when: false
-          failed_when: false
-          when: not onepassword_cli_installed.stat.exists
-
         - name: Add 1Password repository
           apt_repository:
-            repo: "deb [arch={{ dpkg_arch.stdout }} signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/{{ dpkg_arch.stdout }} stable main"
+            repo: "deb [arch={{ arch_suffix }} signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/{{ arch_suffix }} stable main"
             state: present
             filename: 1password
           when: not onepassword_cli_installed.stat.exists
@@ -252,8 +248,8 @@
 
         - name: Download Go archive
           get_url:
-            url: "https://go.dev/dl/go{{ go_version }}.linux-amd64.tar.gz"
-            dest: "/tmp/go{{ go_version }}.linux-amd64.tar.gz"
+            url: "https://go.dev/dl/go{{ go_version }}.linux-{{ arch_suffix }}.tar.gz"
+            dest: "/tmp/go{{ go_version }}.linux-{{ arch_suffix }}.tar.gz"
             mode: '0644'
           when: go_installed_version.rc != 0 or ('go' ~ go_version ~ ' ') not in go_installed_version.stdout
 
@@ -265,7 +261,7 @@
 
         - name: Extract Go archive
           unarchive:
-            src: "/tmp/go{{ go_version }}.linux-amd64.tar.gz"
+            src: "/tmp/go{{ go_version }}.linux-{{ arch_suffix }}.tar.gz"
             dest: /usr/local
             remote_src: yes
           when: go_installed_version.rc != 0 or ('go' ~ go_version ~ ' ') not in go_installed_version.stdout
@@ -278,7 +274,7 @@
 
         - name: Clean up Go archive
           file:
-            path: "/tmp/go{{ go_version }}.linux-amd64.tar.gz"
+            path: "/tmp/go{{ go_version }}.linux-{{ arch_suffix }}.tar.gz"
             state: absent
           when: go_installed_version.rc != 0 or ('go' ~ go_version ~ ' ') not in go_installed_version.stdout
       vars:
@@ -293,29 +289,22 @@
           register: k9s_installed
           become: no
 
-        - name: Get dpkg architecture
-          command: "dpkg --print-architecture"
-          register: dpkg_arch
-          changed_when: false
-          failed_when: false
-          when: not k9s_installed.stat.exists
-
         - name: Download K9s deb package
           get_url:
-            url: "https://github.com/derailed/k9s/releases/latest/download/k9s_linux_{{ dpkg_arch.stdout }}.deb"
-            dest: "/tmp/k9s_linux_{{ dpkg_arch.stdout }}.deb"
+            url: "https://github.com/derailed/k9s/releases/latest/download/k9s_linux_{{ arch_suffix }}.deb"
+            dest: "/tmp/k9s_linux_{{ arch_suffix }}.deb"
             mode: '0644'
           when: not k9s_installed.stat.exists
 
         - name: Install K9s package
           apt:
-            deb: "/tmp/k9s_linux_{{ dpkg_arch.stdout }}.deb"
+            deb: "/tmp/k9s_linux_{{ arch_suffix }}.deb"
             state: present
           when: not k9s_installed.stat.exists
 
         - name: Clean up K9s deb package
           file:
-            path: "/tmp/k9s_linux_{{ dpkg_arch.stdout }}.deb"
+            path: "/tmp/k9s_linux_{{ arch_suffix }}.deb"
             state: absent
           when: not k9s_installed.stat.exists
       tags: k9s

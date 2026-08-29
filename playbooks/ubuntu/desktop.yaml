@@ -7,6 +7,10 @@
   gather_facts: yes
   become: yes
 
+  vars:
+    arch_suffix: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+    arch_vscode: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'x64' }}"
+
   tasks:
     - name: Install CascadiaCode NerdFonts
       block:
@@ -63,6 +67,7 @@
             deb: "/tmp/google-chrome-stable_current_amd64.deb"
             state: present
           when: not google_chrome_installed.stat.exists
+      when: ansible_architecture == 'x86_64'
       tags: google_chrome
 
     - name: Install vscode
@@ -75,7 +80,7 @@
 
         - name: Download vscode
           get_url:
-            url: "https://go.microsoft.com/fwlink/?LinkID=760868"
+            url: "https://update.code.visualstudio.com/latest/linux-deb-{{ arch_vscode }}/stable"
             dest: "/tmp/vscode.deb"
             mode: '0644'
           become: no
@@ -175,6 +180,7 @@
             state: present
             update_cache: true
           when: not insync_installed.stat.exists
+      when: ansible_architecture == 'x86_64'
       tags: insync
 
     - name: Install 1password Desktop
@@ -197,16 +203,9 @@
           changed_when: false
           when: not onepassword_installed.stat.exists
 
-        - name: Get dpkg architecture
-          command: "dpkg --print-architecture"
-          register: dpkg_arch
-          changed_when: false
-          failed_when: false
-          when: not onepassword_installed.stat.exists
-
         - name: Add 1Password repository
           apt_repository:
-            repo: "deb [arch={{ dpkg_arch.stdout }} signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/{{ dpkg_arch.stdout }} stable main"
+            repo: "deb [arch={{ arch_suffix }} signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/{{ arch_suffix }} stable main"
             state: present
             filename: 1password
           when: not onepassword_installed.stat.exists
@@ -429,4 +428,5 @@
             path: "/tmp/antigravity-desktop.tar.gz"
             state: absent
           when: not antigravity_desktop_installed.stat.exists
+      when: ansible_architecture == 'x86_64'
       tags: antigravity

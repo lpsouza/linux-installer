@@ -37,6 +37,13 @@
     audio_pci_id: "0000:01:00.1"
 
   tasks:
+    - name: Assert x86_64 architecture for Intel/NVIDIA hybrid GPU setup
+      assert:
+        that:
+          - ansible_architecture == 'x86_64'
+        fail_msg: "The GPU setup playbook is specifically designed for Intel x86_64 iGPU + NVIDIA dGPU architectures."
+        success_msg: "System architecture is x86_64. Proceeding with GPU setup."
+
     #
     # APT Repository Setup (NVIDIA Container Toolkit)
     #
