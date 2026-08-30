@@ -15,6 +15,7 @@
       - asciinema
       - build-essential
       - ca-certificates
+      - cloud-image-utils
       - cloud-utils
       - coreutils
       - csvkit
