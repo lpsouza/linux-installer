@@ -358,17 +358,67 @@
               #!/usr/bin/env bash
               #
               # Libvirt QEMU Hook for Dynamic GPU Passthrough
-              # Called automatically on VM lifecycle events
+              # Automatically detects if the starting VM requested the NVIDIA dGPU
               #
+              set -euo pipefail
+
               OBJECT="$1"
               OPERATION="$2"
               SUB_OPERATION="$3"
 
-              # Only trigger for VMs configured for passthrough
-              if [ "$OPERATION" == "prepare" ] && [ "$SUB_OPERATION" == "begin" ]; then
-                  /usr/local/bin/gpu-mode to-vm
-              elif [ "$OPERATION" == "release" ] && [ "$SUB_OPERATION" == "end" ]; then
-                  /usr/local/bin/gpu-mode to-host
+              GPU_PCI="{{ gpu_pci_id }}"
+              STATE_DIR="/run/gpu-mode"
+              LOCK_FILE="${STATE_DIR}/${OBJECT}.gpu"
+
+              mkdir -p "$STATE_DIR"
+
+              vm_has_gpu() {
+                  python3 -c '
+              import sys
+              import xml.etree.ElementTree as ET
+
+              try:
+                  gpu_pci = sys.argv[1]
+                  pci_parts = gpu_pci.replace(".", ":").split(":")
+                  if len(pci_parts) == 4:
+                      target_domain = int(pci_parts[0], 16)
+                      target_bus = int(pci_parts[1], 16)
+                      target_slot = int(pci_parts[2], 16)
+                  else:
+                      target_domain = 0
+                      target_bus = int(pci_parts[0], 16)
+                      target_slot = int(pci_parts[1], 16)
+
+                  raw_xml = sys.stdin.read()
+                  if not raw_xml.strip():
+                      sys.exit(1)
+
+                  tree = ET.fromstring(raw_xml)
+                  for hostdev in tree.findall(".//hostdev[@type=\"pci\"]"):
+                      source = hostdev.find("source/address")
+                      if source is not None:
+                          dom = int(source.get("domain", "0"), 0)
+                          bus = int(source.get("bus", "-1"), 0)
+                          slot = int(source.get("slot", "-1"), 0)
+                          if dom == target_domain and bus == target_bus and slot == target_slot:
+                              sys.exit(0)
+                  sys.exit(1)
+              except Exception:
+                  sys.exit(1)
+              ' "$GPU_PCI"
+              }
+
+              if [ "$OPERATION" = "prepare" ] && [ "$SUB_OPERATION" = "begin" ]; then
+                  XML_DATA=$(cat)
+                  if echo "$XML_DATA" | vm_has_gpu; then
+                      touch "$LOCK_FILE"
+                      /usr/local/bin/gpu-mode to-vm
+                  fi
+              elif [ "$OPERATION" = "release" ] && [ "$SUB_OPERATION" = "end" ]; then
+                  if [ -f "$LOCK_FILE" ]; then
+                      rm -f "$LOCK_FILE"
+                      /usr/local/bin/gpu-mode to-host
+                  fi
               fi
       tags:
         - gpu_switch
