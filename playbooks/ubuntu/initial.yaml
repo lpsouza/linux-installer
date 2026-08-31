@@ -47,6 +47,7 @@
       - waypipe
       - wget
       - whois
+      - xsltproc
       - zip
 
     optional_packages:
