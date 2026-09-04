@@ -1,0 +1,95 @@
+---
+#
+# This playbook installs and configures the Logitech Litra Driver (CLI & UI)
+# Source: https://github.com/kharyam/litra-driver
+# Supports Logitech Litra Glow (046d:c900) and Logitech Litra Beam (046d:c901)
+#
+- name: Install and configure Logitech Litra driver
+  hosts: linux
+  gather_facts: yes
+  become: yes
+
+  vars:
+    litra_driver_venv: "/opt/litra-driver"
+    litra_driver_package: "litra-driver"
+    litra_driver_udev_path: "/etc/udev/rules.d/82-litra.rules"
+    litra_system_packages:
+      - udev
+      - python3
+      - python3-pip
+      - python3-venv
+      - python3-tk
+      - libusb-1.0-0
+      - gir1.2-appindicator3-0.1
+
+  tasks:
+    - name: Install Logitech Litra driver and udev rules
+      block:
+        - name: Install required system packages for litra-driver
+          apt:
+            name: "{{ litra_system_packages }}"
+            state: present
+            update_cache: yes
+
+        - name: Ensure udev rules directory exists
+          file:
+            path: /etc/udev/rules.d
+            state: directory
+            mode: '0755'
+
+        - name: Configure udev rules for Logitech Litra devices
+          copy:
+            dest: "{{ litra_driver_udev_path }}"
+            mode: '0644'
+            content: |
+              # Logitech Litra Glow
+              SUBSYSTEM=="usb", ATTR{idVendor}=="046d", ATTR{idProduct}=="c900", MODE="0666", TAG+="uaccess"
+              # Logitech Litra Beam
+              SUBSYSTEM=="usb", ATTR{idVendor}=="046d", ATTR{idProduct}=="c901", MODE="0666", TAG+="uaccess"
+          register: litra_udev_rules
+
+        - name: Reload and trigger udev rules
+          shell: |
+            udevadm control --reload-rules
+            udevadm trigger
+          when: litra_udev_rules.changed
+          failed_when: false
+
+        - name: Install litra-driver in isolated virtual environment
+          pip:
+            name: "{{ litra_driver_package }}"
+            state: present
+            virtualenv: "{{ litra_driver_venv }}"
+            virtualenv_command: "python3 -m venv"
+            virtualenv_site_packages: yes
+
+        - name: Create symlink for lc CLI
+          file:
+            src: "{{ litra_driver_venv }}/bin/lc"
+            dest: /usr/local/bin/lc
+            state: link
+            force: yes
+
+        - name: Create symlink for lcui UI
+          file:
+            src: "{{ litra_driver_venv }}/bin/lcui"
+            dest: /usr/local/bin/lcui
+            state: link
+            force: yes
+
+        - name: Create desktop application shortcut for lcui
+          copy:
+            dest: /usr/share/applications/lcui.desktop
+            mode: '0644'
+            content: |
+              [Desktop Entry]
+              Name=Litra Control UI
+              Comment=Logitech Litra Glow & Beam Controller
+              Exec=/usr/local/bin/lcui
+              Icon=preferences-desktop-display
+              Terminal=false
+              Type=Application
+              Categories=Utility;Settings;HardwareSettings;
+      tags:
+        - litra_driver
+        - litra

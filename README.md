@@ -223,3 +223,15 @@ This playbook forces the Ethernet network interface to advertise exclusively Gig
 | Force Gigabit Ethernet | `force_gigabit` | `amd64 / arm64` | Configures ethtool speed advertisement and enables persistent systemd `force-gigabit` unit | `ansible-playbook playbooks/ubuntu/custom/force-gigabit.yaml --tags force_gigabit` |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/custom/force-gigabit.yaml`
+
+#### Logitech Litra Driver (Litra Glow & Litra Beam)
+
+This playbook installs and configures the Logitech Litra Driver for Logitech Litra Glow and Litra Beam lights. It configures USB udev rules for non-root hardware access, installs system dependencies, sets up an isolated Python virtual environment in `/opt/litra-driver`, creates global symlinks for `lc` (CLI) and `lcui` (UI) in `/usr/local/bin`, and registers a desktop application launcher.
+
+**Playbook:** `playbooks/ubuntu/custom/litra-driver.yaml`
+
+| Application / Tool | Tag | Architecture | Description | Command |
+| :--- | :--- | :--- | :--- | :--- |
+| Logitech Litra Driver | `litra_driver` | `amd64 / arm64` | Installs `lc` (CLI) and `lcui` (UI) for Logitech Litra Glow and Beam, with system udev rules | `ansible-playbook playbooks/ubuntu/custom/litra-driver.yaml --tags litra_driver` |
+
+**Install all:** `ansible-playbook playbooks/ubuntu/custom/litra-driver.yaml`
