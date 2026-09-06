@@ -197,18 +197,16 @@ This playbook installs and configures the Realtek RTS5129/RTS5139 USB MMC Reader
 
 #### GPU Setup (Hybrid Intel iGPU + NVIDIA dGPU)
 
-This playbook configures the Intel UHD 630 iGPU (VA-API/QuickSync) and NVIDIA GTX 1050 Ti dGPU for dual-mode operation (Host Docker Ollama + Dynamic VFIO KVM/Libvirt VM for Moonlight gaming).
+This playbook configures the Intel UHD 630 iGPU (VA-API/QuickSync) and NVIDIA GTX 1050 Ti dGPU dedicated to the host, including NVIDIA proprietary drivers, dynamic power management, and the NVIDIA Container Toolkit runtime for Docker (Ollama / CUDA).
 
 **Playbook:** `playbooks/ubuntu/custom/gpu-setup.yaml`
 
 | Application / Tool | Tag | Architecture | Description | Command |
 | :--- | :--- | :--- | :--- | :--- |
 | Intel iGPU Tools & VA-API | `igpu` | `amd64 only` | Intel media drivers, VA-API, and GPU monitoring utilities | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags igpu` |
-| GRUB IOMMU Configuration | `grub_iommu` | `amd64 only` | Configures GRUB with `intel_iommu=on`, `iommu=pt`, and KVM MSR ignores | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags grub_iommu` |
-| NVIDIA Driver & Persistence | `nvidia_driver` | `amd64 only` | Proprietary NVIDIA drivers and `nvidia-persistenced` service | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags nvidia_driver` |
+| NVIDIA Driver & Persistence | `nvidia_driver` | `amd64 only` | Proprietary NVIDIA drivers, dynamic power management, and `nvidia-persistenced` | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags nvidia_driver` |
 | NVIDIA Container Toolkit (Docker) | `docker_toolkit` | `amd64 only` | Configures NVIDIA Container Toolkit runtime for Docker / Ollama | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags docker_toolkit` |
-| KVM, Libvirt, VFIO & swtpm | `kvm_vfio` | `amd64 only` | Virtualization packages, swtpm TPM emulator, and VFIO boot modules | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags kvm_vfio` |
-| Dynamic GPU Switcher & Hooks | `gpu_switch` | `amd64 only` | Installs `gpu-mode` CLI and libvirt QEMU lifecycle hooks | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags gpu_switch` |
+| GPU Status Verification | `verify` | `amd64 only` | Verifies NVIDIA GPU driver binding and status via `nvidia-smi` | `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml --tags verify` |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/custom/gpu-setup.yaml`
 
