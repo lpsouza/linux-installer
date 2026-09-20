@@ -10,6 +10,8 @@
   vars:
     arch_suffix: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
     arch_vscode: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'x64' }}"
+    arch_antigravity: "{{ 'linux-arm' if ansible_architecture == 'aarch64' else 'linux-x64' }}"
+    antigravity_desktop_version: "2.14.0-5449404535144448"
 
   tasks:
     - name: Install CascadiaCode NerdFonts
@@ -374,7 +376,7 @@
       block:
         - name: Check if Antigravity Desktop is already installed
           stat:
-            path: "/opt/antigravity/antigravity"
+            path: "/usr/local/bin/antigravity"
           register: antigravity_desktop_installed
           become: no
 
@@ -387,7 +389,7 @@
 
         - name: Download Antigravity Desktop archive
           get_url:
-            url: "https://antigravity.google/download/linux/x64/antigravity-desktop.tar.gz"
+            url: "https://storage.googleapis.com/antigravity-public/antigravity-hub/{{ antigravity_desktop_version }}/{{ arch_antigravity }}/Antigravity.tar.gz"
             dest: "/tmp/antigravity-desktop.tar.gz"
             mode: "0644"
           when: not antigravity_desktop_installed.stat.exists
@@ -398,6 +400,25 @@
             dest: "/opt/antigravity"
             remote_src: yes
             extra_opts: [--strip-components=1]
+          when: not antigravity_desktop_installed.stat.exists
+
+        - name: Extract Antigravity Desktop icon
+          command:
+            argv:
+              - python3
+              - -c
+              - |
+                import struct, json
+                with open('/opt/antigravity/resources/app.asar', 'rb') as f:
+                    h = f.read(16)
+                    magic, header_size, _, jlen = struct.unpack('<IIII', h)
+                    data = json.loads(f.read(jlen).decode('utf-8'))
+                    info = data['files']['icon.png']
+                    f.seek(8 + header_size + int(info['offset']))
+                    img = f.read(int(info['size']))
+                with open('/opt/antigravity/icon.png', 'wb') as out:
+                    out.write(img)
+            creates: "/opt/antigravity/icon.png"
           when: not antigravity_desktop_installed.stat.exists
 
         - name: Create symlink in /usr/local/bin
@@ -416,7 +437,7 @@
               Name=Antigravity
               Comment=Google Antigravity 2.0 Desktop Application
               Exec=/opt/antigravity/antigravity %U
-              Icon=/opt/antigravity/resources/app/icon.png
+              Icon=/opt/antigravity/icon.png
               Type=Application
               Categories=Development;
               Terminal=false
@@ -428,5 +449,18 @@
             path: "/tmp/antigravity-desktop.tar.gz"
             state: absent
           when: not antigravity_desktop_installed.stat.exists
-      when: ansible_architecture == 'x86_64'
+
+        - name: Check if Chrome sandbox helper exists
+          stat:
+            path: "/opt/antigravity/chrome-sandbox"
+          register: antigravity_sandbox
+
+        - name: Configure SUID permissions on Chrome sandbox helper
+          file:
+            path: "/opt/antigravity/chrome-sandbox"
+            owner: root
+            group: root
+            mode: "4755"
+          when: antigravity_sandbox.stat.exists
+      when: ansible_architecture in ['x86_64', 'aarch64']
       tags: antigravity

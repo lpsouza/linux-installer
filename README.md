@@ -108,7 +108,7 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 | Todoist | `todoist` | `amd64 / arm64` | Task manager and to-do list (Snap) | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags todoist` |
 | Remmina | `remmina` | `amd64 / arm64` | Remote desktop client (RDP, VNC, SSH) | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags remmina` |
 | Flameshot | `flameshot` | `amd64 / arm64` | Screen capture and annotation tool | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags flameshot` |
-| Antigravity Desktop (2.0) | `antigravity` | `amd64 only` | Google Antigravity 2.0 desktop application | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags antigravity` |
+| Antigravity Desktop (2.0) | `antigravity` | `amd64 / arm64` | Google Antigravity 2.0 desktop application | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags antigravity` |
 
 **Install all:** `ansible-playbook playbooks/ubuntu/desktop.yaml`
 
