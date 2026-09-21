@@ -63,6 +63,7 @@
       register: tailscale_package_status
       ignore_errors: true
       changed_when: false
+      check_mode: false
 
     - name: Ensure software-properties-common is installed
       apt:
@@ -75,6 +76,7 @@
       register: multiverse_check
       ignore_errors: true
       changed_when: false
+      check_mode: false
 
     - name: Enable multiverse repository
       command: add-apt-repository -y multiverse
@@ -89,23 +91,49 @@
       shell: apt-cache policy tailscale
       register: tailscale_policy
       changed_when: false
-      when: tailscale_package_status.rc == 0
+      check_mode: false
+      when:
+        - tailscale_package_status.rc is defined
+        - tailscale_package_status.rc == 0
 
     - name: Set Tailscale version facts
       set_fact:
         tailscale_installed: "{{ tailscale_policy.stdout | regex_search('Installed: (.*)', '\\1') | first }}"
         tailscale_candidate: "{{ tailscale_policy.stdout | regex_search('Candidate: (.*)', '\\1') | first }}"
-      when: tailscale_package_status.rc == 0
+      when:
+        - tailscale_package_status.rc is defined
+        - tailscale_package_status.rc == 0
+        - tailscale_policy.stdout is defined
 
     - name: Asynchronously update Tailscale to prevent SSH connection drop
       apt:
         name: tailscale
         state: latest
-      async: 60
+      async: 120
       poll: 0
+      register: tailscale_update
       when:
         - tailscale_package_status.rc == 0
         - tailscale_installed != tailscale_candidate
+
+    - name: Wait for Tailscale to restart and reconnect SSH
+      wait_for_connection:
+        delay: 15
+        timeout: 120
+      when:
+        - tailscale_update is defined
+        - tailscale_update.ansible_job_id is defined
+
+    - name: Wait for Tailscale update to complete
+      async_status:
+        jid: "{{ tailscale_update.ansible_job_id }}"
+      register: tailscale_job_result
+      until: tailscale_job_result.finished
+      retries: 30
+      delay: 5
+      when:
+        - tailscale_update is defined
+        - tailscale_update.ansible_job_id is defined
 
     - name: Update and upgrade apt packages
       apt:
