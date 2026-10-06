@@ -29,6 +29,7 @@
       - iotop
       - iputils-ping
       - jq
+      - landscape-client
       - lolcat
       - lsb-release
       - mc
