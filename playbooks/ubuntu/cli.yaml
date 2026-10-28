@@ -73,6 +73,23 @@
           become: no
       tags: kiro_cli
 
+    - name: Install Kiro Crew CLI
+      block:
+        - name: Check if Kiro Crew CLI is already installed
+          stat:
+            path: "~/.local/bin/kirocrew"
+          register: kiro_crew_cli_installed
+          become: no
+
+        - name: Install Kiro Crew CLI
+          shell: |
+            curl -fsSL https://download.crew.kiro.dev/cli.sh | bash
+          args:
+            executable: /bin/bash
+          when: not kiro_crew_cli_installed.stat.exists
+          become: no
+      tags: kiro_crew_cli
+
     - name: Install OpenCode CLI
       block:
         - name: Check if OpenCode CLI is already installed

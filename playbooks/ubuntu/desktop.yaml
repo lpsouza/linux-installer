@@ -11,6 +11,7 @@
     arch_suffix: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
     arch_vscode: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'x64' }}"
     arch_antigravity: "{{ 'linux-arm' if ansible_architecture == 'aarch64' else 'linux-x64' }}"
+    arch_kiro_crew: "{{ 'aarch64' if ansible_architecture == 'aarch64' else 'x86_64' }}"
     antigravity_desktop_version: "2.14.0-5449404535144448"
 
   tasks:
@@ -117,6 +118,30 @@
             state: present
           when: not kiro_installed.stat.exists
       tags: kiro
+
+    - name: Install Kiro Crew
+      block:
+        - name: Check if Kiro Crew is already installed
+          stat:
+            path: "/usr/bin/kirocrew-desktop"
+          register: kiro_crew_desktop_installed
+          become: no
+
+        - name: Download Kiro Crew
+          get_url:
+            url: "https://download.crew.kiro.dev/desktop/stable/latest/KiroCrew-{{ arch_kiro_crew }}.deb"
+            dest: "/tmp/kirocrew.deb"
+            mode: '0644'
+          become: no
+          when: not kiro_crew_desktop_installed.stat.exists
+
+        - name: Install Kiro Crew
+          apt:
+            deb: "/tmp/kirocrew.deb"
+            state: present
+          when: not kiro_crew_desktop_installed.stat.exists
+      when: ansible_architecture in ['x86_64', 'aarch64']
+      tags: kiro_crew
 
     - name: Install Obsidian
       block:

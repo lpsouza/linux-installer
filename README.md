@@ -100,6 +100,7 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 | Google Chrome | `google_chrome` | `amd64 only` | Google Chrome web browser (stable 64-bit .deb) | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags google_chrome` |
 | VSCode | `vscode` | `amd64 / arm64` | Visual Studio Code editor (official Microsoft deb) | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags vscode` |
 | Kiro IDE (AWS) | `kiro` | `amd64 / arm64` | Kiro AI development environment | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags kiro` |
+| Kiro Crew | `kiro_crew` | `amd64 / arm64` | Persistent AI agent workspace desktop application | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags kiro_crew` |
 | Obsidian | `obsidian` | `amd64 / arm64` | Markdown knowledge base and note-taking app (Snap) | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags obsidian` |
 | Insync | `insync` | `amd64 only` | Google Drive and OneDrive sync client | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags insync` |
 | 1Password Desktop | `onepassword` | `amd64 / arm64` | 1Password desktop GUI application | `ansible-playbook playbooks/ubuntu/desktop.yaml --tags onepassword` |
@@ -125,6 +126,7 @@ This playbook installs and configures the initial setup for any Ubuntu machine. 
 | GitHub CLI | `github_cli` | `amd64 / arm64` | Official GitHub command-line tool (`gh`) | `ansible-playbook playbooks/ubuntu/cli.yaml --tags github_cli` |
 | GitHub Copilot CLI | `copilot_cli` | `amd64 / arm64` | GitHub Copilot command-line interface | `ansible-playbook playbooks/ubuntu/cli.yaml --tags copilot_cli` |
 | Kiro CLI | `kiro_cli` | `amd64 / arm64` | Kiro AI developer CLI tool | `ansible-playbook playbooks/ubuntu/cli.yaml --tags kiro_cli` |
+| Kiro Crew CLI | `kiro_crew_cli` | `amd64 / arm64` | Persistent AI agent workspace CLI tool (`kirocrew`) | `ansible-playbook playbooks/ubuntu/cli.yaml --tags kiro_crew_cli` |
 | OpenCode CLI | `opencode_cli` | `amd64 / arm64` | OpenCode AI coding agent CLI | `ansible-playbook playbooks/ubuntu/cli.yaml --tags opencode_cli` |
 | GitHub Spec-Kit | `speckit` | `amd64 / arm64` | Specification-driven development toolkit (`specify`) | `ansible-playbook playbooks/ubuntu/cli.yaml --tags speckit` |
 | Dev Container CLI | `devcontainer_cli` | `amd64 / arm64` | Development Containers reference CLI tool | `ansible-playbook playbooks/ubuntu/cli.yaml --tags devcontainer_cli` |
