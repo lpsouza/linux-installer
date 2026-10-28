@@ -212,7 +212,7 @@ This playbook configures the Intel UHD 630 iGPU (VA-API/QuickSync) and NVIDIA GT
 
 #### Force Gigabit Ethernet
 
-This playbook forces the Ethernet network interface to advertise exclusively Gigabit Ethernet (1000Mbps Full Duplex) and configures a systemd service to persist the setting across reboots.
+This playbook forces the Ethernet network interface to advertise Gigabit Ethernet (1000Mbps Full Duplex) on start and configures a systemd service to persist the setting across reboots, with an explicit fallback to 100Mbps Full Duplex when the service is stopped.
 
 **Playbook:** `playbooks/ubuntu/custom/force-gigabit.yaml`
 

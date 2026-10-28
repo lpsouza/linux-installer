@@ -1,7 +1,7 @@
 ---
 #
-# This playbook forces the network interface to advertise exclusively Gigabit Ethernet (1000Mbps Full Duplex)
-# and creates a persistent systemd service at boot time.
+# This playbook forces the network interface to advertise Gigabit Ethernet (1000Mbps Full Duplex) on start,
+# creates a persistent systemd service at boot time, and falls back to 100Mbps Full Duplex when stopped.
 #
 - name: Force Gigabit Ethernet speed advertisement
   hosts: linux
@@ -11,6 +11,8 @@
   vars:
     network_interface: "enp60s0"
     ethtool_advertise_hex: "0x020"  # 1000baseT/Full (1 Gbps Full Duplex)
+    ethtool_fallback_speed: 100     # 100 Mbps fallback speed on service stop
+    ethtool_fallback_duplex: "full" # Full duplex fallback on service stop
 
   tasks:
     - name: Configure Gigabit Ethernet persistence
@@ -32,7 +34,8 @@
 
               [Service]
               Type=oneshot
-              ExecStart=/usr/sbin/ethtool -s {{ network_interface }} advertise {{ ethtool_advertise_hex }}
+              ExecStart=/usr/sbin/ethtool -s {{ network_interface }} autoneg on advertise {{ ethtool_advertise_hex }}
+              ExecStop=/usr/sbin/ethtool -s {{ network_interface }} speed {{ ethtool_fallback_speed }} duplex {{ ethtool_fallback_duplex }} autoneg off
               RemainAfterExit=yes
 
               [Install]
